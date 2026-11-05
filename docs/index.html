@@ -119,8 +119,9 @@
         </button>
 
         <button
+          id="headerAppQrBtn"
           onclick="openAppQrModal()"
-          class="px-3.5 py-2 rounded-xl font-bold text-xs bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30 hover:opacity-95 transition flex items-center gap-1.5"
+          class="hidden lg:flex px-3.5 py-2 rounded-xl font-bold text-xs bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30 hover:opacity-95 transition items-center gap-1.5"
         >
           <span>📱</span>
           <span>手機 APP 掃碼下載</span>
@@ -1652,15 +1653,16 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       loadReportData();
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('install') === '1') {
-        openAppQrModal();
+      const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 1024;
+      if (isMobile) {
+        const hdrBtn = document.getElementById('headerAppQrBtn');
+        if (hdrBtn) hdrBtn.remove();
       }
     });
   </script>
 
-  <!-- 📱 手機版專屬底部原生 APP 導覽列 (僅在手機/平板窄螢幕顯示) -->
-  <nav id="mobileBottomNav" class="lg:hidden sticky bottom-0 z-40 glass-card border-t border-slate-800 px-2 py-2 grid grid-cols-5 gap-1 text-center">
+  <!-- 📱 手機版專屬底部原生 APP 導覽列 (僅在手機/平板窄螢幕顯示，已移除安裝APP按鈕) -->
+  <nav id="mobileBottomNav" class="lg:hidden sticky bottom-0 z-40 glass-card border-t border-slate-800 px-2 py-2 grid grid-cols-4 gap-1 text-center">
     <button onclick="mobileJumpTo('podiumSection')" class="flex flex-col items-center justify-center py-1 rounded-xl hover:bg-slate-800/80 text-slate-200">
       <span class="text-sm">🏆</span>
       <span class="text-[10px] font-bold mt-0.5">Top3榜</span>
@@ -1676,10 +1678,6 @@
     <button onclick="mobileJumpTo('listSection', 'short_sell')" class="flex flex-col items-center justify-center py-1 rounded-xl hover:bg-slate-800/80 text-purple-300">
       <span class="text-sm">🐻</span>
       <span class="text-[10px] font-bold mt-0.5">做空專區</span>
-    </button>
-    <button onclick="openAppQrModal()" class="flex flex-col items-center justify-center py-1 rounded-xl hover:bg-slate-800/80 text-emerald-300">
-      <span class="text-sm">📱</span>
-      <span class="text-[10px] font-bold mt-0.5">安裝APP</span>
     </button>
   </nav>
 
