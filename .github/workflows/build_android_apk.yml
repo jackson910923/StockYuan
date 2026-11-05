@@ -71,8 +71,8 @@ jobs:
                   applicationId "com.stockyuan.app"
                   minSdk 24
                   targetSdk 34
-                  versionCode 6
-                  versionName "4.3.0"
+                  versionCode 7
+                  versionName "4.6.0"
               }
               buildTypes {
                   debug {
@@ -123,10 +123,11 @@ jobs:
                   WebSettings s = webView.getSettings();
                   s.setJavaScriptEnabled(true);
                   s.setDomStorageEnabled(true);
-                  s.setCacheMode(WebSettings.LOAD_DEFAULT);
+                  s.setCacheMode(WebSettings.LOAD_NO_CACHE);
+                  webView.clearCache(true);
                   webView.setWebViewClient(new WebViewClient());
                   setContentView(webView);
-                  webView.loadUrl("https://jackson910923.github.io/StockYuan/");
+                  webView.loadUrl("https://jackson910923.github.io/StockYuan/?app=apk&t=" + System.currentTimeMillis());
               }
               @Override
               public void onBackPressed() {

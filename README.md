@@ -11,7 +11,7 @@
 
 | 🌟 iPhone (iOS) & Android 雙平台通用秒裝版 (PWA APP) | 🤖 Android 手機專屬原生安裝包 (`StockYuan.apk`) |
 | :---: | :---: |
-| ![PWA App QR Code](https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=https%3A%2F%2Fjackson910923.github.io%2FStockYuan%2F%3Finstall%3D1) | ![Android APK QR Code](https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=https%3A%2F%2Fjackson910923.github.io%2FStockYuan%2FStockYuan.apk) |
+| ![PWA App QR Code](https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=https%3A%2F%2Fjackson910923.github.io%2FStockYuan%2F%3Fv%3D46) | ![Android APK QR Code](https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=https%3A%2F%2Fjackson910923.github.io%2FStockYuan%2FStockYuan.apk%3Fv%3D46) |
 | **iPhone**：Safari 掃碼 ➔ 點底部「分享 📤」➔「**加入主畫面**」<br>**Android**：Chrome 掃碼 ➔ 點擊「**📲 一鍵安裝 APP 到桌面**」 | **Android 專用**：掃碼直接下載由 GitHub Actions 雲端自動編譯打包的 `StockYuan.apk` 原生安裝檔 |
 
 ---
