@@ -149,6 +149,29 @@
       </div>
     </section>
 
+    <!-- 新增：🏆 今日八大分類最推薦 Top 3 榮譽榜看板 (短線/波段/長線/高價/中低價/低價/做空 Top 3) -->
+    <section class="glass-card rounded-2xl p-4 border border-indigo-500/30">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <div>
+          <h2 class="text-sm lg:text-base font-black text-white flex items-center gap-2">
+            <span>🏆 今日 AI 多智能體嚴選【各分類最推薦前三名 Top 3】總覽看板</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">
+            涵蓋綜合做多、短線(1~5日)、波段(2~8週)、長線存股、高價(≥200)、中低價(50~200)、銅板股(&lt;50) 與 🐻 做空放空前三名，點擊任一標的立即載入深度策略與 K 線！
+          </p>
+        </div>
+        <button
+          id="syncTop3LiveBtn"
+          onclick="syncAllTop3LiveQuotes()"
+          class="px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-600/30 text-indigo-200 border border-indigo-500/50 hover:bg-indigo-600/50 transition flex items-center gap-1.5"
+        >
+          <span>⚡</span>
+          <span id="syncTop3LiveLabel">一鍵同步全榜 Top 3 最新盤中報價</span>
+        </button>
+      </div>
+      <div id="top3PodiumGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3"></div>
+    </section>
+
     <!-- 第二排：今日台股熱門產業與主流資金流向熱力圖 (Sector Heatmap) -->
     <section class="glass-card rounded-2xl p-4">
       <div class="flex items-center justify-between mb-2.5">
@@ -437,11 +460,183 @@
         const resp = await fetch(`./data/latest_report.json?t=${Date.now()}`);
         REPORT_DATA = await resp.json();
         renderHeaderAndSummary();
+        renderTop3PodiumMatrix();
         renderSectorHeatmap();
         switchTab('top');
       } catch (err) {
         console.error('Failed to load report:', err);
       }
+    }
+
+    function renderTop3PodiumMatrix() {
+      const grid = document.getElementById('top3PodiumGrid');
+      if (!grid || !REPORT_DATA) return;
+
+      const podiumGroups = [
+        {
+          title: '🔥 目前做多綜合最推薦 Top 3',
+          sub: '籌碼＋趨勢＋風控總分最高',
+          border: 'border-indigo-500/40 bg-indigo-950/20',
+          badgeColor: 'text-indigo-300',
+          mode: 'swing',
+          items: (REPORT_DATA.top_picks_debates || []).slice(0, 3),
+          scoreKey: 'total_score',
+          isShort: false,
+        },
+        {
+          title: '⚡ 短線衝刺 (1~5日) Top 3',
+          sub: '當日爆量突破＋法人急買點火',
+          border: 'border-amber-500/40 bg-amber-950/15',
+          badgeColor: 'text-amber-300',
+          mode: 'short_term',
+          items: (REPORT_DATA.short_term_debates || []).slice(0, 3),
+          scoreKey: 'short_term_score',
+          isShort: false,
+        },
+        {
+          title: '🌊 波段認養 (2~8週) Top 3',
+          sub: '外資投信連買＋初升段未過熱',
+          border: 'border-cyan-500/40 bg-cyan-950/15',
+          badgeColor: 'text-cyan-300',
+          mode: 'swing',
+          items: (REPORT_DATA.swing_debates || []).slice(0, 3),
+          scoreKey: 'swing_score',
+          isShort: false,
+        },
+        {
+          title: '🌳 長線存股價值 (季/年) Top 3',
+          sub: '護城河龍頭＋高息穩健低波動',
+          border: 'border-emerald-500/40 bg-emerald-950/15',
+          badgeColor: 'text-emerald-300',
+          mode: 'long_term',
+          items: (REPORT_DATA.long_term_debates || []).slice(0, 3),
+          scoreKey: 'long_term_score',
+          isShort: false,
+        },
+        {
+          title: '💎 高價股 (200元以上) Top 3',
+          sub: '千金與權值成長王（可零股配置）',
+          border: 'border-slate-700 bg-slate-900/70',
+          badgeColor: 'text-sky-300',
+          mode: 'swing',
+          items: (REPORT_DATA.high_price_debates || []).slice(0, 3),
+          scoreKey: 'total_score',
+          isShort: false,
+        },
+        {
+          title: '⚖️ 中低價股 (50~200元) Top 3',
+          sub: '主流波段中堅・整張5~20萬',
+          border: 'border-slate-700 bg-slate-900/70',
+          badgeColor: 'text-teal-300',
+          mode: 'swing',
+          items: (REPORT_DATA.mid_price_debates || []).slice(0, 3),
+          scoreKey: 'total_score',
+          isShort: false,
+        },
+        {
+          title: '🪙 低價銅板股 (50元以下) Top 3',
+          sub: '小資親民首選・整張不到5萬',
+          border: 'border-slate-700 bg-slate-900/70',
+          badgeColor: 'text-yellow-300',
+          mode: 'swing',
+          items: (REPORT_DATA.low_price_debates || []).slice(0, 3),
+          scoreKey: 'total_score',
+          isShort: false,
+        },
+        {
+          title: '🐻 做空／避險放空專區 Top 3',
+          sub: '法人連賣破線＋散戶融資套牢',
+          border: 'border-purple-500/50 bg-purple-950/25',
+          badgeColor: 'text-purple-300',
+          mode: 'short_sell',
+          items: (REPORT_DATA.short_sell_debates || []).slice(0, 3),
+          scoreKey: 'short_sell_score',
+          isShort: true,
+        },
+      ];
+
+      const medals = ['🥇', '🥈', '🥉'];
+      grid.innerHTML = podiumGroups.map(grp => {
+        const rowsHtml = grp.items.map((item, idx) => {
+          const isUp = item.change_pct > 0;
+          const isDown = item.change_pct < 0;
+          const chgClass = isUp ? 'tw-up' : (isDown ? 'tw-down' : 'text-slate-200');
+          const sc = item[grp.scoreKey] ?? item.total_score;
+          const plan = grp.isShort
+            ? (item.short_sell_plan || item.price_plan)
+            : ((item.horizon_plans && item.horizon_plans[grp.mode]) || item.price_plan);
+          const actLabel = grp.isShort ? '反彈空點' : '建議買點';
+          const stopLabel = grp.isShort ? '回補' : '停損';
+
+          return `
+            <div
+              onclick="selectStockAndScroll('${item.code}', '${grp.mode}')"
+              class="cursor-pointer rounded-xl p-2.5 bg-slate-950/80 border border-slate-800/90 hover:border-indigo-400 transition"
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5 min-w-0">
+                  <span class="text-sm">${medals[idx] || ''}</span>
+                  <span class="font-bold text-xs text-white truncate">${item.name}</span>
+                  <span class="font-mono text-[11px] text-indigo-300">${item.code}</span>
+                </div>
+                <div class="text-right font-mono whitespace-nowrap">
+                  <span class="text-xs font-black ${chgClass}">${item.close}元</span>
+                  <span class="text-[11px] font-bold ml-0.5 ${chgClass}">(${item.change_pct >= 0 ? '+' : ''}${item.change_pct}%)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-1 text-[11px] text-slate-400">
+                <span class="truncate">${actLabel} <b class="text-emerald-300">${plan.entry_low}~${plan.entry_high}</b>｜${stopLabel} <b class="text-rose-300">${plan.stop_loss}</b></span>
+                <span class="font-bold ${grp.badgeColor} ml-1 whitespace-nowrap">${sc}分</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="rounded-2xl p-3.5 border ${grp.border} flex flex-col justify-between">
+            <div class="mb-2">
+              <div class="text-xs font-black text-white">${grp.title}</div>
+              <div class="text-[11px] text-slate-400">${grp.sub}</div>
+            </div>
+            <div class="space-y-2">${rowsHtml}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectStockAndScroll(code, horizonMode) {
+      selectStock(code, horizonMode, true);
+      const el = document.getElementById('detailName');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    async function syncAllTop3LiveQuotes() {
+      if (!REPORT_DATA) return;
+      const lbl = document.getElementById('syncTop3LiveLabel');
+      const codes = new Set();
+      [
+        REPORT_DATA.top_picks_debates,
+        REPORT_DATA.short_term_debates,
+        REPORT_DATA.swing_debates,
+        REPORT_DATA.long_term_debates,
+        REPORT_DATA.high_price_debates,
+        REPORT_DATA.mid_price_debates,
+        REPORT_DATA.low_price_debates,
+        REPORT_DATA.short_sell_debates,
+      ].forEach(arr => {
+        (arr || []).slice(0, 3).forEach(x => codes.add(x.code));
+      });
+      const uniqueCodes = Array.from(codes);
+      let done = 0;
+      for (const c of uniqueCodes) {
+        done++;
+        if (lbl) lbl.textContent = `同步即時報價中 (${done}/${uniqueCodes.length})...`;
+        await fetchLiveStockInBrowser(c, true);
+      }
+      if (lbl) lbl.textContent = `✅ 已同步全榜 ${uniqueCodes.length} 檔最新報價`;
+      renderHeaderAndSummary();
+      renderTop3PodiumMatrix();
+      renderStockList();
     }
 
     function renderHeaderAndSummary() {
