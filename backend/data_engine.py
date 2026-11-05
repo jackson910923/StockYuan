@@ -487,32 +487,68 @@ class TaiwanStockDataEngine:
         return margin_diff_lots, dt_shares
 
     def fetch_google_news_for_query(self, query: str, limit: int = 6) -> List[Dict[str, str]]:
-        """從 Google News RSS 抓取台股即時新聞標題、來源與連結。"""
-        encoded = urllib.parse.quote(f"{query} 台股 OR 財經")
-        url = f"https://news.google.com/rss/search?q={encoded}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        articles: List[Dict[str, str]] = []
-        try:
-            with urllib.request.urlopen(req, timeout=6.0, context=self.ssl_ctx) as resp:
-                xml_bytes = resp.read()
-            root = ET.fromstring(xml_bytes)
-            for item in root.findall(".//item")[:limit]:
-                title = (item.findtext("title") or "").strip()
-                link = (item.findtext("link") or "").strip()
-                pub_date = (item.findtext("pubDate") or "").strip()
-                source_el = item.find("source")
-                source = source_el.text.strip() if source_el is not None and source_el.text else "財經快訊"
-                if title:
-                    articles.append(
-                        {
-                            "title": title,
-                            "source": source,
-                            "link": link,
-                            "pub_date": pub_date[:22] if pub_date else "今日最新",
-                        }
+        """從 Google News RSS 抓取台股近期最新新聞（強制過濾舊聞並依時間由新到舊排序）。"""
+        from email.utils import parsedate_to_datetime
+
+        now_dt = datetime.now()
+        parsed_items: List[tuple[float, Dict[str, str]]] = []
+
+        for time_window in ("when:7d", "when:30d"):
+            encoded = urllib.parse.quote(f"{query} 台股 {time_window}")
+            url = f"https://news.google.com/rss/search?q={encoded}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            try:
+                with urllib.request.urlopen(req, timeout=5.0, context=self.ssl_ctx) as resp:
+                    xml_bytes = resp.read()
+                root = ET.fromstring(xml_bytes)
+                for item in root.findall(".//item"):
+                    title = (item.findtext("title") or "").strip()
+                    link = (item.findtext("link") or "").strip()
+                    pub_raw = (item.findtext("pubDate") or "").strip()
+                    source_el = item.find("source")
+                    source = source_el.text.strip() if source_el is not None and source_el.text else "財經快訊"
+                    if not title:
+                        continue
+                    ts = now_dt.timestamp()
+                    pub_str = now_dt.strftime("%Y-%m-%d")
+                    if pub_raw:
+                        try:
+                            dt_obj = parsedate_to_datetime(pub_raw).replace(tzinfo=None)
+                            # 嚴格排除超過 45 天或跨年度的過時舊聞（如 2025 年舊聞）
+                            age_days = (now_dt - dt_obj).total_seconds() / 86400.0
+                            if age_days > 45 or dt_obj.year < 2026:
+                                continue
+                            ts = dt_obj.timestamp()
+                            pub_str = dt_obj.strftime("%Y-%m-%d %H:%M")
+                        except Exception:
+                            if "2025" in pub_raw or "2024" in pub_raw or "2023" in pub_raw:
+                                continue
+                    parsed_items.append(
+                        (
+                            ts,
+                            {
+                                "title": title,
+                                "source": source,
+                                "link": link,
+                                "pub_date": pub_str,
+                            },
+                        )
                     )
-        except Exception:
-            pass
+                if len(parsed_items) >= 3:
+                    break
+            except Exception:
+                pass
+
+        # 依發布時間由最新到最舊排序並去重
+        parsed_items.sort(key=lambda x: x[0], reverse=True)
+        seen_titles = set()
+        articles: List[Dict[str, str]] = []
+        for _, art in parsed_items:
+            if art["title"] not in seen_titles:
+                seen_titles.add(art["title"])
+                articles.append(art)
+                if len(articles) >= limit:
+                    break
         return articles
 
     def fetch_stock_kline_history(self, code: str, market: str = "TWSE", days: int = 60) -> List[Dict[str, Any]]:
@@ -1057,11 +1093,26 @@ class TaiwanStockDataEngine:
         volume_hot = sorted(ranked_all, key=lambda x: x["turnover_yi"], reverse=True)[:10]
         warning_list = short_sell_picks[:8]
 
-        # 6. 全市場 1,800+ 檔上市櫃與 ETF 中文名稱與最新收盤速查字典（供前端即時搜尋聯想與穿透查詢使用）
-        market_directory = {
-            code: [item["name"], item["market"], item["close"], item["change_pct"]]
-            for code, item in all_t0.items()
-        }
+        # 6. 全市場 1,800+ 檔上市櫃與 ETF 完整速查字典（含價量、外資/投信/自營商買賣超、融資、當沖比，供前端 0 延遲秒開）
+        market_directory = {}
+        for code, item in all_t0.items():
+            ic = inst_t0.get(code, {})
+            vol_sh = item.get("volume_shares", 0.0)
+            dt_p = round(min(85.0, (dt_shares_map.get(code, 0.0) / vol_sh * 100.0)) if vol_sh > 0 else 18.0, 1)
+            market_directory[code] = [
+                item["name"],
+                item["market"],
+                item["close"],
+                item["change_pct"],
+                round(float(ic.get("foreign_lots", 0.0)), 0),
+                round(float(ic.get("trust_lots", 0.0)), 0),
+                round(float(ic.get("dealer_lots", 0.0)), 0),
+                round(float(margin_diff_map.get(code, 0.0)), 0),
+                dt_p,
+                item.get("open", item["close"]),
+                item.get("high", item["close"]),
+                item.get("low", item["close"]),
+            ]
 
         return {
             "as_of_date": latest_date,
