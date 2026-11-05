@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .env
 .venv/
+
+圖片表情包/
