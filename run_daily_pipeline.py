@@ -46,8 +46,19 @@ def generate_daily_intelligence_bundle(
     for c in watchlist:
         if c in stocks_map and c not in featured_codes:
             featured_codes.append(c)
-    for group in ["top_picks", "co_buy_leaders", "volume_hot", "warning_list"]:
-        for item in snapshot.get(group, []):
+    for group in [
+        "top_picks",
+        "short_term_picks",
+        "swing_picks",
+        "long_term_picks",
+        "high_price_picks",
+        "mid_price_picks",
+        "low_price_picks",
+        "short_sell_picks",
+        "co_buy_leaders",
+        "volume_hot",
+    ]:
+        for item in snapshot.get(group, [])[:6]:
             c = item["code"]
             if c not in featured_codes:
                 featured_codes.append(c)
@@ -61,18 +72,28 @@ def generate_daily_intelligence_bundle(
         klines_map[code] = kline
         debates_map[code] = committee.run_committee_debate(st, candles=kline, fetch_live_news=True)
 
-    with ThreadPoolExecutor(max_workers=10) as ex:
-        list(ex.map(_process_code, featured_codes[:32]))
+    with ThreadPoolExecutor(max_workers=12) as ex:
+        list(ex.map(_process_code, featured_codes[:45]))
 
     for code, st in stocks_map.items():
         if code not in debates_map:
             debates_map[code] = committee.run_committee_debate(st, candles=None, fetch_live_news=False)
 
+    def _map_debates(key: str) -> List[Dict[str, Any]]:
+        return [debates_map[item["code"]] for item in snapshot.get(key, []) if item["code"] in debates_map]
+
     watchlist_debates = [debates_map[c] for c in watchlist if c in debates_map]
-    top_picks_debates = [debates_map[item["code"]] for item in snapshot["top_picks"] if item["code"] in debates_map]
-    co_buy_debates = [debates_map[item["code"]] for item in snapshot["co_buy_leaders"] if item["code"] in debates_map]
-    volume_hot_debates = [debates_map[item["code"]] for item in snapshot["volume_hot"] if item["code"] in debates_map]
-    warning_debates = [debates_map[item["code"]] for item in snapshot["warning_list"] if item["code"] in debates_map]
+    top_picks_debates = _map_debates("top_picks")
+    short_term_debates = _map_debates("short_term_picks")
+    swing_debates = _map_debates("swing_picks")
+    long_term_debates = _map_debates("long_term_picks")
+    high_price_debates = _map_debates("high_price_picks")
+    mid_price_debates = _map_debates("mid_price_picks")
+    low_price_debates = _map_debates("low_price_picks")
+    short_sell_debates = _map_debates("short_sell_picks")
+    co_buy_debates = _map_debates("co_buy_leaders")
+    volume_hot_debates = _map_debates("volume_hot")
+    warning_debates = short_sell_debates[:8]
 
     report_bundle = {
         "as_of_date": snapshot["as_of_date"],
@@ -83,6 +104,13 @@ def generate_daily_intelligence_bundle(
         "watchlist_codes": watchlist,
         "watchlist_debates": watchlist_debates,
         "top_picks_debates": top_picks_debates,
+        "short_term_debates": short_term_debates,
+        "swing_debates": swing_debates,
+        "long_term_debates": long_term_debates,
+        "high_price_debates": high_price_debates,
+        "mid_price_debates": mid_price_debates,
+        "low_price_debates": low_price_debates,
+        "short_sell_debates": short_sell_debates,
         "co_buy_debates": co_buy_debates,
         "volume_hot_debates": volume_hot_debates,
         "warning_debates": warning_debates,
@@ -109,18 +137,19 @@ def generate_daily_intelligence_bundle(
 def main() -> None:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    parser = argparse.ArgumentParser(description="AlphaTW 台股領航 AI 多智能體每日結算與選股引擎")
+    parser = argparse.ArgumentParser(description="AlphaTW 4.0 台股領航 AI 多智能體每日結算與選股引擎")
     parser.add_argument("--date", type=str, default=None, help="指定交易日 YYYY-MM-DD（選填）")
     args = parser.parse_args()
 
     bundle = generate_daily_intelligence_bundle(target_date=args.date)
-    print(f"[AlphaTW] 盤後結算與多空辯論報告已生成！交易日: {bundle['as_of_date']}")
-    print(f"[AlphaTW] 共深度分析 {len(bundle['all_debates'])} 檔上市櫃個股，Top 3 推薦：")
-    for p in bundle["top_picks_debates"][:3]:
-        print(
-            f"  - {p['code']} {p['name']} ({p['close']}元, {p['change_pct']:+.2f}%): "
-            f"總分={p['total_score']} | {p['verdict']['badge']} | 買點={p['price_plan']['entry_low']}~{p['price_plan']['entry_high']}"
-        )
+    print(f"[AlphaTW 4.0] 盤後結算與多維度報告已生成！交易日: {bundle['as_of_date']} | 分析標的: {len(bundle['all_debates'])} 檔")
+    print(f"  ⚡ 短線首選: {bundle['short_term_debates'][0]['code']} {bundle['short_term_debates'][0]['name']}")
+    print(f"  🌊 波段首選: {bundle['swing_debates'][0]['code']} {bundle['swing_debates'][0]['name']}")
+    print(f"  🌳 長線首選: {bundle['long_term_debates'][0]['code']} {bundle['long_term_debates'][0]['name']}")
+    print(f"  💎 高價首選(>=200): {bundle['high_price_debates'][0]['code']} {bundle['high_price_debates'][0]['name']} ({bundle['high_price_debates'][0]['close']}元)")
+    print(f"  ⚖️ 中低價首選(50~200): {bundle['mid_price_debates'][0]['code']} {bundle['mid_price_debates'][0]['name']} ({bundle['mid_price_debates'][0]['close']}元)")
+    print(f"  🪙 銅板首選(<50): {bundle['low_price_debates'][0]['code']} {bundle['low_price_debates'][0]['name']} ({bundle['low_price_debates'][0]['close']}元)")
+    print(f"  🐻 做空專區首選: {bundle['short_sell_debates'][0]['code']} {bundle['short_sell_debates'][0]['name']} (空方分={bundle['short_sell_debates'][0]['short_sell_score']})")
 
 
 if __name__ == "__main__":

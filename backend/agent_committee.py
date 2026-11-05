@@ -6,9 +6,11 @@ from typing import Any, Dict, List
 class MultiAgentStockCommittee:
     """
     融合 TradingAgents（多空辯論 Bull vs. Bear）與 ai-hedge-fund（6 大師流派圓桌投票）之台股旗艦多智能體引擎。
-    同時產出：
-    1. 【專業投研終端 (Pro Agent View)】：籌碼/技術/新聞三維證據鏈、RSI/KD/MACD/布林通道、多空交叉辯論、凱利部位與風報比。
-    2. 【白話直覺模式 (Easy Conversational View)】：紅綠燈號、口語化好懂解說、明確「幾元分批買、跌破幾元停損、目標看幾元」。
+    全面支援：
+    1. 【三大操作週期專屬策略】：⚡ 短線衝刺 (1~5日) / 🌊 波段操作 (2~8週) / 🌳 長線價值存股 (1季以上)
+    2. 【三大股價位階資金配置】：💎 高價股 (≥200元) / ⚖️ 中低價股 (50~200元) / 🪙 低價銅板股 (<50元)
+    3. 【🐻 做空／避險放空專區】：反彈布空區間、防軋空鐵律回補停損價、下跌目標回補價與軋空風險檢測
+    4. 【雙模式切換】：專業量化終端 (Pro View) × 白話直覺模式 (Easy View)
     """
 
     def __init__(self, data_engine: Any) -> None:
@@ -51,9 +53,9 @@ class MultiAgentStockCommittee:
             }
         return {
             "signal": "REDUCE_AVOID",
-            "badge": "🔴 警戒減碼／暫時避開（法人調節破線）",
+            "badge": "🔴 警戒減碼／偏空轉弱（法人調節破線）",
             "easy_light": "RED",
-            "easy_action": "大戶法人在賣，建議逢反彈減碼或先避開",
+            "easy_action": "大戶法人在賣，建議逢反彈減碼或轉入做空觀察",
         }
 
     def run_committee_debate(
@@ -62,28 +64,43 @@ class MultiAgentStockCommittee:
         candles: List[Dict[str, Any]] | None = None,
         fetch_live_news: bool = True,
     ) -> Dict[str, Any]:
-        """針對單一台股標的執行 6 大 Agent 深度會診、技術矩陣運算與多空辯論。"""
+        """針對單一台股標的執行 6 大 Agent 深度會診、三週期策略、價位分級與做空專區運算。"""
         code = stock["code"]
         name = stock["name"]
-        close_p = stock["close"]
-        ret_pct = stock["change_pct"]
-        ma_short = stock["ma_short"]
-        ma_mid = stock["ma_mid"]
-        ma_gap = stock["ma_gap_pct"]
-        f_lots = stock["foreign_lots"]
-        t_lots = stock["trust_lots"]
-        d_lots = stock["dealer_lots"]
-        inst_lots = stock["inst_total_lots"]
-        f_3d = stock["foreign_3d_lots"]
-        t_3d = stock["trust_3d_lots"]
-        inst_3d_yi = stock["inst_3d_val_yi"]
-        margin_lots = stock["margin_diff_lots"]
-        dt_pct = stock["day_trade_pct"]
+        close_p = float(stock["close"])
+        ret_pct = float(stock["change_pct"])
+        ma_short = float(stock["ma_short"])
+        ma_mid = float(stock["ma_mid"])
+        ma_gap = float(stock["ma_gap_pct"])
+        atr_val = float(stock.get("atr", max(close_p * 0.018, 0.5)))
+        f_lots = float(stock["foreign_lots"])
+        t_lots = float(stock["trust_lots"])
+        d_lots = float(stock["dealer_lots"])
+        inst_lots = float(stock["inst_total_lots"])
+        f_3d = float(stock["foreign_3d_lots"])
+        t_3d = float(stock["trust_3d_lots"])
+        inst_3d_yi = float(stock["inst_3d_val_yi"])
+        margin_lots = float(stock["margin_diff_lots"])
+        dt_pct = float(stock["day_trade_pct"])
         entry_low, entry_high = stock["entry_zone"]
-        stop_loss = stock["stop_loss"]
-        target_p = stock["target_price"]
-        rr_ratio = stock["risk_reward_ratio"]
-        pos_pct = stock.get("suggested_position_pct", 10.0)
+        stop_loss = float(stock["stop_loss"])
+        target_p = float(stock["target_price"])
+        rr_ratio = float(stock["risk_reward_ratio"])
+        pos_pct = float(stock.get("suggested_position_pct", 10.0))
+
+        price_tier = stock.get("price_tier", "HIGH_200_PLUS" if close_p >= 200 else ("MID_50_200" if close_p >= 50 else "LOW_UNDER_50"))
+        price_tier_label = stock.get(
+            "price_tier_label",
+            "💎 高價股 (200元以上)" if close_p >= 200 else ("⚖️ 中低價股 (50~200元)" if close_p >= 50 else "🪙 低價銅板股 (50元以下)"),
+        )
+        lot_cost_wan = round(close_p * 0.1, 2)
+
+        short_term_score = float(stock.get("short_term_score", stock["total_score"]))
+        swing_score = float(stock.get("swing_score", stock["total_score"]))
+        long_term_score = float(stock.get("long_term_score", stock["total_score"]))
+        short_sell_score = float(stock.get("short_sell_score", round(100.0 - float(stock["total_score"]), 1)))
+        best_horizon = stock.get("best_horizon", "SWING")
+        best_horizon_label = stock.get("best_horizon_label", "🌊 波段法人認養 (2~8週)")
 
         tech = self.data_engine.compute_technical_indicators(candles or [], close_p)
         verdict = self._classify_action(stock)
@@ -91,6 +108,120 @@ class MultiAgentStockCommittee:
         news_items: List[Dict[str, str]] = []
         if fetch_live_news:
             news_items = self.data_engine.fetch_google_news_for_query(f"{code} {name}", limit=5)
+
+        # === 三大週期專屬交易策略 (Short-Term / Swing / Long-Term) ===
+        st_entry_low = round(max(close_p * 0.99, ma_short * 0.995), 2)
+        st_entry_high = round(close_p * 1.005, 2)
+        if st_entry_low > st_entry_high:
+            st_entry_low = round(close_p * 0.988, 2)
+        st_stop = round(max(close_p * 0.965, close_p - 1.25 * atr_val), 2)
+        st_target = round(close_p + 2.0 * atr_val, 2)
+
+        lt_entry_low = round(min(close_p * 0.95, tech["ma60"] * 0.985 if tech["ma60"] > 0 else close_p * 0.95), 2)
+        lt_entry_high = round(min(close_p * 0.995, tech["ma20"] * 1.01 if tech["ma20"] > 0 else close_p), 2)
+        if lt_entry_low > lt_entry_high:
+            lt_entry_low = round(close_p * 0.95, 2)
+            lt_entry_high = round(close_p, 2)
+        lt_stop = round(min(close_p * 0.88, tech["ma60"] * 0.94 if tech["ma60"] > 0 else close_p * 0.88), 2)
+        lt_target = round(close_p * 1.22, 2)
+
+        horizon_plans = {
+            "short_term": {
+                "label": "⚡ 短線衝刺 (1~5日)",
+                "score": short_term_score,
+                "suitability": "🔥 極佳（爆量動能突破）" if short_term_score >= 75 else ("🟢 適合（短多守穩）" if short_term_score >= 62 else "⚪ 普通（動能偏溫）"),
+                "entry_low": st_entry_low,
+                "entry_high": st_entry_high,
+                "stop_loss": st_stop,
+                "target_price": st_target,
+                "holding_period": "1 ～ 5 個交易日（快進快出）",
+                "strategy_note": (
+                    f"鎖定當日量比 {stock['vol_ratio']}x 與 KD({tech['k9']}/{tech['d9']}) {tech['kd_signal']}動能；"
+                    f"於 {st_entry_low}~{st_entry_high} 元切入，跌破 5MA / {st_stop} 元立即停損，短線看 {st_target} 元。"
+                ),
+            },
+            "swing": {
+                "label": "🌊 波段操作 (2~8週)",
+                "score": swing_score,
+                "suitability": "🔥 極佳（法人連買認養）" if swing_score >= 75 else ("🟢 適合（趨勢偏多）" if swing_score >= 62 else "⚪ 觀望（等待籌碼轉正）"),
+                "entry_low": entry_low,
+                "entry_high": entry_high,
+                "stop_loss": stop_loss,
+                "target_price": target_p,
+                "holding_period": "2 ～ 8 週（順勢抱波段）",
+                "strategy_note": (
+                    f"依據三大法人近 3 日流向 ({inst_3d_yi:+.2f} 億) 與 20MA ({tech['ma20']} 元) 趨勢；"
+                    f"於 {entry_low}~{entry_high} 元分兩批布局，收盤跌破 {stop_loss} 元停損，波段目標 {target_p} 元。"
+                ),
+            },
+            "long_term": {
+                "label": "🌳 長線存股／價值 (1季以上)",
+                "score": long_term_score,
+                "suitability": "🔥 極佳（核心護城河／高息穩健）" if long_term_score >= 74 else ("🟢 適合（逢低分批配置）" if long_term_score >= 60 else "🟡 波動較大（宜做波段）"),
+                "entry_low": lt_entry_low,
+                "entry_high": lt_entry_high,
+                "stop_loss": lt_stop,
+                "target_price": lt_target,
+                "holding_period": "1 季 ～ 1 年以上（分批長線累積）",
+                "strategy_note": (
+                    f"參考 60 日季線 ({tech['ma60']} 元) 安全邊際，當沖比 {dt_pct:.1f}%；"
+                    f"建議於 {lt_entry_low}~{lt_entry_high} 元價值區間逢跌分批買進，長線目標看 {lt_target} 元。"
+                ),
+            },
+        }
+
+        # === 🐻 做空／避險放空專屬策略 (Short-Selling Strategy Card) ===
+        short_entry_low, short_entry_high = stock.get(
+            "short_entry_zone",
+            [round(close_p * 0.998, 2), round(max(close_p * 1.018, ma_short * 1.005), 2)],
+        )
+        short_stop_loss = float(stock.get("short_stop_loss", round(max(close_p + 1.8 * atr_val, ma_mid * 1.015), 2)))
+        short_target_p = float(stock.get("short_target_price", round(max(1.0, close_p - 2.8 * atr_val), 2)))
+        short_rr = float(stock.get("short_rr_ratio", round((close_p - short_target_p) / max(0.01, short_stop_loss - close_p), 2)))
+
+        if inst_lots > 300 and close_p > ma_mid and ret_pct > 2.0:
+            squeeze_risk = "🔴 高軋空風險（法人大買且站上均線，切勿逆勢硬空）"
+        elif dt_pct > 42.0 or ret_pct > 1.5:
+            squeeze_risk = "🟡 中度軋空／震盪風險（當沖熱絡，務必等反彈壓力區再空並嚴守回補價）"
+        else:
+            squeeze_risk = "🟢 低軋空風險（法人賣超且受制均線反壓，空方結構明確）"
+
+        if short_sell_score >= 68.0:
+            short_badge = "🟣 強烈放空／避險標的（法人連賣破線）"
+        elif short_sell_score >= 56.0:
+            short_badge = "🟠 偏空操作／逢反彈布空（籌碼轉弱）"
+        else:
+            short_badge = "⚪ 多方佔優・不建議放空（僅供避險參考）"
+
+        short_reasons: List[str] = []
+        if inst_lots < 0:
+            short_reasons.append(f"【法人棄養倒貨】三大法人今日賣超 {inst_lots:+.0f} 張（外資 {f_lots:+.0f}、投信 {t_lots:+.0f}），近 3 日合計流向 {inst_3d_yi:+.2f} 億元。")
+        if close_p < ma_mid:
+            short_reasons.append(f"【均線蓋頭反壓】收盤 {close_p} 元跌破多日均線 ({ma_mid} 元，乖離 {ma_gap:+.2f}%)，上檔套牢賣壓沉重。")
+        if margin_lots > 0 and inst_lots < 0:
+            short_reasons.append(f"【散戶融資接刀】法人賣超同時融資卻增加 {margin_lots:+.0f} 張，籌碼凌亂易引發多殺多。")
+        if not short_reasons:
+            short_reasons.append(f"【短線乖離或壓力測試】若反彈無法帶量突破 20 日壓力位 {tech['resistance_20d']} 元，才考慮短空避險。")
+
+        easy_short_advisor = (
+            f"【🐻 做空／避險視角：{name}（{code}）】"
+            f"{'目前外資或投信大戶正在明顯倒貨賣出，而且股價跌破均線支撐，屬於標準的弱勢空頭股！' if short_sell_score >= 60 else '目前這檔多方支撐還算穩，不建議隨便去放空它喔！'}"
+            f"如果您想做空（融券或股票期貨避險），千萬別在急跌最低點追空，建議等盤中反彈到 {short_entry_low} ～ {short_entry_high} 元附近無力時再布空；"
+            f"一旦股價帶量站回 {short_stop_loss} 元以上，代表主力可能軋空，請務必立刻回補停損！下跌回補獲利目標先看 {short_target_p} 元。"
+        )
+
+        short_sell_plan = {
+            "score": short_sell_score,
+            "badge": short_badge,
+            "entry_low": short_entry_low,
+            "entry_high": short_entry_high,
+            "stop_loss": short_stop_loss,
+            "target_price": short_target_p,
+            "risk_reward_ratio": short_rr,
+            "squeeze_risk": squeeze_risk,
+            "reasons": short_reasons,
+            "easy_short_advisor": easy_short_advisor,
+        }
 
         # 1. 籌碼追蹤官 (Smart Money Chip Agent)
         if f_lots > 0 and t_lots > 0:
@@ -177,11 +308,18 @@ class MultiAgentStockCommittee:
         ]
 
         # 5. 口語化白話投資解讀 (Easy Conversational Guide — 給全家人看)
+        lot_tip = (
+            f"（屬於200元以上高價股，買一整張約需 {lot_cost_wan} 萬元，資金較小時也很適合用『盤中零股』分批買）"
+            if price_tier == "HIGH_200_PLUS"
+            else f"（屬於50~200元中堅主流股，買一張約需 {lot_cost_wan} 萬元）"
+            if price_tier == "MID_50_200"
+            else f"（屬於50元以下銅板親民股，買一整張只要約 {lot_cost_wan} 萬元，入手門檻很輕鬆）"
+        )
         easy_summary = (
-            f"【{name}（{code}）】今天收在 {close_p} 元（漲跌 {ret_pct:+.2f}%）。"
+            f"【{name}（{code}）】今天收在 {close_p} 元（漲跌 {ret_pct:+.2f}%）{lot_tip}。"
             f"{'外資跟投信大戶今天同時在買進，籌碼非常穩健！' if (f_lots > 0 and t_lots > 0) else ('法人大戶今天站在買方支撐股價。' if inst_lots > 0 else '要注意今天外資或投信大戶有在調節賣出。')}"
-            f"如果想布局這檔，建議等股價在 {entry_low} ～ {entry_high} 元之間再分批買進，不急著追高；"
-            f"如果手邊已經有持股，只要收盤沒跌破 {stop_loss} 元都可以安心續抱，波段目標先看 {target_p} 元附近。"
+            f"這檔目前最推薦用「{best_horizon_label}」的方式操作：想買進的話，建議等股價在 {entry_low} ～ {entry_high} 元之間分批承接；"
+            f"只要收盤沒跌破 {stop_loss} 元都可以安心持有，目標先看 {target_p} 元附近。"
         )
 
         return {
@@ -192,7 +330,16 @@ class MultiAgentStockCommittee:
             "close": close_p,
             "change": stock["change"],
             "change_pct": ret_pct,
+            "price_tier": price_tier,
+            "price_tier_label": price_tier_label,
+            "lot_cost_wan": lot_cost_wan,
+            "best_horizon": best_horizon,
+            "best_horizon_label": best_horizon_label,
             "total_score": stock["total_score"],
+            "short_term_score": short_term_score,
+            "swing_score": swing_score,
+            "long_term_score": long_term_score,
+            "short_sell_score": short_sell_score,
             "chip_score": stock["chip_score"],
             "trend_score": stock["trend_score"],
             "risk_score": stock["risk_score"],
@@ -205,6 +352,8 @@ class MultiAgentStockCommittee:
                 "risk_reward_ratio": rr_ratio,
                 "suggested_position_pct": pos_pct,
             },
+            "horizon_plans": horizon_plans,
+            "short_sell_plan": short_sell_plan,
             "technicals": tech,
             "agents": {
                 "chip_agent": f"{chip_headline} 此外，{margin_note}。",
@@ -224,6 +373,7 @@ class MultiAgentStockCommittee:
                 "margin_diff_lots": margin_lots,
                 "day_trade_pct": dt_pct,
                 "turnover_yi": stock["turnover_yi"],
+                "vol_ratio": stock.get("vol_ratio", 1.0),
                 "ma_short": ma_short,
                 "ma_mid": ma_mid,
                 "ma_gap_pct": ma_gap,

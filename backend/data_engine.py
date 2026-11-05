@@ -617,9 +617,34 @@ class TaiwanStockDataEngine:
         ]
         top_turnover_codes = [
             item["code"]
-            for item in sorted(all_t0.values(), key=lambda x: x["turnover_ntd"], reverse=True)[:40]
+            for item in sorted(all_t0.values(), key=lambda x: x["turnover_ntd"], reverse=True)[:50]
         ]
-        top_inst_codes = [
+        # 確保高價股(>=200)、中低價股(50~200)、低價銅板股(<50) 與 做空破線股 都有充足代表性標的
+        high_price_active = [
+            item["code"]
+            for item in sorted(
+                [x for x in all_t0.values() if x["close"] >= 200.0],
+                key=lambda x: x["turnover_ntd"],
+                reverse=True,
+            )[:25]
+        ]
+        mid_price_active = [
+            item["code"]
+            for item in sorted(
+                [x for x in all_t0.values() if 50.0 <= x["close"] < 200.0],
+                key=lambda x: x["turnover_ntd"],
+                reverse=True,
+            )[:35]
+        ]
+        low_price_active = [
+            item["code"]
+            for item in sorted(
+                [x for x in all_t0.values() if 5.0 <= x["close"] < 50.0 and len(x["code"]) == 4],
+                key=lambda x: x["turnover_ntd"],
+                reverse=True,
+            )[:35]
+        ]
+        top_inst_buy_codes = [
             code
             for code, info in sorted(
                 inst_t0.items(),
@@ -628,8 +653,25 @@ class TaiwanStockDataEngine:
             )[:30]
             if code in all_t0
         ]
+        top_inst_sell_codes = [
+            code
+            for code, info in sorted(
+                inst_t0.items(),
+                key=lambda kv: kv[1].get("total_lots", 0.0) * all_t0.get(kv[0], {}).get("close", 0.0),
+            )[:30]
+            if code in all_t0
+        ]
         active_codes = list(
-            dict.fromkeys(user_watch + list(DEFAULT_SECTOR_MAP.keys()) + top_turnover_codes + top_inst_codes)
+            dict.fromkeys(
+                user_watch
+                + list(DEFAULT_SECTOR_MAP.keys())
+                + top_turnover_codes
+                + high_price_active
+                + mid_price_active
+                + low_price_active
+                + top_inst_buy_codes
+                + top_inst_sell_codes
+            )
         )
 
         stocks_enriched: Dict[str, Dict[str, Any]] = {}
@@ -642,6 +684,18 @@ class TaiwanStockDataEngine:
             close_p = q["close"]
             high_p = max(q["high"], close_p)
             low_p = min(q["low"], close_p)
+
+            # 股價位階分級：高價股(>=200) / 中低價股(50~200) / 低價銅板股(<50)
+            if close_p >= 200.0:
+                price_tier = "HIGH_200_PLUS"
+                price_tier_label = "💎 高價股 (200元以上)"
+            elif close_p >= 50.0:
+                price_tier = "MID_50_200"
+                price_tier_label = "⚖️ 中低價股 (50~200元)"
+            else:
+                price_tier = "LOW_UNDER_50"
+                price_tier_label = "🪙 低價銅板股 (50元以下)"
+            lot_cost_wan = round(close_p * 0.1, 2)
 
             closes_series = [close_p]
             ranges_series = [max(high_p - low_p, close_p * 0.012)]
@@ -731,6 +785,93 @@ class TaiwanStockDataEngine:
 
             total_score = round(0.45 * chip_score + 0.35 * trend_score + 0.20 * risk_score, 1)
 
+            # === 三大週期專屬評分 (短線 / 波段 / 長線) + 做空放空評分 ===
+            # 1. ⚡ 短線衝刺分 (Short-Term 1~5日)：重當日量能爆發、強勢突破、法人單日急買
+            short_term_score = 50.0
+            if close_p >= ma_short and q["change_pct"] >= 0.8:
+                short_term_score += 18.0
+            if 1.2 <= vol_ratio <= 3.5 and q["change_pct"] > 0:
+                short_term_score += 14.0
+            if i0["total_lots"] > 200:
+                short_term_score += 12.0
+            if i0["foreign_lots"] > 0 and i0["trust_lots"] > 0:
+                short_term_score += 8.0
+            if q["change_pct"] < 0 or close_p < ma_short:
+                short_term_score -= 16.0
+            short_term_score = round(max(12.0, min(98.0, short_term_score)), 1)
+
+            # 2. 🌊 波段認養分 (Swing 2~8週)：重 3 日法人連買、投信作帳、融資減少、均線初升段未過熱
+            swing_score = total_score
+            if trust_3d_lots > 50 or (i0["foreign_lots"] > 0 and i0["trust_lots"] > 0):
+                swing_score += 8.0
+            if -1.5 <= ma_gap_pct <= 4.5 and close_p >= ma_mid:
+                swing_score += 6.0
+            if margin_lots < 0 and i0["total_lots"] > 0:
+                swing_score += 5.0
+            swing_score = round(max(12.0, min(98.0, swing_score)), 1)
+
+            # 3. 🌳 長線價值／存股分 (Long-Term 1季~1年以上)：重產業龍頭護城河、ETF/權值穩健度、低當沖、安全邊際
+            long_term_score = 52.0
+            if code in DEFAULT_SECTOR_MAP:
+                long_term_score += 14.0
+            if sector_label in {"市值型 ETF", "高股息 ETF", "電信防禦核心", "金控與高息金融", "晶圓代工 / AI 晶片", "AI 電源與散熱"}:
+                long_term_score += 12.0
+            if dt_ratio_pct < 26.0:
+                long_term_score += 10.0
+            if -3.5 <= ma_gap_pct <= 3.0:
+                long_term_score += 8.0
+            if inst_3d_val_yi >= 0 or i0["total_lots"] >= 0:
+                long_term_score += 8.0
+            else:
+                long_term_score -= 10.0
+            long_term_score = round(max(15.0, min(98.0, long_term_score)), 1)
+
+            # 4. 🐻 做空／避險放空分 (Short-Selling Score)：捕捉「法人連賣倒貨＋散戶融資接刀＋均線破位蓋頭反壓」
+            short_sell_score = 40.0
+            if i0["total_lots"] < -300:
+                short_sell_score += 18.0
+            elif i0["total_lots"] < -50:
+                short_sell_score += 10.0
+            elif i0["total_lots"] > 300:
+                short_sell_score -= 18.0
+
+            if i0["foreign_lots"] < 0 and i0["trust_lots"] < 0:
+                short_sell_score += 12.0
+            if inst_3d_val_yi < -1.0:
+                short_sell_score += 14.0
+            elif inst_3d_val_yi < -0.2:
+                short_sell_score += 7.0
+            elif inst_3d_val_yi > 1.0:
+                short_sell_score -= 15.0
+
+            if close_p < ma_mid:
+                short_sell_score += 12.0
+            if close_p < ma_short <= ma_mid:
+                short_sell_score += 8.0
+            if margin_lots > 150 and i0["total_lots"] < 0:
+                short_sell_score += 10.0
+            if q["change_pct"] < -0.5:
+                short_sell_score += 6.0
+            elif q["change_pct"] >= 4.5:
+                short_sell_score -= 20.0
+            short_sell_score = round(max(10.0, min(96.0, short_sell_score)), 1)
+
+            # 決定該股最適合的首選操作週期標籤
+            if short_sell_score >= 70.0 and total_score < 48.0:
+                best_horizon = "SHORT_SELL"
+                best_horizon_label = "🐻 空方放空／避險"
+            elif short_term_score >= swing_score and short_term_score >= long_term_score and q["change_pct"] >= 1.5:
+                best_horizon = "SHORT_TERM"
+                best_horizon_label = "⚡ 短線強勢衝刺 (1~5日)"
+            elif long_term_score > swing_score and (
+                sector_label in {"市值型 ETF", "高股息 ETF", "電信防禦核心", "金控與高息金融"} or dt_ratio_pct < 20.0
+            ):
+                best_horizon = "LONG_TERM"
+                best_horizon_label = "🌳 長線存股價值 (季/年)"
+            else:
+                best_horizon = "SWING"
+                best_horizon_label = "🌊 波段法人認養 (2~8週)"
+
             entry_low = round(max(low_p, min(close_p * 0.985, ma_short * 0.995)), 2)
             entry_high = round(min(close_p * 1.005, ma_mid * 1.035 if close_p > ma_mid else close_p), 2)
             if entry_low > entry_high:
@@ -740,12 +881,24 @@ class TaiwanStockDataEngine:
             target_price = round(close_p + 2.8 * atr_est, 2)
             rr_ratio = round((target_price - close_p) / max(0.01, close_p - stop_loss), 2)
 
+            # 做空（放空）專屬點位計算
+            short_entry_low = round(close_p * 0.998, 2)
+            short_entry_high = round(max(close_p * 1.018, ma_short * 1.005), 2)
+            short_stop_loss = round(max(high_p * 1.015, close_p + 1.8 * atr_est, ma_mid * 1.015), 2)
+            short_target_price = round(max(1.0, close_p - 2.8 * atr_est), 2)
+            short_rr_ratio = round((close_p - short_target_price) / max(0.01, short_stop_loss - close_p), 2)
+
             # 凱利部位與分批建倉建議
             kelly_pct = round(max(5.0, min(20.0, (total_score - 45.0) * 0.35)), 1)
 
             item_dict = {
                 **q,
                 "sector": sector_label,
+                "price_tier": price_tier,
+                "price_tier_label": price_tier_label,
+                "lot_cost_wan": lot_cost_wan,
+                "best_horizon": best_horizon,
+                "best_horizon_label": best_horizon_label,
                 "ma_short": round(ma_short, 2),
                 "ma_mid": round(ma_mid, 2),
                 "ma_gap_pct": round(ma_gap_pct, 2),
@@ -765,10 +918,18 @@ class TaiwanStockDataEngine:
                 "trend_score": round(trend_score, 1),
                 "risk_score": round(risk_score, 1),
                 "total_score": total_score,
+                "short_term_score": short_term_score,
+                "swing_score": swing_score,
+                "long_term_score": long_term_score,
+                "short_sell_score": short_sell_score,
                 "entry_zone": [entry_low, entry_high],
                 "stop_loss": stop_loss,
                 "target_price": target_price,
                 "risk_reward_ratio": rr_ratio,
+                "short_entry_zone": [short_entry_low, short_entry_high],
+                "short_stop_loss": short_stop_loss,
+                "short_target_price": short_target_price,
+                "short_rr_ratio": short_rr_ratio,
                 "suggested_position_pct": kelly_pct,
             }
             stocks_enriched[code] = item_dict
@@ -801,29 +962,68 @@ class TaiwanStockDataEngine:
             )
         sector_heatmap.sort(key=lambda x: (x["avg_score"], x["inst_flow_yi"]), reverse=True)
 
-        # 1. AI 嚴選明日 Top 6 強勢推薦股
+        # 1. AI 嚴選明日 Top 8 強勢推薦股
         top_picks = [
             s
             for s in ranked_all
             if s["inst_total_lots"] > 0 and -2.5 <= s["ma_gap_pct"] < 6.5 and s["change_pct"] >= -2.0
-        ][:6]
-        if len(top_picks) < 6:
+        ][:8]
+        if len(top_picks) < 8:
             for s in ranked_all:
                 if s not in top_picks and s["change_pct"] >= -2.5:
                     top_picks.append(s)
-                if len(top_picks) >= 6:
+                if len(top_picks) >= 8:
                     break
 
-        # 2. 土洋同買（外資+投信同步大買）熱門股
+        # 2. 三大週期專屬排行：短線衝刺 (1~5日) / 波段認養 (2~8週) / 長線價值 (季/年以上)
+        short_term_picks = sorted(
+            [s for s in ranked_all if s["change_pct"] >= 0.0 and s["close"] >= s["ma_short"]],
+            key=lambda x: (x["short_term_score"], x["vol_ratio"], x["total_score"]),
+            reverse=True,
+        )[:12]
+        swing_picks = sorted(
+            [s for s in ranked_all if s["inst_total_lots"] >= 0 and s["ma_gap_pct"] <= 6.0],
+            key=lambda x: (x["swing_score"], x["inst_3d_val_yi"], x["total_score"]),
+            reverse=True,
+        )[:12]
+        long_term_picks = sorted(
+            ranked_all,
+            key=lambda x: (x["long_term_score"], x["risk_score"], x["total_score"]),
+            reverse=True,
+        )[:12]
+
+        # 3. 三大股價位階專屬排行：高價股(>=200) / 中低價股(50~200) / 低價銅板股(<50)
+        high_price_picks = sorted(
+            [s for s in ranked_all if s["price_tier"] == "HIGH_200_PLUS"],
+            key=lambda x: x["total_score"],
+            reverse=True,
+        )[:12]
+        mid_price_picks = sorted(
+            [s for s in ranked_all if s["price_tier"] == "MID_50_200"],
+            key=lambda x: x["total_score"],
+            reverse=True,
+        )[:12]
+        low_price_picks = sorted(
+            [s for s in ranked_all if s["price_tier"] == "LOW_UNDER_50"],
+            key=lambda x: x["total_score"],
+            reverse=True,
+        )[:12]
+
+        # 4. 🐻 做空／避險放空專區 (Short-Selling Radar)：法人連賣＋技術破線＋散戶融資接刀
+        short_sell_picks = sorted(
+            ranked_all,
+            key=lambda x: (x["short_sell_score"], -x["total_score"], -x["inst_3d_val_yi"]),
+            reverse=True,
+        )[:12]
+
+        # 5. 土洋同買（外資+投信同步大買）熱門股 & 全市場人氣成交值王
         co_buy_leaders = sorted(
             [s for s in ranked_all if s["foreign_lots"] > 0 and s["trust_lots"] > 0],
             key=lambda x: x["inst_3d_val_yi"],
             reverse=True,
-        )[:8]
-        # 3. 全市場人氣成交值王
-        volume_hot = sorted(ranked_all, key=lambda x: x["turnover_yi"], reverse=True)[:8]
-        # 4. 法人大舉調節 / 破線警戒股
-        warning_list = sorted(ranked_all, key=lambda x: x["total_score"])[:6]
+        )[:10]
+        volume_hot = sorted(ranked_all, key=lambda x: x["turnover_yi"], reverse=True)[:10]
+        warning_list = short_sell_picks[:8]
 
         return {
             "as_of_date": latest_date,
@@ -835,17 +1035,28 @@ class TaiwanStockDataEngine:
                 "flat_count": flat_count,
                 "up_ratio_pct": round(up_count / max(1, len(all_t0)) * 100.0, 1),
                 "avg_return_pct": round(avg_market_ret, 2),
+                "high_200_count": sum(1 for x in stocks_enriched.values() if x["price_tier"] == "HIGH_200_PLUS"),
+                "mid_50_200_count": sum(1 for x in stocks_enriched.values() if x["price_tier"] == "MID_50_200"),
+                "low_under_50_count": sum(1 for x in stocks_enriched.values() if x["price_tier"] == "LOW_UNDER_50"),
+                "short_sell_alert_count": sum(1 for x in stocks_enriched.values() if x["short_sell_score"] >= 65.0),
                 "regime": (
                     "多頭進攻盤（百花齊放，順勢抱強股）"
                     if avg_market_ret >= 0.6
                     else "震盪選股盤（重個股法人籌碼、拉回低接不追高）"
                     if avg_market_ret >= -0.8
-                    else "空方修正洗盤（嚴控現金水位、優先布局法人逆勢護盤股）"
+                    else "空方修正洗盤（嚴控現金水位、可搭配做空專區避險）"
                 ),
             },
             "sector_heatmap": sector_heatmap,
             "headline_news": headline_news,
             "top_picks": top_picks,
+            "short_term_picks": short_term_picks,
+            "swing_picks": swing_picks,
+            "long_term_picks": long_term_picks,
+            "high_price_picks": high_price_picks,
+            "mid_price_picks": mid_price_picks,
+            "low_price_picks": low_price_picks,
+            "short_sell_picks": short_sell_picks,
             "co_buy_leaders": co_buy_leaders,
             "volume_hot": volume_hot,
             "warning_list": warning_list,
