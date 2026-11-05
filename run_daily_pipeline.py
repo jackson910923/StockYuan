@@ -22,7 +22,7 @@ def load_watchlist(path: Path) -> List[str]:
                 return [str(x).strip() for x in data["watchlist"] if str(x).strip()]
         except Exception:
             pass
-    default_list = ["2330", "2317", "2454", "6669", "3533", "1802", "2603", "2618", "2891", "2412"]
+    default_list = ["2330", "2317", "2454", "6669", "3533", "1802", "2603", "2618", "2891", "2412", "0050", "00878"]
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"watchlist": default_list}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return default_list
@@ -42,7 +42,6 @@ def generate_daily_intelligence_bundle(
     snapshot = engine.build_full_market_intelligence(watchlist=watchlist, target_date=target_date)
     stocks_map = snapshot["stocks"]
 
-    # 收集需要執行 6-Agent 多空辯論與 K 線抓取的核心標的
     featured_codes: List[str] = []
     for c in watchlist:
         if c in stocks_map and c not in featured_codes:
@@ -53,22 +52,21 @@ def generate_daily_intelligence_bundle(
             if c not in featured_codes:
                 featured_codes.append(c)
 
-    # 併發執行個股新聞抓取、6-Agent 多空辯論與 K 線歷史資料
     debates_map: Dict[str, Dict[str, Any]] = {}
     klines_map: Dict[str, List[Dict[str, Any]]] = {}
 
     def _process_code(code: str) -> None:
         st = stocks_map[code]
-        debates_map[code] = committee.run_committee_debate(st, fetch_live_news=True)
-        klines_map[code] = engine.fetch_stock_kline_history(code, market=st["market"], days=45)
+        kline = engine.fetch_stock_kline_history(code, market=st["market"], days=60)
+        klines_map[code] = kline
+        debates_map[code] = committee.run_committee_debate(st, candles=kline, fetch_live_news=True)
 
-    with ThreadPoolExecutor(max_workers=8) as ex:
-        list(ex.map(_process_code, featured_codes[:28]))
+    with ThreadPoolExecutor(max_workers=10) as ex:
+        list(ex.map(_process_code, featured_codes[:32]))
 
-    # 對其餘未抓新聞的標的亦生成完整量化辯論結構（不發額外 RSS 請求以保持極速）
     for code, st in stocks_map.items():
         if code not in debates_map:
-            debates_map[code] = committee.run_committee_debate(st, fetch_live_news=False)
+            debates_map[code] = committee.run_committee_debate(st, candles=None, fetch_live_news=False)
 
     watchlist_debates = [debates_map[c] for c in watchlist if c in debates_map]
     top_picks_debates = [debates_map[item["code"]] for item in snapshot["top_picks"] if item["code"] in debates_map]
@@ -80,6 +78,7 @@ def generate_daily_intelligence_bundle(
         "as_of_date": snapshot["as_of_date"],
         "generated_at": snapshot["generated_at"],
         "market_summary": snapshot["market_summary"],
+        "sector_heatmap": snapshot["sector_heatmap"],
         "headline_news": snapshot["headline_news"],
         "watchlist_codes": watchlist,
         "watchlist_debates": watchlist_debates,
@@ -90,9 +89,8 @@ def generate_daily_intelligence_bundle(
         "all_debates": debates_map,
         "klines": klines_map,
     }
-    report_bundle["dad_briefing_text"] = DailyBriefingNotifier.build_dad_line_message(report_bundle)
+    report_bundle["family_briefing_text"] = DailyBriefingNotifier.build_family_line_message(report_bundle)
 
-    # 同步寫入 data/ 與 docs/data/（支援 GitHub Pages 靜態無伺服器直接開啟！）
     for out_path in [
         root_dir / "data" / "latest_report.json",
         root_dir / "docs" / "data" / "latest_report.json",
@@ -101,7 +99,7 @@ def generate_daily_intelligence_bundle(
         out_path.write_text(json.dumps(report_bundle, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     md_path = root_dir / "docs" / "daily_briefing.md"
-    md_path.write_text(report_bundle["dad_briefing_text"] + "\n", encoding="utf-8")
+    md_path.write_text(report_bundle["family_briefing_text"] + "\n", encoding="utf-8")
 
     push_status = DailyBriefingNotifier.push_notifications(report_bundle)
     report_bundle["push_status"] = push_status

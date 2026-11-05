@@ -1,10 +1,19 @@
-name: AlphaTW 台股 AI 多智能體每日盤後結算與選股排程
+name: AlphaTW 台股 AI 多智能體 24hr 全天候自動情報排程
 
 on:
   schedule:
-    # 台灣時間週一至週五 16:35 (UTC 08:35) 自動執行盤後三大法人結算與 AI 多空辯論
-    - cron: '35 8 * * 1-5'
-  workflow_dispatch: # 支援在 GitHub 網頁上一鍵手動觸發
+    # 台灣時間週一至週五：
+    # 08:30 (UTC 00:30) 盤前晨報與國際財經新聞掃描
+    # 11:30 (UTC 03:30) 盤中熱門動能與新聞更新
+    # 14:15 (UTC 06:15) 台股收盤價量快報
+    # 16:40 (UTC 08:40) 三大法人買賣超 (T86) 出爐深度結算
+    # 21:15 (UTC 13:15) 融資融券與當沖比完整盤後總結
+    - cron: '30 0 * * 1-5'
+    - cron: '30 3 * * 1-5'
+    - cron: '15 6 * * 1-5'
+    - cron: '40 8 * * 1-5'
+    - cron: '15 13 * * 1-5'
+  workflow_dispatch: # 支援在 GitHub 網頁上一鍵手動觸發即時更新
 
 permissions:
   contents: write
@@ -21,7 +30,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run AlphaTW Multi-Agent Daily Pipeline
+      - name: Run AlphaTW Multi-Agent Intelligence Pipeline
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -29,10 +38,10 @@ jobs:
         run: |
           python run_daily_pipeline.py
 
-      - name: Commit & Push Updated Daily Intelligence to GitHub Pages
+      - name: Commit & Push Updated Intelligence to GitHub Pages
         run: |
           git config user.name "AlphaTW-AI-Agent"
           git config user.email "agent@alphatw.local"
           git add data/latest_report.json docs/data/latest_report.json docs/daily_briefing.md
-          git diff --staged --quiet || git commit -m "chore(daily): update Taiwan stock AI multi-agent report $(date +'%Y-%m-%d')"
+          git diff --staged --quiet || git commit -m "chore(auto): update Taiwan stock AI multi-agent intelligence $(date +'%Y-%m-%d %H:%M')"
           git push

@@ -1,17 +1,14 @@
 from __future__ import annotations
 
-import json
-import os
-import urllib.request
 from typing import Any, Dict, List
 
 
 class MultiAgentStockCommittee:
     """
-    融合 TradingAgents（多空辯論 Bull vs. Bear）與 ai-hedge-fund（大師圓桌投票）之台股旗艦多智能體引擎。
+    融合 TradingAgents（多空辯論 Bull vs. Bear）與 ai-hedge-fund（6 大師流派圓桌投票）之台股旗艦多智能體引擎。
     同時產出：
-    1. 【專業交易員模式 (Pro Trader View)】：籌碼/技術/新聞三維證據鏈、多空激辯紀錄、精準進出場區間與期望風報比。
-    2. 【老爸專屬白話模式 (Dad's Friendly View)】：紅綠燈號、零術語大白話講解、明確「幾元以下買、跌破幾元停損」。
+    1. 【專業投研終端 (Pro Agent View)】：籌碼/技術/新聞三維證據鏈、RSI/KD/MACD/布林通道、多空交叉辯論、凱利部位與風報比。
+    2. 【白話直覺模式 (Easy Conversational View)】：紅綠燈號、口語化好懂解說、明確「幾元分批買、跌破幾元停損、目標看幾元」。
     """
 
     def __init__(self, data_engine: Any) -> None:
@@ -28,39 +25,44 @@ class MultiAgentStockCommittee:
             return {
                 "signal": "STRONG_BUY",
                 "badge": "🟢 強烈推薦買進（法人認養＋未追高）",
-                "dad_light": "GREEN",
-                "dad_action": "可以逢低分批買進",
+                "easy_light": "GREEN",
+                "easy_action": "可以逢低分批買進",
             }
         if score >= 64.0 and inst_lots >= 0:
             if ma_gap > 5.5 or ret >= 6.0:
                 return {
                     "signal": "HOLD_WAIT_DIP",
                     "badge": "🟡 強勢續抱／拉回再買（短線勿追高）",
-                    "dad_light": "YELLOW",
-                    "dad_action": "有股票續抱，空手等拉回再買",
+                    "easy_light": "YELLOW",
+                    "easy_action": "有持股可續抱，空手等拉回再買",
                 }
             return {
                 "signal": "ACCUMULATE",
                 "badge": "🟢 偏多布局（沿均線分批低接）",
-                "dad_light": "GREEN",
-                "dad_action": "趨勢穩健，可小量分批布局",
+                "easy_light": "GREEN",
+                "easy_action": "趨勢穩健，可小量分批布局",
             }
         if score >= 48.0:
             return {
                 "signal": "NEUTRAL_HOLD",
                 "badge": "⚪ 區間整理觀望（守穩停損續抱）",
-                "dad_light": "YELLOW",
-                "dad_action": "先觀望不加碼，守住停損價即可",
+                "easy_light": "YELLOW",
+                "easy_action": "先觀望不急著加碼，守住停損價即可",
             }
         return {
             "signal": "REDUCE_AVOID",
-            "badge": "🔴 警戒減碼／避開（法人調節破線）",
-            "dad_light": "RED",
-            "dad_action": "外資投信在賣，建議逢反彈減碼或先避開",
+            "badge": "🔴 警戒減碼／暫時避開（法人調節破線）",
+            "easy_light": "RED",
+            "easy_action": "大戶法人在賣，建議逢反彈減碼或先避開",
         }
 
-    def run_committee_debate(self, stock: Dict[str, Any], fetch_live_news: bool = True) -> Dict[str, Any]:
-        """針對單一台股標的執行 6 大 Agent 深度會診與多空辯論。"""
+    def run_committee_debate(
+        self,
+        stock: Dict[str, Any],
+        candles: List[Dict[str, Any]] | None = None,
+        fetch_live_news: bool = True,
+    ) -> Dict[str, Any]:
+        """針對單一台股標的執行 6 大 Agent 深度會診、技術矩陣運算與多空辯論。"""
         code = stock["code"]
         name = stock["name"]
         close_p = stock["close"]
@@ -81,13 +83,14 @@ class MultiAgentStockCommittee:
         stop_loss = stock["stop_loss"]
         target_p = stock["target_price"]
         rr_ratio = stock["risk_reward_ratio"]
+        pos_pct = stock.get("suggested_position_pct", 10.0)
 
+        tech = self.data_engine.compute_technical_indicators(candles or [], close_p)
         verdict = self._classify_action(stock)
 
-        # 個股即時新聞抓取
         news_items: List[Dict[str, str]] = []
         if fetch_live_news:
-            news_items = self.data_engine.fetch_google_news_for_query(f"{code} {name}", limit=4)
+            news_items = self.data_engine.fetch_google_news_for_query(f"{code} {name}", limit=5)
 
         # 1. 籌碼追蹤官 (Smart Money Chip Agent)
         if f_lots > 0 and t_lots > 0:
@@ -102,18 +105,18 @@ class MultiAgentStockCommittee:
             chip_headline = f"三大法人今日合計 {inst_lots:+.0f} 張（外資 {f_lots:+.0f} 張、投信 {t_lots:+.0f} 張），籌碼處於換手整理階段。"
 
         margin_note = (
-            f"融資減少 {abs(margin_lots):.0f} 張（散戶浮額清洗乾淨，籌碼流向大戶）"
+            f"融資減少 {abs(margin_lots):.0f} 張（散戶浮額沉澱乾淨，籌碼流向大戶）"
             if margin_lots < -30
             else f"融資增加 {margin_lots:+.0f} 張（留意散戶短線跟風）"
             if margin_lots > 100
-            else f"融資變動 {margin_lots:+.0f} 張（散戶籌碼平穩）"
+            else f"融資變動 {margin_lots:+.0f} 張（散戶籌碼安定）"
         )
 
         # 2. 量化技術分析官 (Quant Technical Agent)
         trend_state = (
-            f"股價收 {close_p} 元（{ret_pct:+.2f}%），穩站短期均線（{ma_short} 元）與多日均線（{ma_mid} 元）之上，多頭排列確立。"
+            f"收盤 {close_p} 元站穩 5MA({tech['ma5']}) 與 20MA({tech['ma20']})，KD({tech['k9']}/{tech['d9']}) 呈{tech['kd_signal']}、MACD 呈{tech['macd_signal']}、RSI(14) 為 {tech['rsi14']}。"
             if close_p >= ma_mid
-            else f"股價收 {close_p} 元（{ret_pct:+.2f}%），目前位於多日均線（{ma_mid} 元）下方（乖離 {ma_gap:+.2f}%），需等待站回 {ma_short} 元確認止穩。"
+            else f"收盤 {close_p} 元位於多日均線({ma_mid})下方（乖離 {ma_gap:+.2f}%），KD({tech['k9']}/{tech['d9']}) 呈{tech['kd_signal']}、RSI(14) 為 {tech['rsi14']}，近 20 日支撐在 {tech['support_20d']} 元。"
         )
 
         # 3. 多空辯論室 (Bullish vs. Bearish Debate)
@@ -121,48 +124,64 @@ class MultiAgentStockCommittee:
         bear_points: List[str] = []
 
         if inst_lots > 0:
-            bull_points.append(f"三大法人單日淨買超 {inst_lots:+.0f} 張、近 3 日加權買超金額 {inst_3d_yi:+.2f} 億元，主力資金明確站在買方。")
-        if close_p >= ma_mid:
-            bull_points.append(f"收盤價 {close_p} 元站穩多日均線 {ma_mid} 元之上，量能倍數 {stock['vol_ratio']}x 具攻擊力道。")
+            bull_points.append(f"【主力籌碼偏多】三大法人單日淨買超 {inst_lots:+.0f} 張、近 3 日加權買超 {inst_3d_yi:+.2f} 億元，機構資金明確站在買方。")
+        if close_p >= ma_mid or tech["macd_hist"] > 0:
+            bull_points.append(f"【技術趨勢支撐】股價守穩均線結構之上，MACD {tech['macd_signal']}、KD {tech['kd_signal']}，量能倍數 {stock['vol_ratio']}x。")
         if margin_lots <= 0:
-            bull_points.append(f"散戶融資未見失控（{margin_lots:+.0f} 張）且當沖佔比 {dt_pct:.1f}%，籌碼安定度高。")
+            bull_points.append(f"【籌碼歸宿健康】融資變動 {margin_lots:+.0f} 張、當沖比 {dt_pct:.1f}%，散戶浮額未見失控。")
         if not bull_points:
-            bull_points.append(f"短線急跌後乖離達 {ma_gap:+.2f}%，若在 {stop_loss} 元附近縮量止穩具備跌深技術反彈契機。")
+            bull_points.append(f"【跌深乖離收斂】RSI(14) 來到 {tech['rsi14']}、接近布林下軌 {tech['bb_lower']} 元與 20 日支撐 {tech['support_20d']} 元，具短線技術反彈契機。")
 
-        if ma_gap > 5.0 or ret_pct > 5.5:
-            bear_points.append(f"短線正乖離達 {ma_gap:+.2f}%（單日漲幅 {ret_pct:+.2f}%），直接追高容易遭遇隔日沖獲利了結賣壓，宜等拉回 {entry_high} 元以下承接。")
+        if ma_gap > 5.0 or ret_pct > 5.5 or tech["rsi14"] >= 75:
+            bear_points.append(f"【短線追高風險】均線正乖離達 {ma_gap:+.2f}%、RSI(14) {tech['rsi14']}，直接追價易遇隔日沖獲利調節，宜等拉回 {entry_high} 元以下分批承接。")
         if dt_pct > 38.0:
-            bear_points.append(f"當沖成交佔比達 {dt_pct:.1f}%，盤中短線客進出頻繁，尾盤易出現震盪。")
+            bear_points.append(f"【當沖籌碼干擾】當沖成交佔比達 {dt_pct:.1f}%，盤中短線客進出頻繁，尾盤易有波動。")
         if inst_lots < 0:
-            bear_points.append(f"外資（{f_lots:+.0f} 張）與投信（{t_lots:+.0f} 張）尚未全面轉買，反彈遇到均線 {ma_mid} 元會有解套賣壓。")
+            bear_points.append(f"【法人調節壓力】外資（{f_lots:+.0f} 張）與投信（{t_lots:+.0f} 張）尚未全面轉買，上檔壓力先看 {tech['resistance_20d']} 元。")
         if not bear_points:
-            bear_points.append(f"若國際科技股或台指期夜盤震盪，需嚴守 {stop_loss} 元作為波段防守底線。")
+            bear_points.append(f"【系統波動防護】若國際盤或台指期夜盤拉回，需嚴格以 {stop_loss} 元作為波段防守底線。")
 
-        # 4. 三大台股大師流派圓桌投票 (Master Personas)
+        # 4. 六大投資大師與機構流派圓桌投票 (6 Master Personas)
+        pe_val = stock.get("pe_ratio", 0.0)
         personas = [
             {
                 "name": "外資權值趨勢派",
                 "vote": "看多買進" if (f_lots > 0 and close_p >= ma_mid) else ("中性續抱" if f_3d >= 0 else "保守調節"),
-                "reason": f"外資單日 {f_lots:+.0f} 張、3 日累計 {f_3d:+.0f} 張，近 3 日機構資金流向 {inst_3d_yi:+.2f} 億。",
+                "reason": f"外資單日 {f_lots:+.0f} 張、3 日累計 {f_3d:+.0f} 張，近 3 日法人淨流向 {inst_3d_yi:+.2f} 億。",
             },
             {
                 "name": "投信作帳成長派",
                 "vote": "強烈看多" if t_lots > 30 else ("偏多觀察" if t_3d >= 0 else "暫不介入"),
-                "reason": f"投信單日 {t_lots:+.0f} 張、3 日累計 {t_3d:+.0f} 張，重點觀察投信是否連續認養。",
+                "reason": f"投信單日 {t_lots:+.0f} 張、3 日累計 {t_3d:+.0f} 張，鎖定季底作帳連續買超動能。",
             },
             {
-                "name": "安全邊際防追高派",
-                "vote": "安全可買" if (ma_gap <= 4.0 and dt_pct <= 38.0 and stock["total_score"] >= 60) else "等拉回再買",
-                "reason": f"均線乖離率 {ma_gap:+.2f}%、當沖佔比 {dt_pct:.1f}%、期望風報比 1 : {rr_ratio}。",
+                "name": "歐奈爾 CANSLIM 突破派",
+                "vote": "強勢突破" if (close_p >= tech["ma20"] and stock["vol_ratio"] >= 1.15 and ret_pct > 0) else ("守穩均線" if close_p >= ma_mid else "等待帶量站回"),
+                "reason": f"量能倍數 {stock['vol_ratio']}x，KD {tech['kd_signal']}，20 日區間高點壓力 {tech['resistance_20d']} 元。",
+            },
+            {
+                "name": "巴菲特護城河價值派",
+                "vote": "價值穩健" if (0 < pe_val <= 22 or stock["sector"] in {"金控與高息金融", "電信防禦核心", "市值型 ETF", "高股息 ETF"}) else "成長溢價評估",
+                "reason": f"本益比 {pe_val if pe_val > 0 else '依產業成長定價'}，距離 60 日季線 ({tech['ma60']} 元) 檢視中長線安全邊際。",
+            },
+            {
+                "name": "反市場散戶風控派",
+                "vote": "籌碼乾淨" if (margin_lots <= 50 and dt_pct <= 36.0) else "散戶過熱警戒",
+                "reason": f"融資增減 {margin_lots:+.0f} 張、當沖比 {dt_pct:.1f}%、布林通道位置 {tech['bb_pct']}%。",
+            },
+            {
+                "name": "凱利部位與停損風控長",
+                "vote": f"建議配置 {pos_pct}%",
+                "reason": f"風報比 1 : {rr_ratio}；第 1 批於 {entry_high} 元內、第 2 批於 {entry_low} 元附近低接，跌破 {stop_loss} 元停損。",
             },
         ]
 
-        # 5. 老爸專屬大白話翻譯卡 (Dad's Plain-Language Card)
-        dad_summary = (
-            f"【{name}（{code}）】今天收盤 {close_p} 元（漲跌 {ret_pct:+.2f}%）。"
-            f"{'外資跟投信法人今天都在買進，籌碼很穩！' if (f_lots > 0 and t_lots > 0) else ('法人今天站在買方護盤。' if inst_lots > 0 else '要注意今天外資或投信有在賣股票。')}"
-            f"如果您想買，建議等股價在 {entry_low} ～ {entry_high} 元之間再分批買，不要追高；"
-            f"手上如果已經有這檔股票，只要沒跌破 {stop_loss} 元都可以安心抱著，波段目標先看 {target_p} 元附近。"
+        # 5. 口語化白話投資解讀 (Easy Conversational Guide — 給全家人看)
+        easy_summary = (
+            f"【{name}（{code}）】今天收在 {close_p} 元（漲跌 {ret_pct:+.2f}%）。"
+            f"{'外資跟投信大戶今天同時在買進，籌碼非常穩健！' if (f_lots > 0 and t_lots > 0) else ('法人大戶今天站在買方支撐股價。' if inst_lots > 0 else '要注意今天外資或投信大戶有在調節賣出。')}"
+            f"如果想布局這檔，建議等股價在 {entry_low} ～ {entry_high} 元之間再分批買進，不急著追高；"
+            f"如果手邊已經有持股，只要收盤沒跌破 {stop_loss} 元都可以安心續抱，波段目標先看 {target_p} 元附近。"
         )
 
         return {
@@ -184,14 +203,16 @@ class MultiAgentStockCommittee:
                 "stop_loss": stop_loss,
                 "target_price": target_p,
                 "risk_reward_ratio": rr_ratio,
+                "suggested_position_pct": pos_pct,
             },
+            "technicals": tech,
             "agents": {
                 "chip_agent": f"{chip_headline} 此外，{margin_note}。",
                 "technical_agent": f"{trend_state} 建議低接區間 {entry_low}～{entry_high} 元，跌破 {stop_loss} 元停損，上檔目標價 {target_p} 元（風報比 1:{rr_ratio}）。",
                 "bull_researcher": bull_points,
                 "bear_researcher": bear_points,
                 "personas": personas,
-                "dad_advisor": dad_summary,
+                "easy_advisor": easy_summary,
             },
             "news": news_items,
             "metrics": {
@@ -206,5 +227,6 @@ class MultiAgentStockCommittee:
                 "ma_short": ma_short,
                 "ma_mid": ma_mid,
                 "ma_gap_pct": ma_gap,
+                "pe_ratio": pe_val,
             },
         }
