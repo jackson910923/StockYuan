@@ -107,7 +107,7 @@ class MultiAgentStockCommittee:
 
         news_items: List[Dict[str, str]] = []
         if fetch_live_news:
-            news_items = self.data_engine.fetch_yahoo_stock_news(code, name=name, limit=6)
+            news_items = self.data_engine.fetch_yahoo_stock_news(code, name=name, limit=8)
 
         # === 三大週期專屬交易策略 (Short-Term / Swing / Long-Term) ===
         st_entry_low = round(max(close_p * 0.99, ma_short * 0.995), 2)

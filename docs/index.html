@@ -1177,69 +1177,97 @@
     }
 
     const NEWS_FETCH_LOCK = new Set();
+    function renderNewsCards(list) {
+      return list.slice(0, 8).map(n => `
+        <a href="${n.link}" target="_blank" rel="noopener" class="block p-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-indigo-500/50 transition">
+          <div class="text-xs font-bold text-slate-100 line-clamp-2">${n.title}</div>
+          <div class="text-[11px] text-slate-400 mt-1.5 flex justify-between items-center">
+            <span class="text-indigo-300 font-medium">${n.source || '財經焦點'}</span>
+            <span class="text-slate-400 font-mono text-[10px]">${n.pub_date || ''}</span>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    // 多來源聚合（Yahoo 個股 RSS + Google News + 鉅亨網），僅留 7 天內，依「標題相關度 > 新舊」排序
     async function fetchStockNewsInBrowser(code, name) {
       if (NEWS_FETCH_LOCK.has(code)) return;
       NEWS_FETCH_LOCK.add(code);
-      try {
-        const rssUrl = `https://tw.stock.yahoo.com/rss?s=${code}`;
-        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(rssUrl)}`;
+      const fmt = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+      const timed = (url, ms = 4500) => {
         const ctrl = new AbortController();
-        const tid = setTimeout(() => ctrl.abort(), 3500);
-        const resp = await fetch(proxyUrl, { signal: ctrl.signal });
-        clearTimeout(tid);
-        if (!resp.ok) return;
-        const xmlText = await resp.text();
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-        const items = xmlDoc.querySelectorAll('item');
-        if (!items || !items.length) return;
-        const parsedArticles = [];
-        items.forEach(it => {
-          let title = it.querySelector('title')?.textContent || '';
-          const link = it.querySelector('link')?.textContent || '';
-          const pubDateRaw = it.querySelector('pubDate')?.textContent || '';
-          let source = 'Yahoo!奇摩股市';
-          if (title.includes(' - ')) {
-            const parts = title.split(' - ');
-            title = parts[0].trim();
-            source = parts.slice(1).join(' - ').trim();
-          }
-          let pubDate = '';
-          if (pubDateRaw) {
-            try {
-              const d = new Date(pubDateRaw);
-              const ageDays = (Date.now() - d.getTime()) / 86400000;
-              if (ageDays > 7.0) return; // 嚴格淘汰超過 7 天舊聞
-              pubDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-            } catch (e) {
-              return;
+        const tid = setTimeout(() => ctrl.abort(), ms);
+        return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(tid));
+      };
+      const viaProxy = u => `https://corsproxy.io/?url=${encodeURIComponent(u)}`;
+      const parseRss = async (url, defSrc) => {
+        try {
+          const resp = await timed(viaProxy(url));
+          if (!resp.ok) return [];
+          const doc = new DOMParser().parseFromString(await resp.text(), 'text/xml');
+          return [...doc.querySelectorAll('item')].map(it => {
+            let title = it.querySelector('title')?.textContent || '';
+            let source = it.querySelector('source')?.textContent || defSrc;
+            if (title.includes(' - ')) {
+              const idx = title.lastIndexOf(' - ');
+              if (defSrc !== 'Yahoo!奇摩股市') source = title.slice(idx + 3).trim() || source;
+              title = title.slice(0, idx).trim();
             }
-          }
-          if (title && link && pubDate) {
-            parsedArticles.push({ title, link, source, pub_date: pubDate });
-          }
+            return { title, link: it.querySelector('link')?.textContent || '', source, ts: new Date(it.querySelector('pubDate')?.textContent || '').getTime() };
+          });
+        } catch (e) { return []; }
+      };
+      const cnyes = async () => {
+        try {
+          const u = `https://ess.api.cnyes.com/ess/api/v1/news/keyword?q=${encodeURIComponent(name)}&limit=20&page=1`;
+          const resp = await timed(u); // 鉅亨網原生支援 CORS，直連不經代理
+          if (!resp.ok) return [];
+          const data = await resp.json();
+          return ((data.data || {}).items || []).map(it => ({
+            title: String(it.title || '').replace(/<[^>]+>/g, ''),
+            link: `https://news.cnyes.com/news/id/${it.newsId}`,
+            source: '鉅亨網',
+            ts: Number(it.publishAt || 0) * 1000,
+          }));
+        } catch (e) { return []; }
+      };
+      const gq = q => `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`;
+
+      try {
+        const pools = await Promise.all([
+          parseRss(`https://tw.stock.yahoo.com/rss?s=${code}`, 'Yahoo!奇摩股市'),
+          parseRss(gq(`"${name}" when:7d`), 'Google 財經'),
+          parseRss(gq(`${name} ${code} when:7d`), 'Google 財經'),
+          cnyes(),
+        ]);
+        const now = Date.now();
+        const seen = new Set();
+        const merged = [];
+        // 先放入既有新聞，避免重複
+        const existing = (REPORT_DATA.all_debates[code] && REPORT_DATA.all_debates[code].news) || [];
+        existing.forEach(n => pools.push([{ title: n.title, link: n.link, source: n.source, ts: new Date(String(n.pub_date || '').replace(' ', 'T')).getTime() }]));
+        pools.flat().forEach(a => {
+          if (!a.title || !a.link || isNaN(a.ts)) return;
+          const age = now - a.ts;
+          if (age > 7 * 86400000 || age < -3600000) return;
+          const key = a.title.replace(/[\s\p{P}\p{S}]+/gu, '').slice(0, 40);
+          if (!key || seen.has(key)) return;
+          seen.add(key);
+          const rel = (a.title.includes(name) ? 2 : 0) + (a.title.includes(code) ? 1 : 0);
+          merged.push({ ...a, rel });
         });
-        if (parsedArticles.length > 0) {
-          if (REPORT_DATA && REPORT_DATA.all_debates && REPORT_DATA.all_debates[code]) {
-            REPORT_DATA.all_debates[code].news = parsedArticles.slice(0, 6);
-          }
-          if (SELECTED_CODE === code) {
-            const newsContainer = document.getElementById('detailNewsList');
-            if (newsContainer) {
-              newsContainer.innerHTML = parsedArticles.slice(0, 6).map(n => `
-                <a href="${n.link}" target="_blank" rel="noopener" class="block p-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-indigo-500/50 transition">
-                  <div class="text-xs font-bold text-slate-100 line-clamp-2">${n.title}</div>
-                  <div class="text-[11px] text-slate-400 mt-1.5 flex justify-between">
-                    <span class="text-indigo-300 font-medium">${n.source}</span>
-                    <span>${n.pub_date}</span>
-                  </div>
-                </a>
-              `).join('');
-            }
-          }
+        merged.sort((x, y) => (y.rel - x.rel) || (y.ts - x.ts));
+        const finalNews = merged.slice(0, 8).map(a => ({ title: a.title, link: a.link, source: a.source, pub_date: fmt(new Date(a.ts)) }));
+        if (!finalNews.length) return;
+        if (REPORT_DATA.all_debates[code]) REPORT_DATA.all_debates[code].news = finalNews;
+        if (SELECTED_CODE === code) {
+          const box = document.getElementById('detailNewsList');
+          if (box) box.innerHTML = renderNewsCards(finalNews);
         }
       } catch (e) {
-        // 代理若忙線則保有四張個股專屬入口卡片
+        // 代理忙線時保留既有內容
+      } finally {
+        setTimeout(() => NEWS_FETCH_LOCK.delete(code), 120000);
       }
     }
 
@@ -1342,21 +1370,14 @@
       const nowTs = Date.now();
       const recentNews = (item.news || []).filter(n => {
         if (!n.pub_date) return false;
-        const t = new Date(n.pub_date).getTime();
+        const t = new Date(String(n.pub_date).replace(' ', 'T')).getTime();
         return !isNaN(t) && (nowTs - t) <= (7 * 86400000 + 7200000); // 嚴格 7 天以內
       });
 
       const newsContainer = document.getElementById('detailNewsList');
       if (recentNews.length > 0) {
-        newsContainer.innerHTML = recentNews.slice(0, 6).map(n => `
-          <a href="${n.link}" target="_blank" rel="noopener" class="block p-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-indigo-500/50 transition">
-            <div class="text-xs font-bold text-slate-100 line-clamp-2">${n.title}</div>
-            <div class="text-[11px] text-slate-400 mt-1.5 flex justify-between items-center">
-              <span class="text-indigo-300 font-medium">${n.source || '財經焦點'}</span>
-              <span class="text-slate-400 font-mono text-[10px]">${n.pub_date || ''}</span>
-            </div>
-          </a>
-        `).join('');
+        newsContainer.innerHTML = renderNewsCards(recentNews);
+        if (recentNews.length < 4) fetchStockNewsInBrowser(item.code, item.name);
       } else {
         newsContainer.innerHTML = `
           <div class="md:col-span-2 p-4 rounded-xl bg-slate-900/50 border border-slate-800 text-center mb-1">

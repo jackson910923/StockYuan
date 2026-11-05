@@ -551,101 +551,96 @@ class TaiwanStockDataEngine:
                     break
         return articles
 
-    def fetch_yahoo_stock_news(self, code: str, name: str = "", limit: int = 6) -> List[Dict[str, str]]:
-        """嚴格抓取該個股『近 7 天內 (<= 7d)』之專屬即時新聞與重大訊息，超過 7 天全面過濾淘汰。"""
+    def fetch_yahoo_stock_news(self, code: str, name: str = "", limit: int = 8) -> List[Dict[str, str]]:
+        """多來源聚合個股新聞（Yahoo / Google News / 鉅亨網），僅留 7 天內，依「標題相關度 > 新舊」排序。"""
+        import json as _json
+        import re as _re
+        from concurrent.futures import ThreadPoolExecutor as _TPE
         from email.utils import parsedate_to_datetime
-        now_dt = datetime.now()
-        articles: List[Dict[str, str]] = []
-        seen_titles = set()
 
-        # 1. Yahoo 奇摩股市官方 RSS（嚴格限定 7 天以內）
-        url = f"https://tw.stock.yahoo.com/rss?s={code}"
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
-        try:
-            with urllib.request.urlopen(req, timeout=4.0, context=self.ssl_ctx) as resp:
-                xml_data = resp.read()
-            root = ET.fromstring(xml_data)
-            for item in root.findall(".//item"):
-                title = (item.findtext("title") or "").strip()
-                link = (item.findtext("link") or "").strip()
-                pub_raw = (item.findtext("pubDate") or "").strip()
-                if not title or not pub_raw:
+        now_ts = datetime.now().timestamp()
+        max_age = 7 * 86400
+        ua = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+
+        def _get(url: str) -> bytes:
+            req = urllib.request.Request(url, headers=ua)
+            with urllib.request.urlopen(req, timeout=5.0, context=self.ssl_ctx) as resp:
+                return resp.read()
+
+        def _rss(url: str, default_src: str) -> List[Dict[str, Any]]:
+            out: List[Dict[str, Any]] = []
+            try:
+                root = ET.fromstring(_get(url))
+                for it in root.findall(".//item"):
+                    title = (it.findtext("title") or "").strip()
+                    link = (it.findtext("link") or "").strip()
+                    pub = (it.findtext("pubDate") or "").strip()
+                    src_el = it.find("source")
+                    src = src_el.text.strip() if src_el is not None and src_el.text else default_src
+                    try:
+                        ts = parsedate_to_datetime(pub).timestamp()
+                    except Exception:
+                        continue
+                    if " - " in title:
+                        head, tail = title.rsplit(" - ", 1)
+                        title = head.strip()
+                        if default_src != "Yahoo!奇摩股市" or src == default_src:
+                            src = tail.strip() or src
+                    out.append({"title": title, "link": link, "source": src, "ts": ts})
+            except Exception:
+                pass
+            return out
+
+        def _cnyes() -> List[Dict[str, Any]]:
+            out: List[Dict[str, Any]] = []
+            if not name:
+                return out
+            try:
+                url = f"https://ess.api.cnyes.com/ess/api/v1/news/keyword?q={urllib.parse.quote(name)}&limit=20&page=1"
+                data = _json.loads(_get(url))
+                for it in (data.get("data") or {}).get("items") or []:
+                    title = _re.sub(r"<[^>]+>", "", it.get("title") or "").strip()
+                    nid = it.get("newsId")
+                    ts = float(it.get("publishAt") or 0)
+                    if title and nid and ts:
+                        out.append({"title": title, "link": f"https://news.cnyes.com/news/id/{nid}", "source": "鉅亨網", "ts": ts})
+            except Exception:
+                pass
+            return out
+
+        gq = lambda q: f"https://news.google.com/rss/search?q={urllib.parse.quote(q)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
+        jobs = [lambda: _rss(f"https://tw.stock.yahoo.com/rss?s={code}", "Yahoo!奇摩股市"), _cnyes]
+        if name:
+            jobs.append(lambda: _rss(gq(f'"{name}" when:7d'), "Google 財經"))
+            jobs.append(lambda: _rss(gq(f"{name} {code} when:7d"), "Google 財經"))
+        else:
+            jobs.append(lambda: _rss(gq(f"{code} 股 when:7d"), "Google 財經"))
+
+        with _TPE(max_workers=4) as ex:
+            pools = list(ex.map(lambda fn: fn(), jobs))
+
+        seen = set()
+        ranked: List[tuple] = []
+        for arts in pools:
+            for a in arts:
+                age = now_ts - a["ts"]
+                if age > max_age or age < -3600:
                     continue
-                try:
-                    dt = parsedate_to_datetime(pub_raw).replace(tzinfo=None)
-                    age_days = (now_dt - dt).total_seconds() / 86400.0
-                    if age_days > 7.0:
-                        continue  # 嚴格淘汰超過 7 天舊聞
-                    pub_str = dt.strftime("%Y-%m-%d %H:%M")
-                except Exception:
+                key = _re.sub(r"\W+", "", a["title"])[:40]
+                if not key or key in seen:
                     continue
-
-                source = "Yahoo!奇摩股市"
-                if " - " in title:
-                    parts = title.rsplit(" - ", 1)
-                    title = parts[0].strip()
-                    source = parts[1].strip()
-
-                if title not in seen_titles:
-                    seen_titles.add(title)
-                    articles.append({
-                        "title": title,
-                        "source": source,
-                        "link": link,
-                        "pub_date": pub_str,
-                    })
-                    if len(articles) >= limit:
-                        break
-        except Exception:
-            pass
-
-        # 2. 若 Yahoo RSS 7天內新聞不足 limit 則以 Google News (when:7d) 精準補齊
-        if len(articles) < limit and name:
-            queries = [f"{code} {name} when:7d", f"{name} 台股 when:7d"]
-            for q_str in queries:
-                if len(articles) >= limit:
-                    break
-                encoded = urllib.parse.quote(q_str)
-                url_g = f"https://news.google.com/rss/search?q={encoded}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
-                req_g = urllib.request.Request(url_g, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
-                try:
-                    with urllib.request.urlopen(req_g, timeout=4.0, context=self.ssl_ctx) as resp:
-                        root_g = ET.fromstring(resp.read())
-                    for item in root_g.findall(".//item"):
-                        title = (item.findtext("title") or "").strip()
-                        link = (item.findtext("link") or "").strip()
-                        pub_raw = (item.findtext("pubDate") or "").strip()
-                        source_el = item.find("source")
-                        source = source_el.text.strip() if source_el is not None and source_el.text else "財經快訊"
-                        if not title or not pub_raw:
-                            continue
-                        try:
-                            dt = parsedate_to_datetime(pub_raw).replace(tzinfo=None)
-                            age_days = (now_dt - dt).total_seconds() / 86400.0
-                            if age_days > 7.0:
-                                continue
-                            pub_str = dt.strftime("%Y-%m-%d %H:%M")
-                        except Exception:
-                            continue
-
-                        # 必須包含個股名稱或代號，過濾掉純大盤概況
-                        if name not in title and code not in title:
-                            continue
-
-                        if title not in seen_titles:
-                            seen_titles.add(title)
-                            articles.append({
-                                "title": title,
-                                "source": source,
-                                "link": link,
-                                "pub_date": pub_str,
-                            })
-                            if len(articles) >= limit:
-                                break
-                except Exception:
-                    pass
-
-        return articles
+                seen.add(key)
+                t = a["title"]
+                # 相關度：標題含股名/代號為最高，僅內文提及次之
+                rel = (2 if name and name in t else 0) + (1 if code in t else 0)
+                ranked.append((-rel, -a["ts"], {
+                    "title": t,
+                    "source": a["source"],
+                    "link": a["link"],
+                    "pub_date": datetime.fromtimestamp(a["ts"]).strftime("%Y-%m-%d %H:%M"),
+                }))
+        ranked.sort(key=lambda x: (x[0], x[1]))
+        return [r[2] for r in ranked[:limit]]
 
     def fetch_stock_kline_history(self, code: str, market: str = "TWSE", days: int = 60) -> List[Dict[str, Any]]:
         """抓取個股近 60 日真實 OHLCV K 線（供 TradingView 圖表與 RSI/KD/MACD/布林通道計算使用）。"""
