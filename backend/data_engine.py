@@ -454,6 +454,11 @@ class TaiwanStockDataEngine:
                         t86_t0 = hist_t86[idx]
                     break
 
+        if not t86_t0 and hist_t86:
+            for h_inst in hist_t86:
+                if h_inst:
+                    t86_t0 = h_inst
+                    break
         inst_t0 = {**t86_t0, **tp_inst}
         inst_t1 = hist_t86[0] if len(hist_t86) > 0 else {}
         inst_t2 = hist_t86[1] if len(hist_t86) > 1 else {}
@@ -628,10 +633,18 @@ class TaiwanStockDataEngine:
             item["rank"] = idx + 1
 
         # 分類排行榜：
-        # 1. AI 嚴選明日 Top 6 強勢推薦股（高總分 + 法人買超 + 未過度追高）
+        # 1. AI 嚴選明日 Top 6 強勢推薦股（高總分 + 法人買超 + 趨勢抗跌未追高）
         top_picks = [
-            s for s in ranked_all if s["inst_total_lots"] > 0 and s["ma_gap_pct"] < 6.5
+            s
+            for s in ranked_all
+            if s["inst_total_lots"] > 0 and -2.5 <= s["ma_gap_pct"] < 6.5 and s["change_pct"] >= -2.0
         ][:6]
+        if len(top_picks) < 6:
+            for s in ranked_all:
+                if s not in top_picks and s["change_pct"] >= -2.5:
+                    top_picks.append(s)
+                if len(top_picks) >= 6:
+                    break
         # 2. 土洋同買（外資+投信同步大買）熱門股
         co_buy_leaders = sorted(
             [s for s in ranked_all if s["foreign_lots"] > 0 and s["trust_lots"] > 0],
