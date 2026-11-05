@@ -516,7 +516,7 @@ class TaiwanStockDataEngine:
                             dt_obj = parsedate_to_datetime(pub_raw).replace(tzinfo=None)
                             # 嚴格排除超過 45 天或跨年度的過時舊聞（如 2025 年舊聞）
                             age_days = (now_dt - dt_obj).total_seconds() / 86400.0
-                            if age_days > 45 or dt_obj.year < 2026:
+                            if age_days > 7.0 or dt_obj.year < 2026:
                                 continue
                             ts = dt_obj.timestamp()
                             pub_str = dt_obj.strftime("%Y-%m-%d %H:%M")
@@ -552,10 +552,13 @@ class TaiwanStockDataEngine:
         return articles
 
     def fetch_yahoo_stock_news(self, code: str, name: str = "", limit: int = 6) -> List[Dict[str, str]]:
-        """從 Yahoo! 奇摩股市官方 RSS 獲取該個股 100% 關聯之最新新聞與重大訊息。"""
+        """嚴格抓取該個股『近 7 天內 (<= 7d)』之專屬即時新聞與重大訊息，超過 7 天全面過濾淘汰。"""
         from email.utils import parsedate_to_datetime
         now_dt = datetime.now()
         articles: List[Dict[str, str]] = []
+        seen_titles = set()
+
+        # 1. Yahoo 奇摩股市官方 RSS（嚴格限定 7 天以內）
         url = f"https://tw.stock.yahoo.com/rss?s={code}"
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
         try:
@@ -566,40 +569,82 @@ class TaiwanStockDataEngine:
                 title = (item.findtext("title") or "").strip()
                 link = (item.findtext("link") or "").strip()
                 pub_raw = (item.findtext("pubDate") or "").strip()
-                if not title:
+                if not title or not pub_raw:
                     continue
-                pub_str = now_dt.strftime("%Y-%m-%d %H:%M")
-                if pub_raw:
-                    try:
-                        dt = parsedate_to_datetime(pub_raw).replace(tzinfo=None)
-                        pub_str = dt.strftime("%Y-%m-%d %H:%M")
-                    except Exception:
-                        pub_str = pub_raw
+                try:
+                    dt = parsedate_to_datetime(pub_raw).replace(tzinfo=None)
+                    age_days = (now_dt - dt).total_seconds() / 86400.0
+                    if age_days > 7.0:
+                        continue  # 嚴格淘汰超過 7 天舊聞
+                    pub_str = dt.strftime("%Y-%m-%d %H:%M")
+                except Exception:
+                    continue
+
                 source = "Yahoo!奇摩股市"
                 if " - " in title:
                     parts = title.rsplit(" - ", 1)
                     title = parts[0].strip()
                     source = parts[1].strip()
-                articles.append({
-                    "title": title,
-                    "source": source,
-                    "link": link,
-                    "pub_date": pub_str,
-                })
-                if len(articles) >= limit:
-                    break
+
+                if title not in seen_titles:
+                    seen_titles.add(title)
+                    articles.append({
+                        "title": title,
+                        "source": source,
+                        "link": link,
+                        "pub_date": pub_str,
+                    })
+                    if len(articles) >= limit:
+                        break
         except Exception:
             pass
 
-        # 若 Yahoo RSS 抓取條數不足 2 則，備援查詢 Google News
-        if len(articles) < 2 and name:
-            g_news = self.fetch_google_news_for_query(f"{code} {name}", limit=limit)
-            seen_titles = {a["title"] for a in articles}
-            for gn in g_news:
-                if gn["title"] not in seen_titles:
-                    articles.append(gn)
-                    if len(articles) >= limit:
-                        break
+        # 2. 若 Yahoo RSS 7天內新聞不足 limit 則以 Google News (when:7d) 精準補齊
+        if len(articles) < limit and name:
+            queries = [f"{code} {name} when:7d", f"{name} 台股 when:7d"]
+            for q_str in queries:
+                if len(articles) >= limit:
+                    break
+                encoded = urllib.parse.quote(q_str)
+                url_g = f"https://news.google.com/rss/search?q={encoded}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
+                req_g = urllib.request.Request(url_g, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+                try:
+                    with urllib.request.urlopen(req_g, timeout=4.0, context=self.ssl_ctx) as resp:
+                        root_g = ET.fromstring(resp.read())
+                    for item in root_g.findall(".//item"):
+                        title = (item.findtext("title") or "").strip()
+                        link = (item.findtext("link") or "").strip()
+                        pub_raw = (item.findtext("pubDate") or "").strip()
+                        source_el = item.find("source")
+                        source = source_el.text.strip() if source_el is not None and source_el.text else "財經快訊"
+                        if not title or not pub_raw:
+                            continue
+                        try:
+                            dt = parsedate_to_datetime(pub_raw).replace(tzinfo=None)
+                            age_days = (now_dt - dt).total_seconds() / 86400.0
+                            if age_days > 7.0:
+                                continue
+                            pub_str = dt.strftime("%Y-%m-%d %H:%M")
+                        except Exception:
+                            continue
+
+                        # 必須包含個股名稱或代號，過濾掉純大盤概況
+                        if name not in title and code not in title:
+                            continue
+
+                        if title not in seen_titles:
+                            seen_titles.add(title)
+                            articles.append({
+                                "title": title,
+                                "source": source,
+                                "link": link,
+                                "pub_date": pub_str,
+                            })
+                            if len(articles) >= limit:
+                                break
+                except Exception:
+                    pass
+
         return articles
 
     def fetch_stock_kline_history(self, code: str, market: str = "TWSE", days: int = 60) -> List[Dict[str, Any]]:
