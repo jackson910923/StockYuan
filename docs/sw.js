@@ -1,4 +1,4 @@
-const CACHE_NAME = 'stockyuan-v4.2';
+const CACHE_NAME = 'stockyuan-v4.4';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {
