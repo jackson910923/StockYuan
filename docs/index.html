@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlphaTW 台股領航 AI 投研指揮中心｜Multi-Agent Trading Desk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans TC', 'Inter', sans-serif;
+      background-color: #070b14;
+      color: #e2e8f0;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(51, 65, 85, 0.65);
+    }
+    .dad-mode-active {
+      font-size: 1.15rem;
+    }
+    .dad-mode-active .pro-only {
+      display: none !important;
+    }
+    .tw-up { color: #f43f5e; }      /* 台股紅漲 */
+    .tw-down { color: #10b981; }    /* 台股綠跌 */
+    .bg-tw-up { background: rgba(244, 63, 94, 0.14); border-color: rgba(244, 63, 94, 0.4); }
+    .bg-tw-down { background: rgba(16, 185, 129, 0.14); border-color: rgba(16, 185, 129, 0.4); }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- 頂部導航列 -->
+  <header class="sticky top-0 z-40 glass-card border-b border-slate-800 px-4 lg:px-8 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-blue-600 to-emerald-500 flex items-center justify-center font-black text-white text-xl shadow-lg shadow-indigo-500/25">
+          α
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg lg:text-xl font-black tracking-tight text-white">AlphaTW 台股領航 AI 投研指揮中心</h1>
+            <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Multi-Agent v2.0</span>
+          </div>
+          <p class="text-xs text-slate-400" id="header-subtitle">TradingAgents 多空辯論 × 證交所三大法人/融資/當沖雷達 × 即時財經新聞</p>
+        </div>
+      </div>
+
+      <!-- 搜尋框與模式切換 -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <div class="relative">
+          <input id="stock-search-input" type="text" placeholder="輸入台股代號或名稱 (如 2330, 1802)..."
+            class="w-56 sm:w-64 bg-slate-900/90 border border-slate-700 rounded-lg px-3.5 py-1.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500"
+            onkeydown="if(event.key==='Enter') handleSearchStock()" />
+          <button onclick="handleSearchStock()" class="absolute right-1.5 top-1 bottom-1 px-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-xs font-bold transition">
+            AI 會診
+          </button>
+        </div>
+
+        <button id="dad-mode-btn" onclick="toggleDadMode()"
+          class="px-3.5 py-1.5 rounded-lg font-bold text-sm border border-amber-500/50 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 transition flex items-center gap-1.5">
+          <span>👨‍🦳</span> <span id="dad-mode-label">切換：老爸大字白話模式</span>
+        </button>
+
+        <button onclick="openLineModal()"
+          class="px-3.5 py-1.5 rounded-lg font-bold text-sm border border-emerald-500/50 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 transition flex items-center gap-1.5">
+          <span>📲</span> <span>一鍵複製老爸 LINE 日報</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主內容區 -->
+  <main id="main-container" class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 space-y-6">
+
+    <!-- 1. 大盤廣度與市場狀態橫幅 -->
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="glass-card rounded-2xl p-4 md:col-span-2 flex flex-col justify-between border-l-4 border-l-indigo-500">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-400">AI 市場狀態判定 (Market Regime)</span>
+          <span id="as-of-badge" class="text-xs text-slate-400">資料載入中...</span>
+        </div>
+        <div class="my-2">
+          <div id="regime-title" class="text-xl lg:text-2xl font-black text-white">--</div>
+          <p id="regime-desc" class="text-xs sm:text-sm text-slate-300 mt-1">結合證交所與櫃買中心全市場收盤廣度、三大法人資金流向與當沖熱度綜合研判</p>
+        </div>
+        <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden flex">
+          <div id="breadth-up-bar" class="bg-rose-500 h-full transition-all duration-500" style="width: 50%"></div>
+          <div id="breadth-down-bar" class="bg-emerald-500 h-full transition-all duration-500" style="width: 50%"></div>
+        </div>
+        <div class="flex justify-between text-xs mt-1.5 font-semibold">
+          <span class="tw-up" id="breadth-up-text">上漲 -- 家</span>
+          <span class="text-slate-400" id="breadth-avg-text">全市場均漲跌 --%</span>
+          <span class="tw-down" id="breadth-down-text">下跌 -- 家</span>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 flex flex-col justify-between">
+        <div class="text-xs font-bold text-slate-400">🎯 明日 AI 嚴選首選領頭羊</div>
+        <div id="hero-top-pick" class="my-1">
+          <div class="text-lg font-black text-white">--</div>
+          <div class="text-xs text-slate-400">載入中...</div>
+        </div>
+        <div class="text-xs text-indigo-300 font-medium" id="hero-top-pick-plan">買點區間：--</div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 flex flex-col justify-between">
+        <div class="text-xs font-bold text-slate-400">🔥 土洋同買（外資+投信同步搶進）</div>
+        <div id="hero-cobuy-pick" class="my-1">
+          <div class="text-lg font-black text-white">--</div>
+          <div class="text-xs text-slate-400">載入中...</div>
+        </div>
+        <div class="text-xs text-amber-300 font-medium" id="hero-cobuy-sub">近 3 日法人淨流入：--</div>
+      </div>
+    </section>
+
+    <!-- 2. 老爸專屬大字白話總覽區（切換老爸模式時自動置頂放大） -->
+    <section id="dad-exclusive-banner" class="hidden glass-card rounded-2xl p-6 border-2 border-amber-500/60 bg-gradient-to-r from-slate-900 via-slate-900 to-amber-950/30 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-700 pb-3">
+        <div>
+          <h2 class="text-2xl font-black text-amber-300 flex items-center gap-2">👨‍🦳 老爸專屬台股每日健檢與買賣建議</h2>
+          <p class="text-base text-slate-300 mt-1">不講複雜指標！直接看【紅綠燈號】與【幾元買、跌破幾元停損】</p>
+        </div>
+        <div class="flex gap-3 text-sm font-bold">
+          <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">🟢 綠燈：法人在買可分批布局</span>
+          <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">🟡 黃燈：續抱觀望不追高</span>
+          <span class="px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">🔴 紅燈：法人在賣宜減碼</span>
+        </div>
+      </div>
+      <div id="dad-cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- 3. 核心四欄式指揮台：左側選股雷達清單 + 右側 6-Agent 多空辯論室與互動 K 線 -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- 左側：4 大選股與自選股頁籤 (佔 5 欄) -->
+      <div class="lg:col-span-5 glass-card rounded-2xl p-4 flex flex-col h-[780px]">
+        <div class="grid grid-cols-4 gap-1 bg-slate-900/90 p-1 rounded-xl mb-3 text-xs font-bold">
+          <button onclick="switchTab('top_picks')" id="tab-top_picks" class="py-2 rounded-lg bg-indigo-600 text-white transition">🎯 AI 嚴選</button>
+          <button onclick="switchTab('watchlist')" id="tab-watchlist" class="py-2 rounded-lg text-slate-400 hover:text-white transition">👨‍🦳 自選健檢</button>
+          <button onclick="switchTab('co_buy')" id="tab-co_buy" class="py-2 rounded-lg text-slate-400 hover:text-white transition">🤝 土洋同買</button>
+          <button onclick="switchTab('volume_hot')" id="tab-volume_hot" class="py-2 rounded-lg text-slate-400 hover:text-white transition">🔥 爆量熱門</button>
+        </div>
+
+        <!-- 自選股新增列 -->
+        <div id="watchlist-editor" class="hidden mb-3 flex gap-2">
+          <input id="add-watch-input" type="text" placeholder="新增自選股 4 碼代號 (如 2382, 3017)..."
+            class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white"
+            onkeydown="if(event.key==='Enter') addWatchlistStock()" />
+          <button onclick="addWatchlistStock()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold">
+            ＋ 加入自選
+          </button>
+        </div>
+
+        <div id="stock-list-container" class="flex-1 overflow-y-auto space-y-2.5 pr-1"></div>
+      </div>
+
+      <!-- 右側：單一個股 K 線圖 + TradingAgents 6-Agent 多空辯論室 (佔 7 欄) -->
+      <div class="lg:col-span-7 space-y-5">
+
+        <!-- 個股標頭與關鍵操作價位卡 -->
+        <div class="glass-card rounded-2xl p-5 space-y-4">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2.5">
+                <h2 id="detail-title" class="text-2xl font-black text-white">2330 台積電</h2>
+                <span id="detail-sector" class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-slate-800 text-slate-300 border border-slate-700">--</span>
+                <span id="detail-verdict-badge" class="px-3 py-0.5 text-xs font-bold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">--</span>
+              </div>
+              <p id="detail-dad-summary" class="mt-2.5 text-sm sm:text-base text-amber-200/95 bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 font-medium leading-relaxed">
+                點選左側任一檔股票，即可查看 AI 投研團隊完整多空辯論與老爸白話建議。
+              </p>
+            </div>
+            <div class="text-right">
+              <div id="detail-price" class="text-3xl font-black">--</div>
+              <div id="detail-change" class="text-sm font-bold">--</div>
+            </div>
+          </div>
+
+          <!-- 精準操作價位四宮格 -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+            <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-3">
+              <div class="text-xs text-slate-400">🟢 建議低接買點區間</div>
+              <div id="plan-entry" class="text-base sm:text-lg font-black text-emerald-400 mt-0.5">--</div>
+            </div>
+            <div class="bg-slate-900/90 border border-rose-500/30 rounded-xl p-3">
+              <div class="text-xs text-slate-400">🛡️ 鐵律防守停損價</div>
+              <div id="plan-stop" class="text-base sm:text-lg font-black text-rose-400 mt-0.5">--</div>
+            </div>
+            <div class="bg-slate-900/90 border border-amber-500/30 rounded-xl p-3">
+              <div class="text-xs text-slate-400">🎯 波段目標價</div>
+              <div id="plan-target" class="text-base sm:text-lg font-black text-amber-300 mt-0.5">--</div>
+            </div>
+            <div class="bg-slate-900/90 border border-indigo-500/30 rounded-xl p-3">
+              <div class="text-xs text-slate-400">⚖️ AI 綜合評分 / 風報比</div>
+              <div id="plan-score-rr" class="text-base sm:text-lg font-black text-indigo-300 mt-0.5">--</div>
+            </div>
+          </div>
+
+          <!-- TradingView 互動 K 線圖 -->
+          <div class="pro-only pt-2">
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+              <span>📊 近 45 日日 K 線與 AI 進出場價位標記（綠線：買點上限｜紅線：停損底線）</span>
+              <span id="detail-ma-info">短期均線 --｜多日均線 --</span>
+            </div>
+            <div id="tv-chart-container" class="w-full h-64 rounded-xl overflow-hidden border border-slate-800 bg-slate-950"></div>
+          </div>
+        </div>
+
+        <!-- TradingAgents 多空辯論室 (Bull vs. Bear Debate) + 大師圓桌投票 -->
+        <div class="glass-card rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+            <h3 class="text-base font-black text-white flex items-center gap-2">
+              <span>⚖️</span> <span>TradingAgents 多智能體會診與多空辯論室 (Bull vs. Bear Debate)</span>
+            </h3>
+            <span class="text-xs text-slate-400">杜絕單一 AI 幻覺，正反雙方強制交叉質詢</span>
+          </div>
+
+          <!-- 籌碼官與技術官報告 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
+            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5">
+              <div class="font-bold text-indigo-400 mb-1">🕵️‍♂️ 籌碼追蹤官 (Smart Money Chip Agent)</div>
+              <p id="agent-chip-text" class="text-slate-300 leading-relaxed">--</p>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5">
+              <div class="font-bold text-cyan-400 mb-1">📈 量化技術官 (Quant Technical Agent)</div>
+              <p id="agent-tech-text" class="text-slate-300 leading-relaxed">--</p>
+            </div>
+          </div>
+
+          <!-- 正方看多 vs 反方看空辯論 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
+            <div class="bg-rose-950/20 border border-rose-500/30 rounded-xl p-3.5">
+              <div class="font-bold text-rose-400 mb-1.5">🐂 看多研究員論點 (Bullish Case)</div>
+              <ul id="bull-list" class="space-y-1.5 text-slate-200 list-disc list-inside"></ul>
+            </div>
+            <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-3.5">
+              <div class="font-bold text-emerald-400 mb-1.5">🐻 看空風險挑戰官 (Bearish Counter-Evidence)</div>
+              <ul id="bear-list" class="space-y-1.5 text-slate-200 list-disc list-inside"></ul>
+            </div>
+          </div>
+
+          <!-- 三大投資流派圓桌投票 -->
+          <div>
+            <div class="text-xs font-bold text-slate-400 mb-2">🏛️ 台股三大機構流派圓桌投票 (Master Personas)</div>
+            <div id="personas-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs"></div>
+          </div>
+
+          <!-- 個股即時財經新聞 -->
+          <div>
+            <div class="text-xs font-bold text-slate-400 mb-2">📰 個股與產業最新財經新聞 (Google News 台股即時聚合)</div>
+            <div id="stock-news-list" class="space-y-1.5 text-xs"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. 今日全市場財經頭條與撤退警戒名單 -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="glass-card rounded-2xl p-5">
+        <h3 class="text-base font-black text-white mb-3">🗞️ 今日台股熱門財經新聞頭條</h3>
+        <div id="headline-news-container" class="space-y-2.5 text-sm"></div>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <h3 class="text-base font-black text-rose-400 mb-3">⚠️ 法人大舉調節／破線警戒股（建議避開或逢高減碼）</h3>
+        <div id="warning-stocks-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 老爸 LINE 日報彈出視窗 -->
+  <div id="line-modal" class="fixed inset-0 z-50 hidden bg-black/75 flex items-center justify-center p-4">
+    <div class="glass-card max-w-xl w-full rounded-2xl p-6 space-y-4 border border-slate-700">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-black text-white">📲 傳給老爸的 LINE / Telegram 每日盤後總結</h3>
+        <button onclick="closeLineModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
+      </div>
+      <textarea id="line-briefing-textarea" rows="14" readonly
+        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-sm text-slate-200 font-mono leading-relaxed"></textarea>
+      <div class="flex justify-end gap-3">
+        <button onclick="copyLineBriefing()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-sm">
+          📋 一鍵複製文字（直接貼到 LINE 群組）
+        </button>
+        <button onclick="closeLineModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold text-sm">
+          關閉
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let REPORT_DATA = null;
+    let CURRENT_TAB = 'top_picks';
+    let SELECTED_CODE = null;
+    let DAD_MODE = false;
+    let tvChart = null;
+    let candleSeries = null;
+
+    async function initDashboard() {
+      try {
+        let resp = await fetch('./data/latest_report.json?t=' + Date.now());
+        if (!resp.ok) {
+          resp = await fetch('/api/report');
+        }
+        REPORT_DATA = await resp.json();
+        renderHeaderAndSummary();
+        renderDadExclusiveBanner();
+        renderHeadlinesAndWarnings();
+        switchTab('top_picks');
+      } catch (err) {
+        console.error('載入報告失敗:', err);
+      }
+    }
+
+    function renderHeaderAndSummary() {
+      const ms = REPORT_DATA.market_summary || {};
+      document.getElementById('as-of-badge').textContent = `結算基準日：${REPORT_DATA.as_of_date}（更新於 ${REPORT_DATA.generated_at}）`;
+      document.getElementById('regime-title').textContent = ms.regime || '--';
+      const upPct = ms.up_ratio_pct || 50;
+      document.getElementById('breadth-up-bar').style.width = `${upPct}%`;
+      document.getElementById('breadth-down-bar').style.width = `${Math.max(0, 100 - upPct)}%`;
+      document.getElementById('breadth-up-text').textContent = `▲ 上漲 ${ms.up_count} 家 (${upPct}%)`;
+      document.getElementById('breadth-avg-text').textContent = `全市場平均 ${(ms.avg_return_pct >= 0 ? '+' : '')}${ms.avg_return_pct}%`;
+      document.getElementById('breadth-down-text').textContent = `▼ 下跌 ${ms.down_count} 家`;
+
+      const top1 = (REPORT_DATA.top_picks_debates || [])[0];
+      if (top1) {
+        document.getElementById('hero-top-pick').innerHTML = `
+          <div class="flex items-baseline justify-between cursor-pointer" onclick="selectStock('${top1.code}')">
+            <span class="text-xl font-black text-white hover:text-indigo-400">${top1.code} ${top1.name}</span>
+            <span class="text-lg font-black ${top1.change_pct >= 0 ? 'tw-up' : 'tw-down'}">${top1.close} (${top1.change_pct >= 0 ? '+' : ''}${top1.change_pct}%)</span>
+          </div>
+          <div class="text-xs text-slate-400 mt-0.5">AI 總評 ${top1.total_score} 分｜外資 ${top1.metrics.foreign_lots >= 0 ? '+' : ''}${top1.metrics.foreign_lots}張 / 投信 ${top1.metrics.trust_lots >= 0 ? '+' : ''}${top1.metrics.trust_lots}張</div>
+        `;
+        document.getElementById('hero-top-pick-plan').textContent = `建議買點：${top1.price_plan.entry_low}～${top1.price_plan.entry_high} 元｜停損：${top1.price_plan.stop_loss} 元`;
+      }
+
+      const cobuy1 = (REPORT_DATA.co_buy_debates || [])[0];
+      if (cobuy1) {
+        document.getElementById('hero-cobuy-pick').innerHTML = `
+          <div class="flex items-baseline justify-between cursor-pointer" onclick="selectStock('${cobuy1.code}')">
+            <span class="text-xl font-black text-white hover:text-indigo-400">${cobuy1.code} ${cobuy1.name}</span>
+            <span class="text-lg font-black ${cobuy1.change_pct >= 0 ? 'tw-up' : 'tw-down'}">${cobuy1.close} (${cobuy1.change_pct >= 0 ? '+' : ''}${cobuy1.change_pct}%)</span>
+          </div>
+          <div class="text-xs text-slate-400 mt-0.5">外資 ${cobuy1.metrics.foreign_lots >= 0 ? '+' : ''}${cobuy1.metrics.foreign_lots}張 ＋ 投信 ${cobuy1.metrics.trust_lots >= 0 ? '+' : ''}${cobuy1.metrics.trust_lots}張</div>
+        `;
+        document.getElementById('hero-cobuy-sub').textContent = `近 3 日法人加權買超：+${cobuy1.metrics.inst_3d_val_yi} 億元`;
+      }
+
+      document.getElementById('line-briefing-textarea').value = REPORT_DATA.dad_briefing_text || '';
+    }
+
+    function renderDadExclusiveBanner() {
+      const container = document.getElementById('dad-cards-grid');
+      const items = [...(REPORT_DATA.watchlist_debates || []), ...(REPORT_DATA.top_picks_debates || []).slice(0, 2)];
+      const seen = new Set();
+      const uniqueItems = items.filter(x => {
+        if (seen.has(x.code)) return false;
+        seen.add(x.code);
+        return true;
+      });
+      container.innerHTML = uniqueItems.map(item => {
+        const light = item.verdict.dad_light;
+        const borderCls = light === 'GREEN' ? 'border-emerald-500/60 bg-emerald-950/20' : (light === 'YELLOW' ? 'border-amber-500/60 bg-amber-950/20' : 'border-rose-500/60 bg-rose-950/20');
+        const lightIcon = light === 'GREEN' ? '🟢' : (light === 'YELLOW' ? '🟡' : '🔴');
+        return `
+          <div onclick="selectStock('${item.code}')" class="cursor-pointer rounded-2xl p-4 border-2 ${borderCls} hover:scale-[1.01] transition">
+            <div class="flex items-center justify-between">
+              <div class="text-xl font-black text-white">${lightIcon} ${item.name} (${item.code})</div>
+              <div class="text-xl font-black ${item.change_pct >= 0 ? 'tw-up' : 'tw-down'}">${item.close} 元 (${item.change_pct >= 0 ? '+' : ''}${item.change_pct}%)</div>
+            </div>
+            <div class="mt-2 text-base font-bold text-amber-300">👉 行動建議：${item.verdict.dad_action}</div>
+            <p class="mt-1.5 text-sm text-slate-200 leading-relaxed">${item.agents.dad_advisor}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getCustomWatchlistCodes() {
+      const saved = localStorage.getItem('alphatw_watchlist');
+      if (saved) {
+        try { return JSON.parse(saved); } catch (e) {}
+      }
+      return REPORT_DATA.watchlist_codes || [];
+    }
+
+    function switchTab(tab) {
+      CURRENT_TAB = tab;
+      ['top_picks', 'watchlist', 'co_buy', 'volume_hot'].forEach(t => {
+        const btn = document.getElementById('tab-' + t);
+        if (t === tab) {
+          btn.className = 'py-2 rounded-lg bg-indigo-600 text-white transition';
+        } else {
+          btn.className = 'py-2 rounded-lg text-slate-400 hover:text-white transition';
+        }
+      });
+
+      const editor = document.getElementById('watchlist-editor');
+      editor.classList.toggle('hidden', tab !== 'watchlist');
+
+      let list = [];
+      if (tab === 'top_picks') list = REPORT_DATA.top_picks_debates || [];
+      else if (tab === 'co_buy') list = REPORT_DATA.co_buy_debates || [];
+      else if (tab === 'volume_hot') list = REPORT_DATA.volume_hot_debates || [];
+      else if (tab === 'watchlist') {
+        const codes = getCustomWatchlistCodes();
+        list = codes.map(c => REPORT_DATA.all_debates[c]).filter(Boolean);
+      }
+
+      const container = document.getElementById('stock-list-container');
+      container.innerHTML = list.map(item => {
+        const isUp = item.change_pct >= 0;
+        const removeBtn = tab === 'watchlist'
+          ? `<button onclick="event.stopPropagation(); removeWatchlistStock('${item.code}')" class="text-xs text-slate-500 hover:text-rose-400 ml-2" title="移除自選">✕</button>`
+          : '';
+        return `
+          <div onclick="selectStock('${item.code}')" id="card-${item.code}"
+            class="cursor-pointer rounded-xl p-3.5 border border-slate-800 bg-slate-900/75 hover:border-indigo-500/70 transition">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-base font-black text-white">${item.code} ${item.name}</span>
+                <span class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300">${item.sector}</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-base font-black ${isUp ? 'tw-up' : 'tw-down'}">${item.close} (${isUp ? '+' : ''}${item.change_pct}%)</span>
+                ${removeBtn}
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-2 text-xs">
+              <span class="text-slate-300 font-medium">${item.verdict.badge}</span>
+              <span class="font-bold text-indigo-400">總評 ${item.total_score} 分</span>
+            </div>
+            <div class="flex items-center justify-between mt-1.5 text-[11px] text-slate-400">
+              <span>外資 ${item.metrics.foreign_lots >= 0 ? '+' : ''}${item.metrics.foreign_lots}張｜投信 ${item.metrics.trust_lots >= 0 ? '+' : ''}${item.metrics.trust_lots}張</span>
+              <span>買點 ${item.price_plan.entry_low}~${item.price_plan.entry_high}｜停損 ${item.price_plan.stop_loss}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (list.length > 0 && (!SELECTED_CODE || !REPORT_DATA.all_debates[SELECTED_CODE])) {
+        selectStock(list[0].code);
+      } else if (SELECTED_CODE) {
+        selectStock(SELECTED_CODE);
+      }
+    }
+
+    async function selectStock(code) {
+      SELECTED_CODE = code;
+      let item = REPORT_DATA.all_debates[code];
+      let kline = (REPORT_DATA.klines || {})[code] || [];
+
+      if (!item) {
+        try {
+          const resp = await fetch(`/api/analyze/${code}`);
+          if (resp.ok) {
+            const payload = await resp.json();
+            item = payload.debate;
+            kline = payload.kline || [];
+            REPORT_DATA.all_debates[code] = item;
+            REPORT_DATA.klines[code] = kline;
+          }
+        } catch (e) {}
+      }
+      if (!item) {
+        alert(`找不到台股代號 ${code}，請確認輸入 4 碼上市櫃代號（如 2330, 2317, 1802）`);
+        return;
+      }
+
+      const isUp = item.change_pct >= 0;
+      document.getElementById('detail-title').textContent = `${item.code} ${item.name}`;
+      document.getElementById('detail-sector').textContent = `${item.market}｜${item.sector}`;
+      document.getElementById('detail-verdict-badge').textContent = item.verdict.badge;
+      document.getElementById('detail-dad-summary').textContent = `👨‍🦳 老爸白話建議：${item.agents.dad_advisor}`;
+      document.getElementById('detail-price').className = `text-3xl font-black ${isUp ? 'tw-up' : 'tw-down'}`;
+      document.getElementById('detail-price').textContent = `${item.close} 元`;
+      document.getElementById('detail-change').className = `text-sm font-bold ${isUp ? 'tw-up' : 'tw-down'}`;
+      document.getElementById('detail-change').textContent = `${isUp ? '▲ +' : '▼ '}${item.change} (${isUp ? '+' : ''}${item.change_pct}%)｜成交額 ${item.metrics.turnover_yi} 億`;
+
+      document.getElementById('plan-entry').textContent = `${item.price_plan.entry_low} ～ ${item.price_plan.entry_high} 元`;
+      document.getElementById('plan-stop').textContent = `${item.price_plan.stop_loss} 元`;
+      document.getElementById('plan-target').textContent = `${item.price_plan.target_price} 元`;
+      document.getElementById('plan-score-rr').textContent = `${item.total_score} 分 / 1:${item.price_plan.risk_reward_ratio}`;
+      document.getElementById('detail-ma-info').textContent = `短期均線 ${item.metrics.ma_short} 元｜多日均線 ${item.metrics.ma_mid} 元（乖離 ${item.metrics.ma_gap_pct >= 0 ? '+' : ''}${item.metrics.ma_gap_pct}%）`;
+
+      document.getElementById('agent-chip-text').textContent = item.agents.chip_agent;
+      document.getElementById('agent-tech-text').textContent = item.agents.technical_agent;
+
+      document.getElementById('bull-list').innerHTML = (item.agents.bull_researcher || []).map(p => `<li>${p}</li>`).join('');
+      document.getElementById('bear-list').innerHTML = (item.agents.bear_researcher || []).map(p => `<li>${p}</li>`).join('');
+
+      document.getElementById('personas-grid').innerHTML = (item.agents.personas || []).map(p => `
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+          <div class="flex items-center justify-between font-bold mb-1">
+            <span class="text-white">${p.name}</span>
+            <span class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">${p.vote}</span>
+          </div>
+          <p class="text-slate-400 leading-relaxed">${p.reason}</p>
+        </div>
+      `).join('');
+
+      const newsList = item.news && item.news.length ? item.news : (REPORT_DATA.headline_news || []).slice(0, 3);
+      document.getElementById('stock-news-list').innerHTML = newsList.map(n => `
+        <a href="${n.link}" target="_blank" rel="noopener" class="block bg-slate-900/70 hover:bg-slate-800/80 border border-slate-800 rounded-lg px-3 py-2 transition">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-slate-200 font-medium truncate">${n.title}</span>
+            <span class="text-[11px] text-indigo-400 shrink-0">${n.source}</span>
+          </div>
+        </a>
+      `).join('');
+
+      renderKlineChart(kline, item);
+    }
+
+    function renderKlineChart(kline, item) {
+      const container = document.getElementById('tv-chart-container');
+      container.innerHTML = '';
+      if (!kline || kline.length === 0) {
+        container.innerHTML = `<div class="h-full flex items-center justify-center text-xs text-slate-500">此標的暫無歷史 K 線快取，請參考上方均線與建議進出場價位</div>`;
+        return;
+      }
+      tvChart = LightweightCharts.createChart(container, {
+        width: container.clientWidth,
+        height: 256,
+        layout: { background: { color: '#020617' }, textColor: '#94a3b8' },
+        grid: { vertLines: { color: '#0f172a' }, horzLines: { color: '#0f172a' } },
+        rightPriceScale: { borderColor: '#1e293b' },
+        timeScale: { borderColor: '#1e293b' },
+      });
+      candleSeries = tvChart.addCandlestickSeries({
+        upColor: '#f43f5e',
+        downColor: '#10b981',
+        borderVisible: false,
+        wickUpColor: '#f43f5e',
+        wickDownColor: '#10b981',
+      });
+      candleSeries.setData(kline);
+
+      // 標示買點上限與鐵律停損線
+      candleSeries.createPriceLine({
+        price: item.price_plan.entry_high,
+        color: '#10b981',
+        lineWidth: 1,
+        lineStyle: LightweightCharts.LineStyle.Dashed,
+        axisLabelVisible: true,
+        title: '建議低接上限',
+      });
+      candleSeries.createPriceLine({
+        price: item.price_plan.stop_loss,
+        color: '#f43f5e',
+        lineWidth: 2,
+        lineStyle: LightweightCharts.LineStyle.Solid,
+        axisLabelVisible: true,
+        title: '鐵律停損',
+      });
+      candleSeries.createPriceLine({
+        price: item.price_plan.target_price,
+        color: '#fbbf24',
+        lineWidth: 1,
+        lineStyle: LightweightCharts.LineStyle.Dashed,
+        axisLabelVisible: true,
+        title: '波段目標',
+      });
+      tvChart.timeScale().fitContent();
+    }
+
+    function renderHeadlinesAndWarnings() {
+      const newsContainer = document.getElementById('headline-news-container');
+      newsContainer.innerHTML = (REPORT_DATA.headline_news || []).map(n => `
+        <a href="${n.link}" target="_blank" rel="noopener" class="block bg-slate-900/75 hover:bg-slate-800 border border-slate-800 rounded-xl p-3 transition">
+          <div class="font-bold text-slate-200 hover:text-indigo-300">${n.title}</div>
+          <div class="text-xs text-slate-400 mt-1 flex justify-between">
+            <span>來源：${n.source}</span>
+            <span>${n.pub_date}</span>
+          </div>
+        </a>
+      `).join('');
+
+      const warnContainer = document.getElementById('warning-stocks-container');
+      warnContainer.innerHTML = (REPORT_DATA.warning_debates || []).map(w => `
+        <div onclick="selectStock('${w.code}')" class="cursor-pointer bg-rose-950/20 border border-rose-500/30 rounded-xl p-3 hover:border-rose-500 transition">
+          <div class="flex justify-between font-bold text-sm">
+            <span class="text-white">${w.code} ${w.name}</span>
+            <span class="${w.change_pct >= 0 ? 'tw-up' : 'tw-down'}">${w.close} (${w.change_pct >= 0 ? '+' : ''}${w.change_pct}%)</span>
+          </div>
+          <div class="text-rose-300 font-semibold mt-1">總分 ${w.total_score}｜法人合計 ${w.metrics.inst_total_lots} 張</div>
+          <div class="text-slate-400 mt-0.5">防守底線：${w.price_plan.stop_loss} 元</div>
+        </div>
+      `).join('');
+    }
+
+    function handleSearchStock() {
+      const q = document.getElementById('stock-search-input').value.trim();
+      if (!q) return;
+      const found = Object.values(REPORT_DATA.all_debates || {}).find(
+        x => x.code === q || x.name.includes(q)
+      );
+      if (found) {
+        selectStock(found.code);
+      } else if (/^\d{4}$/.test(q)) {
+        selectStock(q);
+      } else {
+        alert(`在目前熱門池中找不到「${q}」，請輸入 4 碼台股代號（例如 2330）`);
+      }
+    }
+
+    function addWatchlistStock() {
+      const code = document.getElementById('add-watch-input').value.trim();
+      if (!/^\d{4}$/.test(code)) {
+        alert('請輸入 4 碼台股代號（如 2330、2382）');
+        return;
+      }
+      const list = getCustomWatchlistCodes();
+      if (!list.includes(code)) {
+        list.unshift(code);
+        localStorage.setItem('alphatw_watchlist', JSON.stringify(list));
+      }
+      document.getElementById('add-watch-input').value = '';
+      switchTab('watchlist');
+      selectStock(code);
+    }
+
+    function removeWatchlistStock(code) {
+      const list = getCustomWatchlistCodes().filter(c => c !== code);
+      localStorage.setItem('alphatw_watchlist', JSON.stringify(list));
+      switchTab('watchlist');
+    }
+
+    function toggleDadMode() {
+      DAD_MODE = !DAD_MODE;
+      document.body.classList.toggle('dad-mode-active', DAD_MODE);
+      document.getElementById('dad-exclusive-banner').classList.toggle('hidden', !DAD_MODE);
+      document.getElementById('dad-mode-label').textContent = DAD_MODE ? '切換：專業投研終端模式' : '切換：老爸大字白話模式';
+    }
+
+    function openLineModal() {
+      document.getElementById('line-modal').classList.remove('hidden');
+    }
+    function closeLineModal() {
+      document.getElementById('line-modal').classList.add('hidden');
+    }
+    function copyLineBriefing() {
+      const el = document.getElementById('line-briefing-textarea');
+      el.select();
+      navigator.clipboard.writeText(el.value);
+      alert('✅ 已複製老爸專屬台股日報！現在可以直接貼到 LINE 傳給爸爸了！');
+    }
+
+    window.addEventListener('DOMContentLoaded', initDashboard);
+  </script>
+</body>
+</html>
