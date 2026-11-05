@@ -116,6 +116,7 @@ def generate_daily_intelligence_bundle(
         "warning_debates": warning_debates,
         "all_debates": debates_map,
         "klines": klines_map,
+        "market_directory": snapshot.get("market_directory", {}),
     }
     report_bundle["family_briefing_text"] = DailyBriefingNotifier.build_family_line_message(report_bundle)
 

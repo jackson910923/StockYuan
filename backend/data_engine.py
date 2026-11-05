@@ -619,28 +619,60 @@ class TaiwanStockDataEngine:
             item["code"]
             for item in sorted(all_t0.values(), key=lambda x: x["turnover_ntd"], reverse=True)[:50]
         ]
-        # 確保高價股(>=200)、中低價股(50~200)、低價銅板股(<50) 與 做空破線股 都有充足代表性標的
-        high_price_active = [
+        # 確保高價股(>=200)、中低價股(50~200)、低價銅板股(<50) 皆優先納入「法人逆勢買超＋抗跌上漲」強勢股與人氣股
+        high_price_bull = [
+            item["code"]
+            for item in sorted(
+                [
+                    x
+                    for x in all_t0.values()
+                    if x["close"] >= 200.0
+                    and x["turnover_ntd"] >= 3e7
+                    and (inst_t0.get(x["code"], {}).get("total_lots", 0.0) > 0 or x["change_pct"] >= 0.0)
+                ],
+                key=lambda x: (
+                    inst_t0.get(x["code"], {}).get("total_lots", 0.0) > 0 and x["change_pct"] >= 0.0,
+                    inst_t0.get(x["code"], {}).get("total_lots", 0.0) * x["close"],
+                    x["change_pct"],
+                ),
+                reverse=True,
+            )[:25]
+        ]
+        high_price_active = high_price_bull + [
             item["code"]
             for item in sorted(
                 [x for x in all_t0.values() if x["close"] >= 200.0],
                 key=lambda x: x["turnover_ntd"],
                 reverse=True,
-            )[:25]
+            )[:20]
         ]
         mid_price_active = [
             item["code"]
             for item in sorted(
-                [x for x in all_t0.values() if 50.0 <= x["close"] < 200.0],
-                key=lambda x: x["turnover_ntd"],
+                [
+                    x
+                    for x in all_t0.values()
+                    if 50.0 <= x["close"] < 200.0 and x["turnover_ntd"] >= 3e7
+                ],
+                key=lambda x: (
+                    inst_t0.get(x["code"], {}).get("total_lots", 0.0) > 50 and x["change_pct"] >= 0.0,
+                    x["turnover_ntd"],
+                ),
                 reverse=True,
             )[:35]
         ]
         low_price_active = [
             item["code"]
             for item in sorted(
-                [x for x in all_t0.values() if 5.0 <= x["close"] < 50.0 and len(x["code"]) == 4],
-                key=lambda x: x["turnover_ntd"],
+                [
+                    x
+                    for x in all_t0.values()
+                    if 5.0 <= x["close"] < 50.0 and len(x["code"]) == 4 and x["turnover_ntd"] >= 2e7
+                ],
+                key=lambda x: (
+                    inst_t0.get(x["code"], {}).get("total_lots", 0.0) > 100 and x["change_pct"] >= 0.0,
+                    x["turnover_ntd"],
+                ),
                 reverse=True,
             )[:35]
         ]
@@ -982,30 +1014,30 @@ class TaiwanStockDataEngine:
             reverse=True,
         )[:12]
         swing_picks = sorted(
-            [s for s in ranked_all if s["inst_total_lots"] >= 0 and s["ma_gap_pct"] <= 6.0],
+            [s for s in ranked_all if s["inst_total_lots"] >= 0 and s["ma_gap_pct"] <= 6.0 and s["change_pct"] >= -1.5],
             key=lambda x: (x["swing_score"], x["inst_3d_val_yi"], x["total_score"]),
             reverse=True,
         )[:12]
         long_term_picks = sorted(
-            ranked_all,
+            [s for s in ranked_all if s["change_pct"] >= -2.0],
             key=lambda x: (x["long_term_score"], x["risk_score"], x["total_score"]),
             reverse=True,
         )[:12]
 
-        # 3. 三大股價位階專屬排行：高價股(>=200) / 中低價股(50~200) / 低價銅板股(<50)
+        # 3. 三大股價位階專屬排行：高價股(>=200) / 中低價股(50~200) / 低價銅板股(<50)（嚴格優先取法人偏多與抗跌上漲標的）
         high_price_picks = sorted(
             [s for s in ranked_all if s["price_tier"] == "HIGH_200_PLUS"],
-            key=lambda x: x["total_score"],
+            key=lambda x: (x["change_pct"] >= -1.0 and x["inst_total_lots"] >= 0, x["total_score"]),
             reverse=True,
         )[:12]
         mid_price_picks = sorted(
             [s for s in ranked_all if s["price_tier"] == "MID_50_200"],
-            key=lambda x: x["total_score"],
+            key=lambda x: (x["change_pct"] >= -1.0 and x["inst_total_lots"] >= 0, x["total_score"]),
             reverse=True,
         )[:12]
         low_price_picks = sorted(
             [s for s in ranked_all if s["price_tier"] == "LOW_UNDER_50"],
-            key=lambda x: x["total_score"],
+            key=lambda x: (x["change_pct"] >= -1.0 and x["inst_total_lots"] >= 0, x["total_score"]),
             reverse=True,
         )[:12]
 
@@ -1024,6 +1056,12 @@ class TaiwanStockDataEngine:
         )[:10]
         volume_hot = sorted(ranked_all, key=lambda x: x["turnover_yi"], reverse=True)[:10]
         warning_list = short_sell_picks[:8]
+
+        # 6. 全市場 1,800+ 檔上市櫃與 ETF 中文名稱與最新收盤速查字典（供前端即時搜尋聯想與穿透查詢使用）
+        market_directory = {
+            code: [item["name"], item["market"], item["close"], item["change_pct"]]
+            for code, item in all_t0.items()
+        }
 
         return {
             "as_of_date": latest_date,
@@ -1062,4 +1100,5 @@ class TaiwanStockDataEngine:
             "warning_list": warning_list,
             "watchlist_codes": user_watch,
             "stocks": stocks_enriched,
+            "market_directory": market_directory,
         }
