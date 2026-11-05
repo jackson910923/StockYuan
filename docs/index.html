@@ -8,9 +8,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="StockYuan" />
   <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" type="image/png" href="./icon-192.png" />
-  <link rel="apple-touch-icon" href="./icon-192.png" />
-  <title>StockYuan 4.2 台股領航 AI 投研指揮中心｜手機 APP ＆ 電腦旗艦看盤終端</title>
+  <link rel="icon" type="image/png" href="./assets/memes/1.png" />
+  <link rel="apple-touch-icon" href="./assets/memes/1.png" />
+  <title>StockYuan</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -42,13 +42,15 @@
   <!-- 頂部旗艦導航列 -->
   <header class="sticky top-0 z-40 glass-card border-b border-slate-800 px-4 lg:px-8 py-3">
     <div class="max-w-[1640px] mx-auto flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-blue-600 to-emerald-500 flex items-center justify-center font-black text-xl shadow-lg shadow-indigo-500/20">
-          α
-        </div>
+      <div class="flex items-center gap-3.5">
+        <img
+          src="./assets/memes/1.png"
+          alt="StockYuan Logo"
+          class="w-12 h-12 rounded-2xl object-cover border-2 border-indigo-400/70 shadow-lg shadow-indigo-500/30 hover:scale-105 transition duration-200"
+        />
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-lg lg:text-xl font-black tracking-tight text-white">AlphaTW 4.0 台股領航 AI 投研指揮中心</h1>
+          <div class="flex items-center gap-2.5">
+            <h1 class="text-xl lg:text-2xl font-black tracking-tight bg-gradient-to-r from-white via-indigo-200 to-amber-200 bg-clip-text text-transparent">StockYuan</h1>
             <span id="liveStatusBadge" class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
               ⚡ 即時雙引擎就緒
             </span>
@@ -130,35 +132,50 @@
   <!-- 主體內容區 -->
   <main class="flex-1 max-w-[1640px] w-full mx-auto px-4 lg:px-8 py-5 space-y-5">
 
-    <!-- 第一排：大盤多空溫度計 + 價位分級統計 + 做空雷達統計 -->
+    <!-- 第一排：大盤多空溫度計 + 價位分級統計 + 做空雷達統計 (融合專屬梗圖表情包美化) -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-      <div class="glass-card rounded-2xl p-4 border-l-4 border-l-indigo-500">
-        <div class="text-xs text-slate-400 font-medium">今日台股市場格局 (Regime)</div>
-        <div id="marketRegime" class="text-sm font-black text-white mt-1 leading-snug">載入中...</div>
-        <div id="marketBreadthText" class="text-xs text-slate-400 mt-1.5">--</div>
-      </div>
-
-      <div class="glass-card rounded-2xl p-4 border-l-4 border-l-red-500">
-        <div class="text-xs text-slate-400 font-medium">⏱️ 三大週期首選標的</div>
-        <div id="horizonQuickSummary" class="text-xs text-slate-200 mt-1.5 space-y-1 font-medium">載入中...</div>
-      </div>
-
-      <div class="glass-card rounded-2xl p-4 border-l-4 border-l-amber-500">
-        <div class="text-xs text-slate-400 font-medium">💰 高／中低／低價股首選</div>
-        <div id="priceTierQuickSummary" class="text-xs text-slate-200 mt-1.5 space-y-1 font-medium">載入中...</div>
-      </div>
-
-      <div class="glass-card rounded-2xl p-4 border-l-4 border-l-purple-500 cursor-pointer hover:border-purple-400 transition" onclick="switchTab('short_sell')">
-        <div class="flex items-center justify-between">
-          <span class="text-xs text-purple-300 font-bold">🐻 做空／避險放空雷達</span>
-          <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">點此進入專區</span>
+      <div class="glass-card rounded-2xl p-4 border-l-4 border-l-indigo-500 flex items-center justify-between gap-2.5">
+        <div class="min-w-0">
+          <div class="text-xs text-slate-400 font-medium">今日台股市場格局 (Regime)</div>
+          <div id="marketRegime" class="text-sm font-black text-white mt-1 leading-snug">載入中...</div>
+          <div id="marketBreadthText" class="text-xs text-slate-400 mt-1.5">--</div>
         </div>
-        <div id="shortSellQuickPick" class="text-base font-black text-purple-300 mt-1">載入中...</div>
-        <div id="shortSellQuickSub" class="text-xs text-slate-400 mt-1">--</div>
+        <img src="./assets/memes/5.png" alt="一人一股救台股" title="一人一股救台股！" class="w-14 h-14 rounded-xl object-cover border border-indigo-500/40 shadow-md shrink-0 hover:scale-110 transition" />
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 border-l-4 border-l-red-500 flex items-center justify-between gap-2.5">
+        <div class="min-w-0">
+          <div class="text-xs text-slate-400 font-medium">⏱️ 三大週期首選標的</div>
+          <div id="horizonQuickSummary" class="text-xs text-slate-200 mt-1.5 space-y-1 font-medium">載入中...</div>
+        </div>
+        <img src="./assets/memes/6.png" alt="無腦多衝鋒" title="強勢動能衝刺" class="w-14 h-14 rounded-xl object-cover border border-red-500/40 shadow-md shrink-0 hover:scale-110 transition" />
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 border-l-4 border-l-amber-500 flex items-center justify-between gap-2.5">
+        <div class="min-w-0">
+          <div class="text-xs text-slate-400 font-medium">💰 高／中低／低價股首選</div>
+          <div id="priceTierQuickSummary" class="text-xs text-slate-200 mt-1.5 space-y-1 font-medium">載入中...</div>
+        </div>
+        <img src="./assets/memes/1.png" alt="StockYuan 財富自由" title="高價・中低價・銅板股全面掌握" class="w-14 h-14 rounded-xl object-cover border border-amber-500/40 shadow-md shrink-0 hover:scale-110 transition" />
+      </div>
+
+      <div class="glass-card rounded-2xl p-4 border-l-4 border-l-purple-500 cursor-pointer hover:border-purple-400 transition flex items-center justify-between gap-2.5" onclick="switchTab('short_sell')">
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs text-purple-300 font-bold">🐻 做空／避險放空雷達</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">專區</span>
+          </div>
+          <div id="shortSellQuickPick" class="text-base font-black text-purple-300 mt-1 truncate">載入中...</div>
+          <div id="shortSellQuickSub" class="text-xs text-slate-400 mt-1 truncate">--</div>
+        </div>
+        <img src="./assets/memes/3.png" alt="我就不會輸" title="做空避險・嚴守停損我就不會輸" class="w-14 h-14 rounded-xl object-cover border border-purple-500/40 shadow-md shrink-0 hover:scale-110 transition" />
       </div>
 
       <div class="glass-card rounded-2xl p-4 border-l-4 border-l-emerald-500">
-        <div class="text-xs text-slate-400 font-medium">⭐ 自選股監控組合 (<span id="watchCountBadge">0</span> 檔)</div>
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-slate-400 font-medium">⭐ 自選股監控組合 (<span id="watchCountBadge">0</span> 檔)</div>
+          <img src="./assets/memes/2.png" alt="手機隨時盯盤" class="w-8 h-8 rounded-lg object-cover border border-emerald-500/40" />
+        </div>
         <div class="text-xs text-slate-300 mt-1">支援全市場 1,800+ 檔上市櫃與 ETF 即時增刪</div>
         <div class="mt-2 flex gap-2">
           <input id="addWatchInput" type="text" placeholder="新增代號 (如 2603)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white" />
@@ -170,13 +187,16 @@
     <!-- 新增：🏆 今日八大分類最推薦 Top 3 榮譽榜看板 (短線/波段/長線/高價/中低價/低價/做空 Top 3) -->
     <section id="podiumSection" class="glass-card rounded-2xl p-4 border border-indigo-500/30">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-        <div>
-          <h2 class="text-sm lg:text-base font-black text-white flex items-center gap-2">
-            <span>🏆 今日 AI 多智能體嚴選【各分類最推薦前三名 Top 3】總覽看板</span>
-          </h2>
-          <p class="text-xs text-slate-400 mt-0.5">
-            涵蓋綜合做多、短線(1~5日)、波段(2~8週)、長線存股、高價(≥200)、中低價(50~200)、銅板股(&lt;50) 與 🐻 做空放空前三名，點擊任一標的立即載入深度策略與 K 線！
-          </p>
+        <div class="flex items-center gap-3">
+          <img src="./assets/memes/1.png" alt="StockYuan Top 3" class="w-11 h-11 rounded-xl object-cover border border-amber-400/60 shadow-md hidden sm:block" />
+          <div>
+            <h2 class="text-sm lg:text-base font-black text-white flex items-center gap-2">
+              <span>🏆 今日 StockYuan AI 多智能體嚴選【各分類最推薦前三名 Top 3】總覽看板</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">
+              涵蓋綜合做多、短線(1~5日)、波段(2~8週)、長線存股、高價(≥200)、中低價(50~200)、銅板股(&lt;50) 與 🐻 做空放空前三名，點擊任一標的立即載入深度策略與 K 線！
+            </p>
+          </div>
         </div>
         <button
           id="syncTop3LiveBtn"
@@ -340,16 +360,24 @@
             </div>
           </div>
 
-          <!-- 白話投資顧問大字解說卡 (給全家人直覺閱讀) -->
-          <div class="mt-4 rounded-2xl p-4 bg-gradient-to-r from-indigo-950/80 via-slate-900 to-slate-900 border border-indigo-500/40">
-            <div class="flex items-center justify-between mb-1.5">
-              <div class="flex items-center gap-2">
-                <span class="text-base">💬</span>
-                <span id="easyAdvisorHeader" class="text-xs font-bold uppercase tracking-wider text-indigo-300">白話操作重點總結（適合全家人直覺看懂）</span>
+          <!-- 白話投資顧問大字解說卡 (直覺秒懂版 + 梗圖表情包助陣) -->
+          <div class="mt-4 rounded-2xl p-4 bg-gradient-to-r from-indigo-950/80 via-slate-900 to-slate-900 border border-indigo-500/40 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <img
+              id="easyAdvisorMemeImg"
+              src="./assets/memes/4.png"
+              alt="AI 操盤心法"
+              class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border border-indigo-400/50 shadow-lg shrink-0"
+            />
+            <div class="flex-1 min-w-0">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                <div class="flex items-center gap-2">
+                  <span class="text-base">💬</span>
+                  <span id="easyAdvisorHeader" class="text-xs font-bold uppercase tracking-wider text-indigo-300">白話操作重點總結（直覺秒懂版）</span>
+                </div>
+                <span id="squeezeRiskPill" class="hidden px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-500/20 text-purple-200 border border-purple-500/40"></span>
               </div>
-              <span id="squeezeRiskPill" class="hidden px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-500/20 text-purple-200 border border-purple-500/40"></span>
+              <p id="detailEasyAdvisor" class="text-sm text-slate-100 leading-relaxed easy-text">--</p>
             </div>
-            <p id="detailEasyAdvisor" class="text-sm text-slate-100 leading-relaxed easy-text">--</p>
           </div>
 
           <!-- 專業量化技術指標列 (RSI / KD / MACD / 布林通道 / 支撐壓力) -->
@@ -410,16 +438,22 @@
         <!-- TradingAgents 多空交叉辯論室 (Bullish vs Bearish Debate) -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="glass-card rounded-2xl p-4 border-t-4 border-t-red-500">
-            <h3 class="text-sm font-black text-red-400 flex items-center gap-2 mb-2.5">
-              <span>🐂 看多研究員 (Bullish Catalysts)</span>
-            </h3>
+            <div class="flex items-center justify-between mb-2.5">
+              <h3 class="text-sm font-black text-red-400 flex items-center gap-2">
+                <span>🐂 看多研究員 (Bullish Catalysts)</span>
+              </h3>
+              <img src="./assets/memes/6.png" alt="看多衝鋒" class="w-10 h-10 rounded-xl object-cover border border-red-500/40 shadow" />
+            </div>
             <ul id="detailBullList" class="space-y-2 text-xs text-slate-200 leading-relaxed easy-text"></ul>
           </div>
 
           <div class="glass-card rounded-2xl p-4 border-t-4 border-t-emerald-500">
-            <h3 class="text-sm font-black text-emerald-400 flex items-center gap-2 mb-2.5">
-              <span>🐻 看空風險與放空理由官 (Bearish & Short Triggers)</span>
-            </h3>
+            <div class="flex items-center justify-between mb-2.5">
+              <h3 class="text-sm font-black text-emerald-400 flex items-center gap-2">
+                <span>🐻 看空風險與放空理由官 (Bearish & Short Triggers)</span>
+              </h3>
+              <img src="./assets/memes/3.png" alt="風險防守" class="w-10 h-10 rounded-xl object-cover border border-emerald-500/40 shadow" />
+            </div>
             <ul id="detailBearList" class="space-y-2 text-xs text-slate-200 leading-relaxed easy-text"></ul>
           </div>
         </div>
@@ -504,6 +538,7 @@
           border: 'border-indigo-500/40 bg-indigo-950/20',
           badgeColor: 'text-indigo-300',
           mode: 'swing',
+          meme: './assets/memes/1.png',
           items: (REPORT_DATA.top_picks_debates || []).slice(0, 3),
           scoreKey: 'total_score',
           isShort: false,
@@ -514,6 +549,7 @@
           border: 'border-amber-500/40 bg-amber-950/15',
           badgeColor: 'text-amber-300',
           mode: 'short_term',
+          meme: './assets/memes/6.png',
           items: (REPORT_DATA.short_term_debates || []).slice(0, 3),
           scoreKey: 'short_term_score',
           isShort: false,
@@ -524,6 +560,7 @@
           border: 'border-cyan-500/40 bg-cyan-950/15',
           badgeColor: 'text-cyan-300',
           mode: 'swing',
+          meme: './assets/memes/2.png',
           items: (REPORT_DATA.swing_debates || []).slice(0, 3),
           scoreKey: 'swing_score',
           isShort: false,
@@ -534,6 +571,7 @@
           border: 'border-emerald-500/40 bg-emerald-950/15',
           badgeColor: 'text-emerald-300',
           mode: 'long_term',
+          meme: './assets/memes/4.png',
           items: (REPORT_DATA.long_term_debates || []).slice(0, 3),
           scoreKey: 'long_term_score',
           isShort: false,
@@ -544,6 +582,7 @@
           border: 'border-slate-700 bg-slate-900/70',
           badgeColor: 'text-sky-300',
           mode: 'swing',
+          meme: './assets/memes/1.png',
           items: (REPORT_DATA.high_price_debates || []).slice(0, 3),
           scoreKey: 'total_score',
           isShort: false,
@@ -554,6 +593,7 @@
           border: 'border-slate-700 bg-slate-900/70',
           badgeColor: 'text-teal-300',
           mode: 'swing',
+          meme: './assets/memes/5.png',
           items: (REPORT_DATA.mid_price_debates || []).slice(0, 3),
           scoreKey: 'total_score',
           isShort: false,
@@ -564,6 +604,7 @@
           border: 'border-slate-700 bg-slate-900/70',
           badgeColor: 'text-yellow-300',
           mode: 'swing',
+          meme: './assets/memes/2.png',
           items: (REPORT_DATA.low_price_debates || []).slice(0, 3),
           scoreKey: 'total_score',
           isShort: false,
@@ -574,6 +615,7 @@
           border: 'border-purple-500/50 bg-purple-950/25',
           badgeColor: 'text-purple-300',
           mode: 'short_sell',
+          meme: './assets/memes/3.png',
           items: (REPORT_DATA.short_sell_debates || []).slice(0, 3),
           scoreKey: 'short_sell_score',
           isShort: true,
@@ -619,9 +661,12 @@
 
         return `
           <div class="rounded-2xl p-3.5 border ${grp.border} flex flex-col justify-between">
-            <div class="mb-2">
-              <div class="text-xs font-black text-white">${grp.title}</div>
-              <div class="text-[11px] text-slate-400">${grp.sub}</div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <div class="min-w-0">
+                <div class="text-xs font-black text-white truncate">${grp.title}</div>
+                <div class="text-[11px] text-slate-400 truncate">${grp.sub}</div>
+              </div>
+              <img src="${grp.meme}" alt="" class="w-9 h-9 rounded-xl object-cover border border-slate-700 shadow shrink-0" />
             </div>
             <div class="space-y-2">${rowsHtml}</div>
           </div>
@@ -1057,6 +1102,8 @@
         document.getElementById('labelTargetTitle').textContent = '📉 波段下跌回補目標價';
         document.getElementById('easyAdvisorHeader').textContent = '🐻 白話做空／避險操作重點（防軋空必讀）';
         document.getElementById('detailEasyAdvisor').textContent = ssPlan.easy_short_advisor || item.agents.easy_advisor;
+        const memeEl = document.getElementById('easyAdvisorMemeImg');
+        if (memeEl) memeEl.src = './assets/memes/3.png';
         document.getElementById('calcDirection').value = 'SHORT';
         squeezePill.textContent = ssPlan.squeeze_risk || '';
         squeezePill.classList.remove('hidden');
@@ -1081,8 +1128,12 @@
         document.getElementById('labelStopTitle').textContent = '🛡️ 鐵律防守停損價';
         document.getElementById('labelStopSub').textContent = '收盤跌破無條件停損保護本金';
         document.getElementById('labelTargetTitle').textContent = '🎯 目標獲利價';
-        document.getElementById('easyAdvisorHeader').textContent = '💬 白話操作重點總結（適合全家人直覺看懂）';
+        document.getElementById('easyAdvisorHeader').textContent = '💬 白話操作重點總結（直覺秒懂版）';
         document.getElementById('detailEasyAdvisor').textContent = item.agents.easy_advisor;
+        const memeEl = document.getElementById('easyAdvisorMemeImg');
+        if (memeEl) {
+          memeEl.src = CURRENT_HORIZON_MODE === 'short_term' ? './assets/memes/6.png' : './assets/memes/4.png';
+        }
         document.getElementById('calcDirection').value = 'LONG';
         squeezePill.classList.add('hidden');
       }
@@ -1438,10 +1489,14 @@
         }
       }
 
+      const calcMeme = pnlNtd >= 0 ? './assets/memes/2.png' : './assets/memes/3.png';
       box.innerHTML = `
-        <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
-          <div>目前市價 <b>${nowP} 元</b> vs 您的${isLong ? '做多' : '放空'}成本 <b>${cost} 元</b>（${lots} 張）：帳面損益 <b class="${pnlNtd >= 0 ? 'tw-up' : 'tw-down'}">${pnlNtd >= 0 ? '+' : ''}${pnlNtd.toLocaleString()} 元 (${pnlPct >= 0 ? '+' : ''}${pnlPct}%)</b></div>
-          <div class="text-amber-300 font-medium">${advice}</div>
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-3">
+          <img src="${calcMeme}" alt="" class="w-12 h-12 rounded-xl object-cover border border-slate-700 shrink-0" />
+          <div class="space-y-1 min-w-0">
+            <div>目前市價 <b>${nowP} 元</b> vs 您的${isLong ? '做多' : '放空'}成本 <b>${cost} 元</b>（${lots} 張）：帳面損益 <b class="${pnlNtd >= 0 ? 'tw-up' : 'tw-down'}">${pnlNtd >= 0 ? '+' : ''}${pnlNtd.toLocaleString()} 元 (${pnlPct >= 0 ? '+' : ''}${pnlPct}%)</b></div>
+            <div class="text-amber-300 font-medium">${advice}</div>
+          </div>
         </div>
       `;
       box.classList.remove('hidden');
@@ -1633,12 +1688,15 @@
     <div class="glass-card rounded-3xl max-w-2xl w-full p-6 border border-indigo-500/40 shadow-2xl relative">
       <button onclick="closeAppQrModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-sm">✕</button>
 
-      <div class="flex items-center gap-3 mb-4">
-        <img src="./icon-192.png" alt="StockYuan Icon" class="w-12 h-12 rounded-2xl shadow-lg" />
-        <div>
-          <h3 class="text-lg font-black text-white">📱 StockYuan 手機 APP 掃碼下載中心</h3>
-          <p class="text-xs text-slate-400">支援 iPhone (iOS) ＆ Android 手機獨立桌面 APP，電腦亦可直接看盤</p>
+      <div class="flex items-center justify-between gap-3 mb-4">
+        <div class="flex items-center gap-3">
+          <img src="./assets/memes/1.png" alt="StockYuan Icon" class="w-12 h-12 rounded-2xl object-cover border border-indigo-400/60 shadow-lg" />
+          <div>
+            <h3 class="text-lg font-black text-white">📱 StockYuan 手機 APP 掃碼下載中心</h3>
+            <p class="text-xs text-slate-400">支援 iPhone (iOS) ＆ Android 手機獨立桌面 APP，電腦亦可直接看盤</p>
+          </div>
         </div>
+        <img src="./assets/memes/2.png" alt="手機看盤" class="w-12 h-12 rounded-2xl object-cover border border-emerald-400/50 shadow-lg hidden sm:block mr-8" />
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

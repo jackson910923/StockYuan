@@ -307,7 +307,7 @@ class MultiAgentStockCommittee:
             },
         ]
 
-        # 5. 口語化白話投資解讀 (Easy Conversational Guide — 給全家人看)
+        # 5. 口語化白話投資解讀 (Easy Conversational Guide — 直覺好懂版)
         lot_tip = (
             f"（屬於200元以上高價股，買一整張約需 {lot_cost_wan} 萬元，資金較小時也很適合用『盤中零股』分批買）"
             if price_tier == "HIGH_200_PLUS"
