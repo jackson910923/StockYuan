@@ -40,8 +40,7 @@ jobs:
 
       - name: Commit & Push Updated Intelligence to GitHub Pages
         run: |
-          git config user.name "AlphaTW-AI-Agent"
-          git config user.email "agent@alphatw.local"
+          git config user.name "StockYuan-AI-Agent"
+          git config user.email "agent@stockyuan.local"
           git add data/latest_report.json docs/data/latest_report.json docs/daily_briefing.md
-          git diff --staged --quiet || git commit -m "chore(auto): update Taiwan stock AI multi-agent intelligence $(date +'%Y-%m-%d %H:%M')"
-          git push
+          git diff --staged --quiet || (git commit -m "chore(auto): update StockYuan AI intelligence $(date +'%Y-%m-%d %H:%M')" && git pull --rebase origin main && git push origin HEAD:main)

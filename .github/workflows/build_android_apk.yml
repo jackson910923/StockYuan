@@ -141,12 +141,15 @@ jobs:
 
           cd android_app
           gradle assembleDebug --no-daemon
-          cp app/build/outputs/apk/debug/app-debug.apk ../docs/StockYuan.apk
+          cp app/build/outputs/apk/debug/app-debug.apk /tmp/StockYuan.apk
+          cd ..
+          rm -rf android_app
 
       - name: Commit StockYuan.apk to docs/ for direct QR download
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git pull --rebase origin main
+          cp /tmp/StockYuan.apk docs/StockYuan.apk
           git add docs/StockYuan.apk
           git diff --staged --quiet || (git commit -m "chore(apk): publish latest StockYuan.apk with custom app icon" && git push origin HEAD:main)
