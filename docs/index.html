@@ -834,7 +834,7 @@
                           .sort((a, b) => b.metrics.inst_3d_val_yi - a.metrics.inst_3d_val_yi);
       } else if (CURRENT_TAB === 'watch') {
         const wl = getLocalWatchlist();
-        baseList = wl.map(c => allMap[c]).filter(Boolean);
+        baseList = wl.map(c => allMap[c] || ensureInstantStockFromDirectory(c)).filter(Boolean);
       } else {
         baseList = [...allList].sort((a, b) => b.total_score - a.total_score);
       }
@@ -848,8 +848,8 @@
       return baseList;
     }
 
-    function renderStockList() {
-      const list = getFilteredStockList();
+    function renderStockList(resetSelection = true) {
+      let list = getFilteredStockList();
       document.getElementById('filteredCountLabel').textContent = `共 ${list.length} 檔`;
       const container = document.getElementById('stockListContainer');
 
@@ -858,8 +858,11 @@
         return;
       }
 
-      if (!SELECTED_CODE || !list.some(x => x.code === SELECTED_CODE)) {
+      if (!SELECTED_CODE || (resetSelection && !list.some(x => x.code === SELECTED_CODE))) {
         SELECTED_CODE = list[0].code;
+      }
+      if (SELECTED_CODE && REPORT_DATA.all_debates[SELECTED_CODE] && !list.some(x => x.code === SELECTED_CODE)) {
+        list = [REPORT_DATA.all_debates[SELECTED_CODE], ...list];
       }
 
       container.innerHTML = list.map(item => {
@@ -1158,7 +1161,8 @@
         CURRENT_HORIZON_MODE = forceHorizonMode;
       }
       if (reRenderList) {
-        renderStockList();
+        renderStockList(false);
+        return;
       }
       // 若該股尚未載入 60 日完整 K 線，於背景非阻塞極速補齊（0.2秒 FinMind 原生 CORS）
       if (!KLINE_FETCH_LOCK.has(code) && (!REPORT_DATA.klines[code] || REPORT_DATA.klines[code].length <= 21)) {
