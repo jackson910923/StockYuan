@@ -163,7 +163,7 @@
         <img src="./assets/memes/1.png" alt="StockYuan 財富自由" title="高價・中低價・銅板股全面掌握" class="w-14 h-14 rounded-xl object-cover border border-amber-500/40 shadow-md shrink-0 hover:scale-110 transition" />
       </div>
 
-      <div class="glass-card rounded-2xl p-4 border-l-4 border-l-purple-500 cursor-pointer hover:border-purple-400 transition flex items-center justify-between gap-2.5" onclick="switchTab('short_sell')">
+      <div id="shortSellQuickCard" class="glass-card rounded-2xl p-4 border-l-4 border-l-purple-500 cursor-pointer hover:border-purple-400 transition flex items-center justify-between gap-2.5" onclick="selectStockAndScroll('2408', 'short_sell')">
         <div class="min-w-0">
           <div class="flex items-center gap-1.5">
             <span class="text-xs text-purple-300 font-bold">🐻 做空／避險放空雷達</span>
@@ -483,7 +483,12 @@
 
         <!-- 個股與市場即時新聞情緒流 -->
         <div class="glass-card rounded-2xl p-5">
-          <h3 class="text-sm font-bold text-white mb-3">📰 即時財經新聞與熱門題材快訊</h3>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              📰 <span id="detailNewsStockTitle">即時財經新聞與熱門題材快訊</span>
+            </h3>
+            <div id="detailNewsQuickLinks" class="flex items-center gap-2"></div>
+          </div>
           <div id="detailNewsList" class="grid grid-cols-1 md:grid-cols-2 gap-2.5"></div>
         </div>
 
@@ -678,10 +683,28 @@
       }).join('');
     }
 
-    function selectStockAndScroll(code, horizonMode) {
+    function selectStockAndScroll(code, horizonMode = null) {
+      if (horizonMode === 'short_sell') {
+        CURRENT_TAB = 'short_sell';
+        CURRENT_HORIZON_MODE = 'short_sell';
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          if (btn.id === 'tab_short_sell') {
+            btn.className = 'tab-btn px-2.5 py-2 rounded-xl text-xs font-bold bg-purple-600 text-white shadow-lg shadow-purple-600/30 transition';
+          } else {
+            btn.className = 'tab-btn px-2.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+          }
+        });
+      } else if (horizonMode) {
+        CURRENT_HORIZON_MODE = horizonMode;
+      }
       selectStock(code, horizonMode, true);
-      const el = document.getElementById('detailName');
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        const el = document.getElementById('detailSection');
+        if (el) {
+          const y = el.getBoundingClientRect().top + window.pageYOffset - 16;
+          window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+        }
+      }, 50);
     }
 
     async function syncAllTop3LiveQuotes() {
@@ -721,32 +744,36 @@
       document.getElementById('marketBreadthText').innerHTML =
         `上漲 <span class="tw-up font-bold">${ms.up_count || 0}</span> 家 ｜ 下跌 <span class="tw-down font-bold">${ms.down_count || 0}</span> 家 ｜ 平均 <span class="${(ms.avg_return_pct || 0) >= 0 ? 'tw-up' : 'tw-down'} font-bold">${(ms.avg_return_pct || 0) >= 0 ? '+' : ''}${ms.avg_return_pct || 0}%</span>`;
 
-      // 三大週期首選摘要
+      // 三大週期首選摘要（點擊平滑跳轉至深度診斷面板）
       const stTop = (REPORT_DATA.short_term_debates || [])[0];
       const swTop = (REPORT_DATA.swing_debates || [])[0];
       const ltTop = (REPORT_DATA.long_term_debates || [])[0];
       document.getElementById('horizonQuickSummary').innerHTML = `
-        <div class="cursor-pointer hover:text-indigo-300" onclick="selectStock('${stTop?.code || '2330'}', 'short_term')">⚡ 短線：<b>${stTop ? `${stTop.name}(${stTop.code})` : '--'}</b> <span class="tw-up">${stTop ? `${stTop.change_pct >= 0 ? '+' : ''}${stTop.change_pct}%` : ''}</span></div>
-        <div class="cursor-pointer hover:text-indigo-300" onclick="selectStock('${swTop?.code || '2330'}', 'swing')">🌊 波段：<b>${swTop ? `${swTop.name}(${swTop.code})` : '--'}</b> <span class="tw-up">${swTop ? `${swTop.change_pct >= 0 ? '+' : ''}${swTop.change_pct}%` : ''}</span></div>
-        <div class="cursor-pointer hover:text-indigo-300" onclick="selectStock('${ltTop?.code || '2330'}', 'long_term')">🌳 長線：<b>${ltTop ? `${ltTop.name}(${ltTop.code})` : '--'}</b> <span class="text-amber-300">${ltTop ? `${ltTop.close}元` : ''}</span></div>
+        <div class="cursor-pointer hover:text-indigo-300" onclick="selectStockAndScroll('${stTop?.code || '2330'}', 'short_term')">⚡ 短線：<b>${stTop ? `${stTop.name}(${stTop.code})` : '--'}</b> <span class="tw-up">${stTop ? `${stTop.change_pct >= 0 ? '+' : ''}${stTop.change_pct}%` : ''}</span></div>
+        <div class="cursor-pointer hover:text-indigo-300" onclick="selectStockAndScroll('${swTop?.code || '2330'}', 'swing')">🌊 波段：<b>${swTop ? `${swTop.name}(${swTop.code})` : '--'}</b> <span class="tw-up">${swTop ? `${swTop.change_pct >= 0 ? '+' : ''}${swTop.change_pct}%` : ''}</span></div>
+        <div class="cursor-pointer hover:text-indigo-300" onclick="selectStockAndScroll('${ltTop?.code || '2330'}', 'long_term')">🌳 長線：<b>${ltTop ? `${ltTop.name}(${ltTop.code})` : '--'}</b> <span class="text-amber-300">${ltTop ? `${ltTop.close}元` : ''}</span></div>
       `;
 
-      // 高/中低/低價首選摘要
+      // 高/中低/低價首選摘要（點擊平滑跳轉至深度診斷面板）
       const hiTop = (REPORT_DATA.high_price_debates || [])[0];
       const midTop = (REPORT_DATA.mid_price_debates || [])[0];
       const lowTop = (REPORT_DATA.low_price_debates || [])[0];
       document.getElementById('priceTierQuickSummary').innerHTML = `
-        <div class="cursor-pointer hover:text-amber-300" onclick="selectStock('${hiTop?.code || '2330'}')">💎 高價(≥200)：<b>${hiTop ? `${hiTop.name}(${hiTop.close}元)` : '--'}</b></div>
-        <div class="cursor-pointer hover:text-amber-300" onclick="selectStock('${midTop?.code || '2317'}')">⚖️ 中低(50~200)：<b>${midTop ? `${midTop.name}(${midTop.close}元)` : '--'}</b></div>
-        <div class="cursor-pointer hover:text-amber-300" onclick="selectStock('${lowTop?.code || '2618'}')">🪙 銅板(&lt;50)：<b>${lowTop ? `${lowTop.name}(${lowTop.close}元)` : '--'}</b></div>
+        <div class="cursor-pointer hover:text-amber-300" onclick="selectStockAndScroll('${hiTop?.code || '2330'}', 'swing')">💎 高價(≥200)：<b>${hiTop ? `${hiTop.name}(${hiTop.close}元)` : '--'}</b></div>
+        <div class="cursor-pointer hover:text-amber-300" onclick="selectStockAndScroll('${midTop?.code || '2317'}', 'swing')">⚖️ 中低(50~200)：<b>${midTop ? `${midTop.name}(${midTop.close}元)` : '--'}</b></div>
+        <div class="cursor-pointer hover:text-amber-300" onclick="selectStockAndScroll('${lowTop?.code || '2618'}', 'swing')">🪙 銅板(&lt;50)：<b>${lowTop ? `${lowTop.name}(${lowTop.close}元)` : '--'}</b></div>
       `;
 
-      // 做空專區首選摘要
+      // 做空專區首選摘要（點擊平滑跳轉至深度診斷做空模式）
       const ssTop = (REPORT_DATA.short_sell_debates || [])[0];
       if (ssTop) {
         document.getElementById('shortSellQuickPick').textContent = `${ssTop.name} (${ssTop.code}) ${ssTop.close}元`;
         document.getElementById('shortSellQuickSub').textContent =
           `空方分 ${ssTop.short_sell_score} ｜ 法人 ${ssTop.metrics.inst_total_lots >= 0 ? '+' : ''}${ssTop.metrics.inst_total_lots} 張`;
+        const ssCard = document.getElementById('shortSellQuickCard');
+        if (ssCard) {
+          ssCard.onclick = () => selectStockAndScroll(ssTop.code, 'short_sell');
+        }
       }
 
       const wl = getLocalWatchlist();
@@ -761,7 +788,7 @@
         const bgClass = isUp ? 'bg-red-500/10 border-red-500/30 hover:border-red-400' : 'bg-emerald-500/10 border-emerald-500/30 hover:border-emerald-400';
         const chgClass = isUp ? 'tw-up' : 'tw-down';
         return `
-          <div onclick="selectStock('${s.leader_code}')" class="cursor-pointer rounded-xl p-2.5 border transition ${bgClass}">
+          <div onclick="selectStockAndScroll('${s.leader_code}', 'swing')" class="cursor-pointer rounded-xl p-2.5 border transition ${bgClass}">
             <div class="text-xs font-bold text-white truncate">${s.sector}</div>
             <div class="flex items-baseline justify-between mt-1">
               <span class="text-sm font-black font-mono ${chgClass}">${isUp ? '+' : ''}${s.avg_change_pct}%</span>
@@ -1149,6 +1176,71 @@
       return itemObj;
     }
 
+    const NEWS_FETCH_LOCK = new Set();
+    async function fetchStockNewsInBrowser(code, name) {
+      if (NEWS_FETCH_LOCK.has(code)) return;
+      NEWS_FETCH_LOCK.add(code);
+      try {
+        const rssUrl = `https://tw.stock.yahoo.com/rss?s=${code}`;
+        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(rssUrl)}`;
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 3500);
+        const resp = await fetch(proxyUrl, { signal: ctrl.signal });
+        clearTimeout(tid);
+        if (!resp.ok) return;
+        const xmlText = await resp.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+        const items = xmlDoc.querySelectorAll('item');
+        if (!items || !items.length) return;
+        const parsedArticles = [];
+        items.forEach(it => {
+          let title = it.querySelector('title')?.textContent || '';
+          const link = it.querySelector('link')?.textContent || '';
+          const pubDateRaw = it.querySelector('pubDate')?.textContent || '';
+          let source = 'Yahoo!奇摩股市';
+          if (title.includes(' - ')) {
+            const parts = title.split(' - ');
+            title = parts[0].trim();
+            source = parts.slice(1).join(' - ').trim();
+          }
+          let pubDate = '';
+          if (pubDateRaw) {
+            try {
+              const d = new Date(pubDateRaw);
+              pubDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+            } catch (e) {
+              pubDate = pubDateRaw;
+            }
+          }
+          if (title && link) {
+            parsedArticles.push({ title, link, source, pub_date: pubDate });
+          }
+        });
+        if (parsedArticles.length > 0) {
+          if (REPORT_DATA && REPORT_DATA.all_debates && REPORT_DATA.all_debates[code]) {
+            REPORT_DATA.all_debates[code].news = parsedArticles.slice(0, 6);
+          }
+          if (SELECTED_CODE === code) {
+            const newsContainer = document.getElementById('detailNewsList');
+            if (newsContainer) {
+              newsContainer.innerHTML = parsedArticles.slice(0, 6).map(n => `
+                <a href="${n.link}" target="_blank" rel="noopener" class="block p-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-indigo-500/50 transition">
+                  <div class="text-xs font-bold text-slate-100 line-clamp-2">${n.title}</div>
+                  <div class="text-[11px] text-slate-400 mt-1.5 flex justify-between">
+                    <span class="text-indigo-300 font-medium">${n.source}</span>
+                    <span>${n.pub_date}</span>
+                  </div>
+                </a>
+              `).join('');
+            }
+          }
+        }
+      } catch (e) {
+        // 代理若忙線則保有四張個股專屬入口卡片
+      }
+    }
+
     function selectStock(code, forceHorizonMode = null, reRenderList = true) {
       if (!REPORT_DATA || !REPORT_DATA.all_debates) return;
       let item = REPORT_DATA.all_debates[code] || ensureInstantStockFromDirectory(code);
@@ -1227,17 +1319,80 @@
         </div>
       `).join('');
 
-      // 新聞列表
-      const newsItems = (item.news && item.news.length) ? item.news : (REPORT_DATA.headline_news || []);
-      document.getElementById('detailNewsList').innerHTML = newsItems.slice(0, 6).map(n => `
-        <a href="${n.link}" target="_blank" rel="noopener" class="block p-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-indigo-500/50 transition">
-          <div class="text-xs font-bold text-slate-100 line-clamp-2">${n.title}</div>
-          <div class="text-[11px] text-slate-400 mt-1.5 flex justify-between">
-            <span>${n.source || '財經快訊'}</span>
-            <span>${n.pub_date || ''}</span>
-          </div>
-        </a>
-      `).join('');
+      // 個股專屬即時新聞標題與外鏈
+      const newsStockTitle = document.getElementById('detailNewsStockTitle');
+      if (newsStockTitle) {
+        newsStockTitle.textContent = `【${item.name}（${item.code}）即時相關新聞與題材】`;
+      }
+      const newsQuickLinks = document.getElementById('detailNewsQuickLinks');
+      if (newsQuickLinks) {
+        newsQuickLinks.innerHTML = `
+          <a href="https://tw.stock.yahoo.com/quote/${item.code}/news" target="_blank" rel="noopener" class="text-xs px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 font-bold border border-indigo-500/40 flex items-center gap-1 transition">
+            <span>🔗</span> 奇摩股市新聞
+          </a>
+          <a href="https://news.google.com/search?q=${encodeURIComponent(item.code + ' ' + item.name)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant" target="_blank" rel="noopener" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-bold border border-slate-700 flex items-center gap-1 transition">
+            <span>🔍</span> Google 財經
+          </a>
+        `;
+      }
+
+      // 嚴格僅顯示該個股 100% 關聯之新聞；若該股尚無新聞，顯示高相關個股專屬入口卡片，絕不顯示泛用大盤暴跌舊聞！
+      const newsContainer = document.getElementById('detailNewsList');
+      if (item.news && item.news.length > 0) {
+        newsContainer.innerHTML = item.news.slice(0, 6).map(n => `
+          <a href="${n.link}" target="_blank" rel="noopener" class="block p-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-indigo-500/50 transition">
+            <div class="text-xs font-bold text-slate-100 line-clamp-2">${n.title}</div>
+            <div class="text-[11px] text-slate-400 mt-1.5 flex justify-between">
+              <span class="text-indigo-300 font-medium">${n.source || '財經焦點'}</span>
+              <span>${n.pub_date || ''}</span>
+            </div>
+          </a>
+        `).join('');
+      } else {
+        newsContainer.innerHTML = `
+          <a href="https://tw.stock.yahoo.com/quote/${item.code}/news" target="_blank" rel="noopener" class="block p-3.5 rounded-xl bg-slate-900/80 border border-indigo-500/30 hover:border-indigo-400 transition">
+            <div class="flex items-center gap-2 text-xs font-bold text-indigo-300 mb-1">
+              <span>✈️</span> <span>Yahoo! 奇摩股市：${item.name} (${item.code}) 即時焦點新聞</span>
+            </div>
+            <div class="text-[11px] text-slate-300 line-clamp-2">點擊直達 Yahoo 股市【${item.name}】官方即時新聞頻道，查看最新營收、法說會與即時新聞報導。</div>
+            <div class="text-[10px] text-slate-500 mt-2 flex justify-between">
+              <span>Yahoo Finance TW</span>
+              <span class="text-indigo-400 font-bold">點擊即時查看 ↗</span>
+            </div>
+          </a>
+          <a href="https://news.google.com/search?q=${encodeURIComponent(item.code + ' ' + item.name)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant" target="_blank" rel="noopener" class="block p-3.5 rounded-xl bg-slate-900/80 border border-cyan-500/30 hover:border-cyan-400 transition">
+            <div class="flex items-center gap-2 text-xs font-bold text-cyan-300 mb-1">
+              <span>🔍</span> <span>Google 財經：${item.name} 全網最新新聞與法人分析</span>
+            </div>
+            <div class="text-[11px] text-slate-300 line-clamp-2">包含經濟日報、工商時報、鉅亨網等各大財經媒體關於 ${item.name} (${item.code}) 的深度專題與研究報告。</div>
+            <div class="text-[10px] text-slate-500 mt-2 flex justify-between">
+              <span>Google News TW</span>
+              <span class="text-cyan-400 font-bold">即時搜尋新聞 ↗</span>
+            </div>
+          </a>
+          <a href="https://mops.twse.com.tw/mops/web/t05st01" target="_blank" rel="noopener" class="block p-3.5 rounded-xl bg-slate-900/80 border border-amber-500/30 hover:border-amber-400 transition">
+            <div class="flex items-center gap-2 text-xs font-bold text-amber-300 mb-1">
+              <span>🏛️</span> <span>公開資訊觀測站 (MOPS)：${item.name} 重大訊息公告</span>
+            </div>
+            <div class="text-[11px] text-slate-300 line-clamp-2">證交所官方發布之法定重大訊息、自結營收、股利分派與董事會重訊。</div>
+            <div class="text-[10px] text-slate-500 mt-2 flex justify-between">
+              <span>MOPS 證交所官方</span>
+              <span class="text-amber-400 font-bold">官方重訊 ↗</span>
+            </div>
+          </a>
+          <a href="https://goodinfo.tw/tw/ShowKLine.asp?STOCK_ID=${item.code}" target="_blank" rel="noopener" class="block p-3.5 rounded-xl bg-slate-900/80 border border-emerald-500/30 hover:border-emerald-400 transition">
+            <div class="flex items-center gap-2 text-xs font-bold text-emerald-300 mb-1">
+              <span>📊</span> <span>Goodinfo! 台灣股市資訊網：${item.name} 籌碼與獲利</span>
+            </div>
+            <div class="text-[11px] text-slate-300 line-clamp-2">查看 ${item.name} 的外資投信進出歷程、主力籌碼集中度、歷年本益比與除權息紀錄。</div>
+            <div class="text-[10px] text-slate-500 mt-2 flex justify-between">
+              <span>Goodinfo! 股市資訊</span>
+              <span class="text-emerald-400 font-bold">籌碼分析 ↗</span>
+            </div>
+          </a>
+        `;
+        fetchStockNewsInBrowser(item.code, item.name);
+      }
 
       // 同步更新週期/做空按鈕與卡片+K線
       selectHorizonMode(CURRENT_HORIZON_MODE);

@@ -72,8 +72,8 @@ def generate_daily_intelligence_bundle(
         klines_map[code] = kline
         debates_map[code] = committee.run_committee_debate(st, candles=kline, fetch_live_news=True)
 
-    with ThreadPoolExecutor(max_workers=12) as ex:
-        list(ex.map(_process_code, featured_codes[:45]))
+    with ThreadPoolExecutor(max_workers=16) as ex:
+        list(ex.map(_process_code, featured_codes[:80]))
 
     for code, st in stocks_map.items():
         if code not in debates_map:

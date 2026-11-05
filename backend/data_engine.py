@@ -551,6 +551,57 @@ class TaiwanStockDataEngine:
                     break
         return articles
 
+    def fetch_yahoo_stock_news(self, code: str, name: str = "", limit: int = 6) -> List[Dict[str, str]]:
+        """從 Yahoo! 奇摩股市官方 RSS 獲取該個股 100% 關聯之最新新聞與重大訊息。"""
+        from email.utils import parsedate_to_datetime
+        now_dt = datetime.now()
+        articles: List[Dict[str, str]] = []
+        url = f"https://tw.stock.yahoo.com/rss?s={code}"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+        try:
+            with urllib.request.urlopen(req, timeout=4.0, context=self.ssl_ctx) as resp:
+                xml_data = resp.read()
+            root = ET.fromstring(xml_data)
+            for item in root.findall(".//item"):
+                title = (item.findtext("title") or "").strip()
+                link = (item.findtext("link") or "").strip()
+                pub_raw = (item.findtext("pubDate") or "").strip()
+                if not title:
+                    continue
+                pub_str = now_dt.strftime("%Y-%m-%d %H:%M")
+                if pub_raw:
+                    try:
+                        dt = parsedate_to_datetime(pub_raw).replace(tzinfo=None)
+                        pub_str = dt.strftime("%Y-%m-%d %H:%M")
+                    except Exception:
+                        pub_str = pub_raw
+                source = "Yahoo!奇摩股市"
+                if " - " in title:
+                    parts = title.rsplit(" - ", 1)
+                    title = parts[0].strip()
+                    source = parts[1].strip()
+                articles.append({
+                    "title": title,
+                    "source": source,
+                    "link": link,
+                    "pub_date": pub_str,
+                })
+                if len(articles) >= limit:
+                    break
+        except Exception:
+            pass
+
+        # 若 Yahoo RSS 抓取條數不足 2 則，備援查詢 Google News
+        if len(articles) < 2 and name:
+            g_news = self.fetch_google_news_for_query(f"{code} {name}", limit=limit)
+            seen_titles = {a["title"] for a in articles}
+            for gn in g_news:
+                if gn["title"] not in seen_titles:
+                    articles.append(gn)
+                    if len(articles) >= limit:
+                        break
+        return articles
+
     def fetch_stock_kline_history(self, code: str, market: str = "TWSE", days: int = 60) -> List[Dict[str, Any]]:
         """抓取個股近 60 日真實 OHLCV K 線（供 TradingView 圖表與 RSI/KD/MACD/布林通道計算使用）。"""
         suffix = ".TW" if market == "TWSE" else ".TWO"
