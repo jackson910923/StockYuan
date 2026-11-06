@@ -1658,19 +1658,19 @@
         if (isBullFavored) {
           stanceBannerEl.className = 'p-2.5 rounded-xl border border-emerald-500/40 bg-emerald-950/25 flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-emerald-200 transition';
           if (stanceIconEl) stanceIconEl.textContent = '🟢';
-          stanceTitleEl.innerHTML = `<span>AI 昨日核心立場：<b class="text-emerald-300">多方分數顯著較高（主推做多／偏多操作）</b></span>`;
+          stanceTitleEl.innerHTML = `<span>昨日 AI 研判依據：<b class="text-emerald-300 text-sm font-black">【昨日多方分數較高】</b> 🌟 主推做多策略</span>`;
           stanceScoreEl.className = 'text-[11px] font-mono px-2.5 py-0.5 rounded bg-emerald-900/50 border border-emerald-500/50 text-emerald-200';
           stanceScoreEl.innerHTML = `多方 <b>${bullScore}</b> 分 ＞ 空方 <b>${bearScore}</b> 分 (+${scoreDiff}分)`;
         } else if (isBearFavored) {
           stanceBannerEl.className = 'p-2.5 rounded-xl border border-purple-500/40 bg-purple-950/25 flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-purple-200 transition';
           if (stanceIconEl) stanceIconEl.textContent = '🟣';
-          stanceTitleEl.innerHTML = `<span>AI 昨日核心立場：<b class="text-purple-300">空方分數顯著較高（主推避險／做空放空）</b></span>`;
+          stanceTitleEl.innerHTML = `<span>昨日 AI 研判依據：<b class="text-purple-300 text-sm font-black">【昨日空方分數較高】</b> 🌟 主推避險／放空策略</span>`;
           stanceScoreEl.className = 'text-[11px] font-mono px-2.5 py-0.5 rounded bg-purple-900/50 border border-purple-500/50 text-purple-200';
           stanceScoreEl.innerHTML = `空方 <b>${bearScore}</b> 分 ＞ 多方 <b>${bullScore}</b> 分 (+${(-scoreDiff).toFixed(1)}分)`;
         } else {
           stanceBannerEl.className = 'p-2.5 rounded-xl border border-amber-500/40 bg-amber-950/20 flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-amber-200 transition';
           if (stanceIconEl) stanceIconEl.textContent = '⚖️';
-          stanceTitleEl.innerHTML = `<span>AI 昨日核心立場：<b class="text-amber-300">多空勢均力敵（建議區間操作／嚴控部位）</b></span>`;
+          stanceTitleEl.innerHTML = `<span>昨日 AI 研判依據：<b class="text-amber-300 text-sm font-black">【昨日多空勢均力敵】</b> ⚖️ 區間短打整理</span>`;
           stanceScoreEl.className = 'text-[11px] font-mono px-2.5 py-0.5 rounded bg-amber-900/40 border border-amber-500/40 text-amber-200';
           stanceScoreEl.innerHTML = `多方 <b>${bullScore}</b> 分 ≒ 空方 <b>${bearScore}</b> 分`;
         }
@@ -1707,12 +1707,12 @@
       if (longAmountEl && longBadgeEl && longAnalysisEl && longCardEl && longRoleBadge) {
         if (isBullFavored) {
           longRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/50';
-          longRoleBadge.textContent = '🌟 昨日 AI 主推策略';
-          if (longTitleEl) longTitleEl.textContent = `若昨日依建議做多（買一張）`;
+          longRoleBadge.textContent = '🌟 昨日多方分數較高 (主推做多)';
+          if (longTitleEl) longTitleEl.textContent = `【昨日多方分數較高】依建議做多（買一張）`;
         } else if (isBearFavored) {
           longRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700';
           longRoleBadge.textContent = '⚠️ 非昨日主推（逆向對照）';
-          if (longTitleEl) longTitleEl.textContent = `若昨日反向做多（買一張）`;
+          if (longTitleEl) longTitleEl.textContent = `【昨日空方分數較高】若反向做多（買一張）`;
         } else {
           longRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
           longRoleBadge.textContent = '⚖️ 區間短打選項';
@@ -1772,12 +1772,12 @@
       if (shortAmountEl && shortBadgeEl && shortAnalysisEl && shortCardEl && shortRoleBadge) {
         if (isBearFavored) {
           shortRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/50';
-          shortRoleBadge.textContent = '🌟 昨日 AI 主推策略';
-          if (shortTitleEl) shortTitleEl.textContent = `若昨日依建議做空（融券放空一張）`;
+          shortRoleBadge.textContent = '🌟 昨日空方分數較高 (主推避險/放空)';
+          if (shortTitleEl) shortTitleEl.textContent = `【昨日空方分數較高】依建議放空（融券一張）`;
         } else if (isBullFavored) {
           shortRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700';
           shortRoleBadge.textContent = '🛡️ 避險對照（非昨日主推）';
-          if (shortTitleEl) shortTitleEl.textContent = `若昨日融券放空避險（放空一張）`;
+          if (shortTitleEl) shortTitleEl.textContent = `【昨日多方分數較高】若反向放空避險（融券一張）`;
         } else {
           shortRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40';
           shortRoleBadge.textContent = '🐻 避險保護選項';
