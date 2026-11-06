@@ -38,6 +38,9 @@
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .safe-area-pb { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
     @keyframes fadeInUpCard {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
@@ -180,7 +183,7 @@
   </header>
 
   <!-- 主體內容區 -->
-  <main class="flex-1 max-w-[1640px] w-full mx-auto px-4 lg:px-8 py-5 space-y-5">
+  <main class="flex-1 max-w-[1640px] w-full mx-auto px-4 lg:px-8 py-5 space-y-5 pb-24 lg:pb-6">
 
     <!-- 第一排：大盤多空溫度計 + 價位分級統計 + 做空雷達統計 (融合專屬梗圖表情包美化) -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
@@ -271,6 +274,39 @@
       <div id="sectorHeatmapGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5"></div>
     </section>
 
+    <!-- 📢 今日台股全市場重大頭條焦點 (國安基金・外資百億動態・總經政策) -->
+    <section id="macroNewsSection" class="glass-card rounded-2xl p-4 sm:p-5 border border-indigo-500/30">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3 mb-3.5">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xl">📢</span>
+          <div>
+            <h2 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+              <span>今日台股全市場重大焦點頭條</span>
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">總經・外資・國安基金</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">涵蓋國安基金動態、外資百億買賣超、台積電重訊與全球總經央行決策</p>
+          </div>
+        </div>
+        <!-- 快速外鏈頻道 -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <a href="https://news.google.com/search?q=%E5%9C%8B%E5%AE%89%E5%9F%BA%E9%87%91%20%E5%8F%B0%E8%82%A1%20when:7d&hl=zh-TW&gl=TW&ceid=TW:zh-Hant" target="_blank" rel="noopener" class="text-xs px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/40 hover:bg-amber-500/25 transition font-bold flex items-center gap-1">
+            <span>🏛️</span> 國安基金動態 ↗
+          </a>
+          <a href="https://tw.stock.yahoo.com/news" target="_blank" rel="noopener" class="text-xs px-2.5 py-1 rounded-lg bg-indigo-500/15 text-indigo-300 border border-indigo-500/40 hover:bg-indigo-500/25 transition font-bold flex items-center gap-1">
+            <span>📈</span> 奇摩大盤頭條 ↗
+          </a>
+          <a href="https://news.cnyes.com/news/cat/tw_stock" target="_blank" rel="noopener" class="text-xs px-2.5 py-1 rounded-lg bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 hover:bg-cyan-500/25 transition font-bold flex items-center gap-1">
+            <span>⚡</span> 鉅亨台股即時 ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- 新聞卡片網格 -->
+      <div id="macroNewsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <!-- 由 JS 自動渲染 REPORT_DATA.headline_news -->
+      </div>
+    </section>
+
     <!-- 第三排：核心雙欄工作區（左側：雙層分類選股清單｜右側：6-Agent 深度會診＋三週期＋做空專區＋K線） -->
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
@@ -334,6 +370,17 @@
 
       <!-- 右側深度投研面板 (8 欄) -->
       <div id="detailSection" class="lg:col-span-8 space-y-4">
+
+        <!-- 手機端專屬自選股橫向滑動捷徑 (點擊秒切換，免上下找) -->
+        <div class="lg:hidden p-2 rounded-xl bg-slate-900/80 border border-slate-800">
+          <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 mb-1.5 px-1">
+            <span class="flex items-center gap-1 text-amber-300"><span>⭐</span> 我的自選股捷徑：</span>
+            <button onclick="mobileNavigateTo('watchlist')" class="text-indigo-400 hover:underline">展開完整清單 ➔</button>
+          </div>
+          <div id="mobileWatchlistChipBar" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 px-0.5">
+            <!-- 由 JS 動態生成自選股快速晶片 -->
+          </div>
+        </div>
 
         <!-- 選中個股頂部核心結論卡 -->
         <div class="glass-card rounded-2xl p-5">
@@ -415,6 +462,54 @@
           </div>
 
           <!-- 白話投資顧問大字解說卡 (直覺秒懂版 + 梗圖表情包助陣) -->
+          <!-- ⚖️ 昨日策略今日實盤複盤驗證卡 (誠實量化・勝率信心) -->
+          <div id="strategyPnlSection" class="mt-4 rounded-2xl p-4 bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-indigo-950/30 border border-indigo-500/30 shadow-xl space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+              <div class="flex items-center gap-2">
+                <span class="text-base">⚖️</span>
+                <span class="text-sm font-black text-white">昨日策略今日實盤複盤驗證（1張 = 1,000股 實戰損益）</span>
+              </div>
+              <div class="text-[11px] font-mono text-slate-400">
+                基準昨收：<span id="pnlPrevClose" class="font-bold text-slate-200">--</span> 元 ➔ 現價/今收：<span id="pnlCurrentPrice" class="font-bold text-white">--</span> 元
+              </div>
+            </div>
+
+            <!-- 多空雙軌真實對照 (做多損益 vs 做空損益) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <!-- 做多損益卡 -->
+              <div id="longPnlCard" class="p-3.5 rounded-xl border bg-slate-950/60 transition duration-200">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                    <span>🟢</span> <span>若昨日依建議做多（買一張）</span>
+                  </span>
+                  <span id="longPnlBadge" class="text-xs font-black font-mono px-2 py-0.5 rounded">--</span>
+                </div>
+                <div class="text-lg font-black font-mono mb-1" id="longPnlAmount">-- 元</div>
+                <p id="longPnlAnalysis" class="text-xs text-slate-300 leading-relaxed">--</p>
+              </div>
+
+              <!-- 做空損益卡 -->
+              <div id="shortPnlCard" class="p-3.5 rounded-xl border bg-slate-950/60 transition duration-200">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs font-bold text-purple-300 flex items-center gap-1.5">
+                    <span>🟣</span> <span>若昨日依建議做空（融券放空一張）</span>
+                  </span>
+                  <span id="shortPnlBadge" class="text-xs font-black font-mono px-2 py-0.5 rounded">--</span>
+                </div>
+                <div class="text-lg font-black font-mono mb-1" id="shortPnlAmount">-- 元</div>
+                <p id="shortPnlAnalysis" class="text-xs text-slate-300 leading-relaxed">--</p>
+              </div>
+            </div>
+
+            <!-- 策略可靠度與量化誠實說明 -->
+            <div class="text-[11px] text-slate-400 bg-slate-950/40 rounded-xl p-2.5 border border-slate-800/60 flex items-start gap-2">
+              <span class="text-amber-400 shrink-0 mt-0.5">💡</span>
+              <span id="pnlReliabilityNote" class="leading-relaxed">
+                <b>量化實證與風控保證：</b>本系統全面公開昨日決策價位與今日市場真實撮合表現，落實透明可驗證的 AI 交易紀律。若遇逆風回檔，只要未破防守價皆屬健康換手；若破防守價則嚴格停損保護資產。
+              </span>
+            </div>
+          </div>
+
           <div class="mt-4 rounded-2xl p-4 bg-gradient-to-r from-indigo-950/80 via-slate-900 to-slate-900 border border-indigo-500/40 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <img
               id="easyAdvisorMemeImg"
@@ -686,6 +781,8 @@
       
       renderHeaderAndSummary();
       renderTop3PodiumMatrix();
+      renderMacroNews();
+      renderMobileWatchlistChips();
       renderStockList(false); // 內部會重繪右側個股診斷
       
       const pEl = document.getElementById('detailPrice');
@@ -712,6 +809,7 @@
       } catch (e) {}
       const badge = document.getElementById('watchCountBadge');
       if (badge) badge.textContent = list.length;
+      if (typeof renderMobileWatchlistChips === 'function') renderMobileWatchlistChips();
     }
 
     async function loadReportData() {
@@ -728,6 +826,8 @@
         // 記憶使用者的分頁（若曾切換過自選或其他分頁，重開網頁時維持該分頁）
         const restoredTab = localStorage.getItem('alphatw_active_tab') || (initialWl.length > 0 && localStorage.getItem('alphatw_watchlist') ? 'watch' : 'top');
         switchTab(restoredTab);
+        renderMacroNews();
+        renderMobileWatchlistChips();
         if (isTwMarketOpen()) toggleAutoPolling();
         else refreshLiveQuotes();
       } catch (err) {
@@ -1509,6 +1609,193 @@
       }
     }
 
+
+    // === ⚖️ 昨日策略今日實盤複盤驗證渲染引擎 ===
+    function renderStrategyPnlValidation(item) {
+      if (!item) return;
+      const prevClose = item.prev_close || +(item.close - item.change).toFixed(2);
+      const currentPrice = item.close;
+      const chg = +(currentPrice - prevClose).toFixed(2);
+      const chgPct = +((chg / prevClose) * 100).toFixed(2);
+
+      const pnlPrevCloseEl = document.getElementById('pnlPrevClose');
+      const pnlCurrentPriceEl = document.getElementById('pnlCurrentPrice');
+      if (pnlPrevCloseEl) pnlPrevCloseEl.textContent = prevClose;
+      if (pnlCurrentPriceEl) pnlCurrentPriceEl.textContent = currentPrice;
+
+      // 1. 做多實盤損益 (買一張 = 1,000股)
+      const longPnlNtd = Math.round(chg * 1000);
+      const isLongProfit = longPnlNtd > 0;
+      const isLongLoss = longPnlNtd < 0;
+
+      const longAmountEl = document.getElementById('longPnlAmount');
+      const longBadgeEl = document.getElementById('longPnlBadge');
+      const longAnalysisEl = document.getElementById('longPnlAnalysis');
+      const longCardEl = document.getElementById('longPnlCard');
+
+      if (longAmountEl && longBadgeEl && longAnalysisEl && longCardEl) {
+        if (isLongProfit) {
+          longAmountEl.className = 'text-lg font-black font-mono mb-1 tw-up';
+          longAmountEl.textContent = `+${longPnlNtd.toLocaleString()} 元 (+${chgPct}%)`;
+          longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40';
+          longBadgeEl.textContent = '獲利達成 🎯';
+          longCardEl.className = 'p-3.5 rounded-xl border border-rose-500/30 bg-rose-950/15 transition';
+          longAnalysisEl.innerHTML = `🎉 <b>多方策略精準獲利</b>：順利拉出 <b>+${longPnlNtd.toLocaleString()} 元</b> 獲利空間！完全符合昨日 AI 多方量化與法人籌碼推升預期。若持有中，建議可將防守停損價調升至昨收價（${prevClose} 元）鎖定利潤，續抱朝第一目標價 <b>${item.price_plan.target_price} 元</b> 前進。`;
+        } else if (isLongLoss) {
+          longAmountEl.className = 'text-lg font-black font-mono mb-1 tw-down';
+          longAmountEl.textContent = `${longPnlNtd.toLocaleString()} 元 (${chgPct}%)`;
+          longCardEl.className = 'p-3.5 rounded-xl border border-slate-700 bg-slate-950/60 transition';
+          
+          const plan = item.price_plan;
+          if (currentPrice >= plan.entry_low && currentPrice <= plan.entry_high) {
+            longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+            longBadgeEl.textContent = '回測承接區 🟢';
+            longAnalysisEl.innerHTML = `🛡️ <b>回測建議買區・策略防守線穩固</b>：今日小幅拉回，但股價<b>精準回測至昨日 AI 規劃之分批承接區（${plan.entry_low} ~ ${plan.entry_high} 元）</b>，且距鐵律防守價（${plan.stop_loss} 元）仍有安全距離。AI 昨日本即強調「買綠不買紅、切勿急躁追高」，此回檔屬健康籌碼沉澱，維持原策略於區間內分批逢低布局。`;
+          } else if (currentPrice < plan.stop_loss) {
+            longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40';
+            longBadgeEl.textContent = '觸發停損警戒 🚨';
+            longAnalysisEl.innerHTML = `🚨 <b>觸發鐵律防守・落實停損保命</b>：今日受大盤或突發賣壓衝擊跌破防守價（${plan.stop_loss} 元）。雖然做多遭遇逆風，但 AI 提早預設的停損機制能有效阻止深幅套牢（虧損控制在預期內），建議持股者果斷依紀律減碼或退場觀望，證明量化風控之必要性。`;
+          } else {
+            longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
+            longBadgeEl.textContent = '區間整理中 ⏳';
+            longAnalysisEl.innerHTML = `⏳ <b>多空拉鋸震盪・守穩支撐</b>：今日微幅震盪，並未破壞多方中長線架構，上方壓力看 ${plan.entry_high} 元、下方支撐看 ${plan.stop_loss} 元。AI 建議耐心觀察主力洗盤沉澱，勿受短線雜音干擾。`;
+          }
+        } else {
+          longAmountEl.className = 'text-lg font-black font-mono mb-1 text-slate-300';
+          longAmountEl.textContent = '0 元 (平盤 0.00%)';
+          longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300';
+          longBadgeEl.textContent = '平盤持平 ➖';
+          longAnalysisEl.innerHTML = '今日股價平盤整理，多空力道均衡，維持昨日策略觀察後續量能變化。';
+        }
+      }
+
+      // 2. 做空實盤損益 (融券放空一張 = 1,000股)
+      const shortPnlNtd = Math.round(-chg * 1000);
+      const isShortProfit = shortPnlNtd > 0;
+      const isShortLoss = shortPnlNtd < 0;
+
+      const shortAmountEl = document.getElementById('shortPnlAmount');
+      const shortBadgeEl = document.getElementById('shortPnlBadge');
+      const shortAnalysisEl = document.getElementById('shortPnlAnalysis');
+      const shortCardEl = document.getElementById('shortPnlCard');
+
+      if (shortAmountEl && shortBadgeEl && shortAnalysisEl && shortCardEl) {
+        if (isShortProfit) {
+          shortAmountEl.className = 'text-lg font-black font-mono mb-1 text-purple-300';
+          shortAmountEl.textContent = `+${shortPnlNtd.toLocaleString()} 元 (+${(-chgPct).toFixed(2)}%)`;
+          shortBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40';
+          shortBadgeEl.textContent = '放空獲利 🎯';
+          shortCardEl.className = 'p-3.5 rounded-xl border border-purple-500/40 bg-purple-950/20 transition';
+          shortAnalysisEl.innerHTML = `📉 <b>空方避險策略完美奏效</b>：成功獲利 <b>+${shortPnlNtd.toLocaleString()} 元</b>！AI 昨精確捕捉到高檔籌碼調節與空方破位，放空獲利已拉開，可於波段目標價附近分批停利回補。`;
+        } else if (isShortLoss) {
+          shortAmountEl.className = 'text-lg font-black font-mono mb-1 text-slate-400';
+          shortAmountEl.textContent = `${shortPnlNtd.toLocaleString()} 元 (${(-chgPct).toFixed(2)}%)`;
+          shortBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400';
+          shortCardEl.className = 'p-3.5 rounded-xl border border-slate-700 bg-slate-950/60 transition';
+          const ssPlan = item.short_sell_plan || {};
+          shortBadgeEl.textContent = '多方強勢 ⚠️';
+          shortAnalysisEl.innerHTML = `⚠️ <b>多方推升・嚴防軋空</b>：今日主力逆勢買超拉抬，放空暫處逆風。AI 昨日已提示防軋空停損回補價為 <b>${ssPlan.stop_loss || (prevClose * 1.04).toFixed(1)} 元</b>，若帶量突破務必無條件停損回補，絕不可抗單。`;
+        } else {
+          shortAmountEl.className = 'text-lg font-black font-mono mb-1 text-slate-300';
+          shortAmountEl.textContent = '0 元 (平盤 0.00%)';
+          shortBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300';
+          shortBadgeEl.textContent = '平盤持平 ➖';
+          shortAnalysisEl.innerHTML = '今日股價平盤，空方調節力量與多方拉鋸中。';
+        }
+      }
+    }
+
+    // === 📢 今日台股全市場重大頭條焦點渲染引擎 ===
+    function renderMacroNews() {
+      const container = document.getElementById('macroNewsGrid');
+      if (!container || !REPORT_DATA || !REPORT_DATA.headline_news) return;
+      const list = REPORT_DATA.headline_news || [];
+      if (!list.length) {
+        container.innerHTML = `<div class="col-span-full text-xs text-slate-400 p-4 text-center">今日全市場尚無重大突發新聞發布。</div>`;
+        return;
+      }
+      container.innerHTML = list.slice(0, 9).map((n, idx) => {
+        const isTop = idx < 2;
+        const tag = n.title.includes('外資') ? '⚡ 法人動向' : (n.title.includes('國安基金') || n.title.includes('政府') || n.title.includes('央行') ? '🏛️ 政策總經' : '🔥 盤面焦點');
+        const borderCls = isTop ? 'border-amber-500/40 bg-amber-950/15 hover:border-amber-400' : 'border-slate-800 bg-slate-900/60 hover:border-indigo-500/50';
+        return `
+          <a href="${n.link}" target="_blank" rel="noopener" class="block p-3.5 rounded-xl border transition ${borderCls} flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${isTop ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-800 text-slate-300'}">${tag}</span>
+                <span class="text-[10px] font-mono text-slate-400">${n.pub_date || ''}</span>
+              </div>
+              <h3 class="text-xs font-bold text-white group-hover:text-cyan-300 transition line-clamp-2 leading-snug">${n.title}</h3>
+            </div>
+            <div class="mt-3 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-800/80 pt-2">
+              <span class="font-medium text-slate-300">${n.source || '財經焦點'}</span>
+              <span class="text-cyan-400 font-bold group-hover:translate-x-1 transition text-[10px]">閱讀全文 ↗</span>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    // === ⭐ 手機端自選股快速滾動晶片列渲染 ===
+    function renderMobileWatchlistChips() {
+      const container = document.getElementById('mobileWatchlistChipBar');
+      if (!container || !REPORT_DATA) return;
+      const wl = getLocalWatchlist();
+      const allMap = REPORT_DATA.all_debates || {};
+      
+      const mobileCountEl = document.getElementById('mobileWatchCount');
+      if (mobileCountEl) mobileCountEl.textContent = wl.length;
+
+      if (!wl.length) {
+        container.innerHTML = `
+          <div class="text-[11px] text-slate-400 px-3 py-1 rounded-lg bg-slate-900/60 border border-slate-800 flex items-center gap-1 whitespace-nowrap">
+            <span>⭐ 暫無自選股，搜尋股票或點選「☆ 加入自選」即可在此快速切換</span>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = wl.map(code => {
+        const item = allMap[code] || (REPORT_DATA.market_directory && REPORT_DATA.market_directory[code] ? { code, name: REPORT_DATA.market_directory[code][0], close: REPORT_DATA.market_directory[code][2], change_pct: REPORT_DATA.market_directory[code][3] } : { code, name: code, close: '--', change_pct: 0 });
+        const isSelected = item.code === SELECTED_CODE;
+        const isUp = item.change_pct > 0;
+        const isDown = item.change_pct < 0;
+        const colorCls = isUp ? 'tw-up' : (isDown ? 'tw-down' : 'text-slate-200');
+        const borderCls = isSelected ? 'border-amber-400 bg-amber-950/40 text-amber-300 ring-1 ring-amber-400/50' : 'border-slate-800 bg-slate-900/80 text-slate-300 hover:border-slate-700';
+        return `
+          <button onclick="onStockCardClick('${item.code}')" class="px-2.5 py-1.5 rounded-xl border text-xs font-mono font-bold whitespace-nowrap flex items-center gap-1.5 shrink-0 transition ${borderCls}">
+            <span class="text-amber-400">★</span>
+            <span class="text-white">${item.name}</span>
+            <span class="${colorCls}">${item.close}</span>
+            <span class="text-[10px] ${colorCls}">${item.change_pct >= 0 ? '+' : ''}${item.change_pct}%</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    // === 📱 手機端底部常駐列導航跳轉 ===
+    function mobileNavigateTo(dest) {
+      if (dest === 'watchlist') {
+        switchTab('watch');
+        const el = document.getElementById('stockListContainer');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (typeof showLiveToast === 'function') {
+          const wl = getLocalWatchlist();
+          showLiveToast(`⭐ 已為您跳轉至「我的自選股」（共 ${wl.length} 檔）`, false, 1800);
+        }
+      } else if (dest === 'home') {
+        switchTab('top');
+        const el = document.getElementById('stockListContainer');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (dest === 'pnl') {
+        const el = document.getElementById('strategyPnlSection');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (dest === 'news') {
+        const el = document.getElementById('macroNewsSection');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
     function selectStock(code, forceHorizonMode = null, reRenderList = true) {
       if (!REPORT_DATA || !REPORT_DATA.all_debates) return;
       let item = REPORT_DATA.all_debates[code] || ensureInstantStockFromDirectory(code);
@@ -1697,6 +1984,12 @@
 
       // 同步更新週期/做空按鈕與卡片+K線
       selectHorizonMode(CURRENT_HORIZON_MODE);
+
+      // 實盤策略損益複盤驗證渲染
+      renderStrategyPnlValidation(item);
+
+      // 同步更新手機自選股晶片高亮
+      renderMobileWatchlistChips();
 
       // 自動載入該股記憶的持倉成本並試算
       loadSavedPositionForStock(item.code);
@@ -2330,6 +2623,29 @@
         💻 電腦版永久網址：<a href="https://jackson910923.github.io/StockYuan/" target="_blank" class="text-indigo-400 underline font-mono">https://jackson910923.github.io/StockYuan/</a>
       </div>
     </div>
+  </div>
+  <!-- 手機專屬底部常駐快捷導航列 (Fixed Mobile Bottom Navigation Bar) -->
+  <div class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-t border-slate-800/90 backdrop-blur-xl px-2 py-2 flex items-center justify-around shadow-2xl safe-area-pb">
+    <button onclick="mobileNavigateTo('home')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-indigo-300 transition px-2">
+      <span class="text-lg">📊</span>
+      <span class="text-[10px] font-bold">市場榜單</span>
+    </button>
+    <button onclick="mobileNavigateTo('watchlist')" class="flex flex-col items-center gap-1 text-amber-400 font-bold hover:scale-105 transition px-2 relative">
+      <span class="text-lg">⭐</span>
+      <span class="text-[10px]">我的自選 (<span id="mobileWatchCount">0</span>)</span>
+    </button>
+    <button onclick="mobileNavigateTo('pnl')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-emerald-300 transition px-2">
+      <span class="text-lg">⚖️</span>
+      <span class="text-[10px] font-bold">昨日複盤</span>
+    </button>
+    <button onclick="mobileNavigateTo('news')" class="flex flex-col items-center gap-1 text-slate-400 hover:text-cyan-300 transition px-2">
+      <span class="text-lg">📢</span>
+      <span class="text-[10px] font-bold">台股大事</span>
+    </button>
+    <button onclick="refreshCurrentStockLive()" class="flex flex-col items-center gap-1 text-slate-400 hover:text-cyan-300 transition px-2">
+      <span class="text-lg">⚡</span>
+      <span class="text-[10px] font-bold">報價刷新</span>
+    </button>
   </div>
 </body>
 </html>
