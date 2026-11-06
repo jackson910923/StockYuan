@@ -38,9 +38,55 @@
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    @keyframes fadeInUpCard {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card-enter {
+      animation: fadeInUpCard 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes priceGlow {
+      0% { text-shadow: 0 0 14px rgba(34, 211, 238, 0.9); }
+      100% { text-shadow: none; }
+    }
+    .price-glow {
+      animation: priceGlow 1.2s ease-out;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- App 啟動開屏過場動畫 (Mobile & Web Splash Screen) -->
+  <div id="appSplashScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#070b14] transition-all duration-500">
+    <div class="relative flex items-center justify-center">
+      <div class="absolute w-28 h-28 rounded-full bg-indigo-500/20 animate-ping"></div>
+      <div class="absolute w-24 h-24 rounded-full border border-indigo-400/30 animate-pulse"></div>
+      <img
+        src="./assets/memes/1.png"
+        alt="StockYuan Logo"
+        class="relative w-16 h-16 rounded-2xl object-cover border-2 border-indigo-400/80 shadow-2xl shadow-indigo-500/50"
+      />
+    </div>
+    <div class="mt-5 text-center px-4">
+      <h2 class="text-xl font-black bg-gradient-to-r from-white via-indigo-200 to-amber-200 bg-clip-text text-transparent tracking-wide">
+        StockYuan 台股 AI 領航
+      </h2>
+      <p class="text-xs text-indigo-300/80 mt-1 font-mono">6-Agent 委員會盤後結算 ✕ 盤中秒級即時行情</p>
+      <div class="mt-4 flex items-center justify-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-indigo-400 animate-bounce"></span>
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style="animation-delay: 0.15s"></span>
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-bounce" style="animation-delay: 0.3s"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 即時報價載入中 / 更新成功浮動提示 Toast -->
+  <div id="liveQuoteToast" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 -translate-y-2">
+    <div id="liveQuoteToastInner" class="px-4 py-2 rounded-xl bg-slate-900/95 border border-cyan-500/50 text-cyan-300 text-xs font-bold shadow-2xl flex items-center gap-2 backdrop-blur-md">
+      <span id="liveQuoteToastIcon">⏳</span>
+      <span id="liveQuoteToastText">正在連線交易所撮合行情...</span>
+    </div>
+  </div>
 
   <!-- 頂部旗艦導航列 -->
   <header class="sticky top-0 z-40 glass-card border-b border-slate-800 px-4 lg:px-8 py-3">
@@ -87,10 +133,10 @@
         <button
           id="liveRefreshBtn"
           onclick="refreshCurrentStockLive()"
-          class="px-3 py-2 rounded-xl font-bold text-xs bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 hover:bg-cyan-500/25 transition flex items-center gap-1"
+          class="px-3 py-2 rounded-xl font-bold text-xs bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 hover:bg-cyan-500/25 transition flex items-center gap-1.5 disabled:opacity-50"
           title="直接從瀏覽器抓取最新盤中/收盤即時報價與 60 日 K 線"
         >
-          <span>⚡</span>
+          <span id="liveRefreshIcon" class="inline-block transition-transform duration-300">⚡</span>
           <span id="liveRefreshLabel">即時報價刷新</span>
         </button>
 
@@ -311,13 +357,18 @@
             </div>
 
             <div class="text-right">
-              <div class="flex items-baseline justify-end gap-2">
-                <span id="detailPrice" class="text-3xl font-black font-mono">--</span>
+              <div class="flex items-baseline justify-end gap-2.5 flex-wrap">
+                <span id="detailPrice" class="text-3xl font-black font-mono transition-colors duration-300">--</span>
                 <span id="detailChange" class="text-base font-bold font-mono">--</span>
+                <span id="detailPrevCloseBadge" class="text-xs px-2 py-0.5 rounded-md bg-slate-800 text-slate-400 border border-slate-700/60 font-mono font-medium">昨收 <span id="detailPrevClose" class="font-bold text-slate-200">--</span></span>
               </div>
-              <div class="text-xs text-slate-400 mt-1">
-                多方總分：<span id="detailScore" class="font-bold text-amber-400">--</span> ｜ 空方放空分：<span id="detailShortScore" class="font-bold text-purple-400">--</span> ｜ 建議配置：<span id="detailKellyPct" class="font-bold text-emerald-400">--%</span>
+              <div class="mt-1 flex items-center justify-end gap-2 flex-wrap">
+                <span id="detailStrategyValidationBadge" class="hidden text-[11px] font-bold px-2 py-0.5 rounded-md transition-all"></span>
+                <div class="text-xs text-slate-400">
+                  多方：<span id="detailScore" class="font-bold text-amber-400">--</span> ｜ 空方：<span id="detailShortScore" class="font-bold text-purple-400">--</span> ｜ 建議部位：<span id="detailKellyPct" class="font-bold text-emerald-400">--%</span>
+                </div>
               </div>
+            </div>
             </div>
           </div>
 
@@ -523,6 +574,9 @@
       const q = LIVE_QUOTES[code];
       const item = REPORT_DATA && REPORT_DATA.all_debates && REPORT_DATA.all_debates[code];
       if (!q || !item) return;
+      if (!item.prev_close) {
+        item.prev_close = q.prev_close || +(item.close - item.change).toFixed(2);
+      }
       item.close = q.price;
       item.change = q.change;
       item.change_pct = q.pct;
@@ -534,15 +588,53 @@
         else if (last.time < q.date) kl.push(bar);
       }
     }
+    function showLiveToast(text, isError = false, autoHideMs = 2200) {
+      const toast = document.getElementById('liveQuoteToast');
+      const toastText = document.getElementById('liveQuoteToastText');
+      const toastIcon = document.getElementById('liveQuoteToastIcon');
+      const toastInner = document.getElementById('liveQuoteToastInner');
+      if (!toast || !toastText) return;
+      toastText.textContent = text;
+      toastIcon.textContent = isError ? '⚠️' : (autoHideMs > 0 && !text.includes('中...') ? '✅' : '⏳');
+      if (isError) {
+        toastInner.className = 'px-4 py-2 rounded-xl bg-slate-900/95 border border-rose-500/50 text-rose-300 text-xs font-bold shadow-2xl flex items-center gap-2 backdrop-blur-md';
+      } else {
+        toastInner.className = 'px-4 py-2 rounded-xl bg-slate-900/95 border border-cyan-500/50 text-cyan-300 text-xs font-bold shadow-2xl flex items-center gap-2 backdrop-blur-md';
+      }
+      toast.classList.remove('opacity-0', '-translate-y-2');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      if (autoHideMs > 0) {
+        setTimeout(() => {
+          toast.classList.remove('opacity-100', 'translate-y-0');
+          toast.classList.add('opacity-0', '-translate-y-2');
+        }, autoHideMs);
+      }
+    }
+
     async function refreshLiveQuotes() {
       if (!REPORT_DATA || !REPORT_DATA.all_debates) return;
       const codes = Object.keys(REPORT_DATA.all_debates);
       if (SELECTED_CODE && !codes.includes(SELECTED_CODE)) codes.push(SELECTED_CODE);
+      
       const badge = document.getElementById('liveStatusBadge');
+      const refreshBtn = document.getElementById('liveRefreshBtn');
+      const refreshIcon = document.getElementById('liveRefreshIcon');
+      const refreshLabel = document.getElementById('liveRefreshLabel');
+      
+      if (refreshBtn) refreshBtn.disabled = true;
+      if (refreshIcon) {
+        refreshIcon.textContent = '🔄';
+        refreshIcon.classList.add('animate-spin');
+      }
+      if (refreshLabel) refreshLabel.textContent = '報價載入中...';
       if (badge) badge.textContent = '⏳ 更新報價中...';
+      showLiveToast('正在連線交易所與全市場 161 檔即時報價...', false, 0);
+
       const chunks = [];
       for (let i = 0; i < codes.length; i += 50) chunks.push(codes.slice(i, i + 50));
       let latestTs = 0;
+      let successCount = 0;
+
       await Promise.all(chunks.map(async chunk => {
         try {
           const url = 'https://ws.api.cnyes.com/ws/api/v1/quote/quotes/' + chunk.map(c => `TWS:${c}:STOCK`).join(',');
@@ -555,10 +647,14 @@
             if (!code || !(price > 0)) return;
             const ts = Number(x['200007'] || 0) * 1000;
             latestTs = Math.max(latestTs, ts);
+            successCount++;
+            const chg = Number(x['11'] || 0);
+            const prevClose = Number(x['21']) || +(price - chg).toFixed(2);
             LIVE_QUOTES[code] = {
               price,
-              change: Number(x['11'] || 0),
+              change: chg,
               pct: Number(x['56'] || 0),
+              prev_close: prevClose,
               open: Number(x['19'] || price),
               high: Number(x['12'] || price),
               low: Number(x['13'] || price),
@@ -568,17 +664,36 @@
           });
         } catch (e) {}
       }));
+
+      // 復原按鈕狀態
+      if (refreshBtn) refreshBtn.disabled = false;
+      if (refreshIcon) {
+        refreshIcon.textContent = '⚡';
+        refreshIcon.classList.remove('animate-spin');
+      }
+      if (refreshLabel) refreshLabel.textContent = '即時報價刷新';
+
       if (!latestTs) {
         if (badge) badge.textContent = '⚠️ 即時報價暫時無法連線';
+        showLiveToast('即時報價節點連線逾時，保留目前數據', true, 3000);
         return;
       }
+
       Object.keys(LIVE_QUOTES).forEach(applyLiveQuote);
       const lt = tpeParts(latestTs);
       LIVE_QUOTE_TIME = `${lt.date.slice(5)} ${lt.time}`;
       if (badge) badge.textContent = isTwMarketOpen() ? `⚡ 盤中即時 ${lt.time}` : `🔒 收盤價 ${lt.date.slice(5)}`;
+      showLiveToast(`報價已成功更新！共 ${successCount} 檔（${lt.time}）`, false, 2000);
+      
       renderHeaderAndSummary();
       renderTop3PodiumMatrix();
       renderStockList(false); // 內部會重繪右側個股診斷
+      
+      const pEl = document.getElementById('detailPrice');
+      if (pEl) {
+        pEl.classList.add('price-glow');
+        setTimeout(() => pEl.classList.remove('price-glow'), 1200);
+      }
     }
 
     function getLocalWatchlist() {
@@ -606,6 +721,13 @@
         else refreshLiveQuotes();
       } catch (err) {
         console.error('Failed to load report:', err);
+      } finally {
+        // 平滑淡出關閉 App 啟動開屏 Splash Screen
+        const splash = document.getElementById('appSplashScreen');
+        if (splash) {
+          splash.classList.add('opacity-0', 'pointer-events-none');
+          setTimeout(() => splash.style.display = 'none', 600);
+        }
       }
     }
 
@@ -995,7 +1117,7 @@
           : '';
 
         return `
-          <div onclick="onStockCardClick('${item.code}')" class="cursor-pointer rounded-xl p-3 border transition ${activeBorder}">
+          <div onclick="onStockCardClick('${item.code}')" class="card-enter cursor-pointer rounded-xl p-3 border transition ${activeBorder}">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-1.5">
                 <span class="font-mono text-xs font-bold text-indigo-300">${item.code}</span>
@@ -1003,9 +1125,12 @@
                 <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">${tierShort}</span>
                 ${removeWatchBtn}
               </div>
-              <div class="text-right font-mono">
-                <span class="text-sm font-black ${colorClass}">${item.close}</span>
-                <span class="text-xs font-bold ml-1 ${colorClass}">${item.change_pct >= 0 ? '+' : ''}${item.change_pct}%</span>
+              <div class="text-right font-mono flex flex-col items-end">
+                <div>
+                  <span class="text-sm font-black ${colorClass}">${item.close}</span>
+                  <span class="text-xs font-bold ml-1 ${colorClass}">${item.change_pct >= 0 ? '+' : ''}${item.change_pct}%</span>
+                </div>
+                <span class="text-[10px] text-slate-400">昨收 ${(item.prev_close || (item.close - item.change)).toFixed(1)}</span>
               </div>
             </div>
             <div class="flex items-center justify-between mt-2 text-[11px] text-slate-400">
@@ -1382,6 +1507,31 @@
       pEl.className = `text-3xl font-black font-mono ${isUp ? 'tw-up' : (isDown ? 'tw-down' : 'text-white')}`;
       cEl.textContent = `${item.change >= 0 ? '+' : ''}${item.change} (${item.change_pct >= 0 ? '+' : ''}${item.change_pct}%)`;
       cEl.className = `text-base font-bold font-mono ${isUp ? 'tw-up' : (isDown ? 'tw-down' : 'text-slate-300')}`;
+
+      // 顯示昨收基準價
+      const prevC = item.prev_close || +(item.close - item.change).toFixed(2);
+      const prevCloseEl = document.getElementById('detailPrevClose');
+      if (prevCloseEl) prevCloseEl.textContent = `${prevC}`;
+
+      // 驗證昨天策略與當前股價落點 (即時策略驗證)
+      const valBadge = document.getElementById('detailStrategyValidationBadge');
+      if (valBadge && item.price_plan) {
+        const plan = item.price_plan;
+        valBadge.className = 'text-xs font-bold px-2 py-0.5 rounded-md border';
+        if (item.close >= plan.entry_low && item.close <= plan.entry_high) {
+          valBadge.classList.add('bg-emerald-500/20', 'text-emerald-300', 'border-emerald-500/40');
+          valBadge.innerHTML = `🎯 落在 AI 建議買區 (${plan.entry_low}~${plan.entry_high})`;
+        } else if (item.close > plan.entry_high) {
+          valBadge.classList.add('bg-cyan-500/20', 'text-cyan-300', 'border-cyan-500/40');
+          valBadge.innerHTML = `🚀 高於進場區 (已拉開 +${(item.close - plan.entry_high).toFixed(2)}元)`;
+        } else if (item.close < plan.stop_loss) {
+          valBadge.classList.add('bg-rose-500/20', 'text-rose-300', 'border-rose-500/40');
+          valBadge.innerHTML = `⚠️ 跌破停損防守價 (${plan.stop_loss}元)`;
+        } else {
+          valBadge.classList.add('bg-amber-500/20', 'text-amber-300', 'border-amber-500/40');
+          valBadge.innerHTML = `⏳ 接近建議買區 (${plan.entry_low}~${plan.entry_high})`;
+        }
+      }
 
       document.getElementById('detailScore').textContent = `${item.total_score} / 100`;
       document.getElementById('detailShortScore').textContent = `${item.short_sell_score || (100 - item.total_score).toFixed(1)} / 100`;
@@ -2037,6 +2187,10 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const sp = document.getElementById('appSplashScreen');
+        if (sp) { sp.classList.add('opacity-0', 'pointer-events-none'); setTimeout(() => sp.style.display = 'none', 600); }
+      }, 2500);
       loadReportData();
       const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 1024;
       if (isMobile) {

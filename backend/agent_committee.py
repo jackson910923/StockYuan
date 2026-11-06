@@ -330,6 +330,7 @@ class MultiAgentStockCommittee:
             "close": close_p,
             "change": stock["change"],
             "change_pct": ret_pct,
+            "prev_close": round(close_p - float(stock["change"]), 2),
             "price_tier": price_tier,
             "price_tier_label": price_tier_label,
             "lot_cost_wan": lot_cost_wan,

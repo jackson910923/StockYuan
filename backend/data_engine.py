@@ -133,9 +133,10 @@ class TaiwanStockDataEngine:
             try:
                 dt = datetime.strptime(base_date_str, "%Y-%m-%d")
             except ValueError:
-                dt = datetime.now()
+                dt = datetime.now(timezone(timedelta(hours=8)))
         else:
-            dt = datetime.now()
+            tz_tw = timezone(timedelta(hours=8))
+            dt = datetime.now(tz_tw)
             if dt.hour < 14:
                 dt -= timedelta(days=1)
         out: List[str] = []
