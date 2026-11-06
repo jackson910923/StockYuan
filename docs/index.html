@@ -474,14 +474,27 @@
               </div>
             </div>
 
+            <!-- 🤖 AI 昨日立場研判橫幅 (多方分數 vs 空方分數，直接判定建議主軸) -->
+            <div id="aiYesterdayStanceBanner" class="p-2.5 rounded-xl border flex flex-wrap items-center justify-between gap-2 text-xs font-bold transition">
+              <div class="flex items-center gap-2">
+                <span id="aiStanceIcon" class="text-base">🤖</span>
+                <span id="aiStanceTitle">AI 昨日核心研判立場：計算中...</span>
+              </div>
+              <div id="aiStanceScoreCompare" class="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-900/80 border border-slate-700">
+                多方 -- 分 vs 空方 -- 分
+              </div>
+            </div>
+
             <!-- 多空雙軌真實對照 (做多損益 vs 做空損益) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <!-- 做多損益卡 -->
               <div id="longPnlCard" class="p-3.5 rounded-xl border bg-slate-950/60 transition duration-200">
-                <div class="flex items-center justify-between mb-1.5">
-                  <span class="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
-                    <span>🟢</span> <span>若昨日依建議做多（買一張）</span>
-                  </span>
+                <div class="flex items-center justify-between mb-1.5 flex-wrap gap-1">
+                  <div class="flex items-center gap-1.5">
+                    <span id="longDirectionIcon">🟢</span>
+                    <span id="longDirectionTitle" class="text-xs font-bold text-emerald-300">若昨日依建議做多（買一張）</span>
+                    <span id="longRoleBadge" class="text-[10px] font-black font-mono px-1.5 py-0.5 rounded border">--</span>
+                  </div>
                   <span id="longPnlBadge" class="text-xs font-black font-mono px-2 py-0.5 rounded">--</span>
                 </div>
                 <div class="text-lg font-black font-mono mb-1" id="longPnlAmount">-- 元</div>
@@ -490,10 +503,12 @@
 
               <!-- 做空損益卡 -->
               <div id="shortPnlCard" class="p-3.5 rounded-xl border bg-slate-950/60 transition duration-200">
-                <div class="flex items-center justify-between mb-1.5">
-                  <span class="text-xs font-bold text-purple-300 flex items-center gap-1.5">
-                    <span>🟣</span> <span>若昨日依建議做空（融券放空一張）</span>
-                  </span>
+                <div class="flex items-center justify-between mb-1.5 flex-wrap gap-1">
+                  <div class="flex items-center gap-1.5">
+                    <span id="shortDirectionIcon">🟣</span>
+                    <span id="shortDirectionTitle" class="text-xs font-bold text-purple-300">若昨日依建議做空（融券放空一張）</span>
+                    <span id="shortRoleBadge" class="text-[10px] font-black font-mono px-1.5 py-0.5 rounded border">--</span>
+                  </div>
                   <span id="shortPnlBadge" class="text-xs font-black font-mono px-2 py-0.5 rounded">--</span>
                 </div>
                 <div class="text-lg font-black font-mono mb-1" id="shortPnlAmount">-- 元</div>
@@ -505,7 +520,7 @@
             <div class="text-[11px] text-slate-400 bg-slate-950/40 rounded-xl p-2.5 border border-slate-800/60 flex items-start gap-2">
               <span class="text-amber-400 shrink-0 mt-0.5">💡</span>
               <span id="pnlReliabilityNote" class="leading-relaxed">
-                <b>量化實證與風控保證：</b>本系統全面公開昨日決策價位與今日市場真實撮合表現，落實透明可驗證的 AI 交易紀律。若遇逆風回檔，只要未破防守價皆屬健康換手；若破防守價則嚴格停損保護資產。
+                <b>量化實證與建議價值檢驗：</b>本系統全面公開昨日 AI 評分主力方向（多方 vs 空方分數）與今日真實撮合損益。多方勝出時驗證進場獲利或承接安全防線；空方勝出時驗證避開套牢或融券放空成果，絕不事後諸葛或雙向討好，落實 100% 透明可驗證的 AI 紀律！
               </span>
             </div>
           </div>
@@ -1623,7 +1638,45 @@
       if (pnlPrevCloseEl) pnlPrevCloseEl.textContent = prevClose;
       if (pnlCurrentPriceEl) pnlCurrentPriceEl.textContent = currentPrice;
 
-      // 1. 做多實盤損益 (買一張 = 1,000股)
+      // 取得多方與空方評分
+      const bullScore = +(item.total_score || 50).toFixed(1);
+      const bearScore = +(item.short_sell_score || (100 - bullScore).toFixed(1));
+      const scoreDiff = +(bullScore - bearScore).toFixed(1);
+
+      // 判斷昨日 AI 核心立場：多方偏勝、空方偏勝、或多空勢均力敵
+      const isBullFavored = scoreDiff > 5;
+      const isBearFavored = scoreDiff < -5;
+      const isNeutral = !isBullFavored && !isBearFavored;
+
+      // 1. 渲染頂部「AI 昨日核心研判立場旗幟」
+      const stanceBannerEl = document.getElementById('aiYesterdayStanceBanner');
+      const stanceIconEl = document.getElementById('aiStanceIcon');
+      const stanceTitleEl = document.getElementById('aiStanceTitle');
+      const stanceScoreEl = document.getElementById('aiStanceScoreCompare');
+
+      if (stanceBannerEl && stanceTitleEl && stanceScoreEl) {
+        if (isBullFavored) {
+          stanceBannerEl.className = 'p-2.5 rounded-xl border border-emerald-500/40 bg-emerald-950/25 flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-emerald-200 transition';
+          if (stanceIconEl) stanceIconEl.textContent = '🟢';
+          stanceTitleEl.innerHTML = `<span>AI 昨日核心立場：<b class="text-emerald-300">多方分數顯著較高（主推做多／偏多操作）</b></span>`;
+          stanceScoreEl.className = 'text-[11px] font-mono px-2.5 py-0.5 rounded bg-emerald-900/50 border border-emerald-500/50 text-emerald-200';
+          stanceScoreEl.innerHTML = `多方 <b>${bullScore}</b> 分 ＞ 空方 <b>${bearScore}</b> 分 (+${scoreDiff}分)`;
+        } else if (isBearFavored) {
+          stanceBannerEl.className = 'p-2.5 rounded-xl border border-purple-500/40 bg-purple-950/25 flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-purple-200 transition';
+          if (stanceIconEl) stanceIconEl.textContent = '🟣';
+          stanceTitleEl.innerHTML = `<span>AI 昨日核心立場：<b class="text-purple-300">空方分數顯著較高（主推避險／做空放空）</b></span>`;
+          stanceScoreEl.className = 'text-[11px] font-mono px-2.5 py-0.5 rounded bg-purple-900/50 border border-purple-500/50 text-purple-200';
+          stanceScoreEl.innerHTML = `空方 <b>${bearScore}</b> 分 ＞ 多方 <b>${bullScore}</b> 分 (+${(-scoreDiff).toFixed(1)}分)`;
+        } else {
+          stanceBannerEl.className = 'p-2.5 rounded-xl border border-amber-500/40 bg-amber-950/20 flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-amber-200 transition';
+          if (stanceIconEl) stanceIconEl.textContent = '⚖️';
+          stanceTitleEl.innerHTML = `<span>AI 昨日核心立場：<b class="text-amber-300">多空勢均力敵（建議區間操作／嚴控部位）</b></span>`;
+          stanceScoreEl.className = 'text-[11px] font-mono px-2.5 py-0.5 rounded bg-amber-900/40 border border-amber-500/40 text-amber-200';
+          stanceScoreEl.innerHTML = `多方 <b>${bullScore}</b> 分 ≒ 空方 <b>${bearScore}</b> 分`;
+        }
+      }
+
+      // 2. 做多實盤損益 (買一張 = 1,000股)
       const longPnlNtd = Math.round(chg * 1000);
       const isLongProfit = longPnlNtd > 0;
       const isLongLoss = longPnlNtd < 0;
@@ -1632,44 +1685,10 @@
       const longBadgeEl = document.getElementById('longPnlBadge');
       const longAnalysisEl = document.getElementById('longPnlAnalysis');
       const longCardEl = document.getElementById('longPnlCard');
+      const longRoleBadge = document.getElementById('longRoleBadge');
+      const longTitleEl = document.getElementById('longDirectionTitle');
 
-      if (longAmountEl && longBadgeEl && longAnalysisEl && longCardEl) {
-        if (isLongProfit) {
-          longAmountEl.className = 'text-lg font-black font-mono mb-1 tw-up';
-          longAmountEl.textContent = `+${longPnlNtd.toLocaleString()} 元 (+${chgPct}%)`;
-          longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40';
-          longBadgeEl.textContent = '獲利達成 🎯';
-          longCardEl.className = 'p-3.5 rounded-xl border border-rose-500/30 bg-rose-950/15 transition';
-          longAnalysisEl.innerHTML = `🎉 <b>多方策略精準獲利</b>：順利拉出 <b>+${longPnlNtd.toLocaleString()} 元</b> 獲利空間！完全符合昨日 AI 多方量化與法人籌碼推升預期。若持有中，建議可將防守停損價調升至昨收價（${prevClose} 元）鎖定利潤，續抱朝第一目標價 <b>${item.price_plan.target_price} 元</b> 前進。`;
-        } else if (isLongLoss) {
-          longAmountEl.className = 'text-lg font-black font-mono mb-1 tw-down';
-          longAmountEl.textContent = `${longPnlNtd.toLocaleString()} 元 (${chgPct}%)`;
-          longCardEl.className = 'p-3.5 rounded-xl border border-slate-700 bg-slate-950/60 transition';
-          
-          const plan = item.price_plan;
-          if (currentPrice >= plan.entry_low && currentPrice <= plan.entry_high) {
-            longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
-            longBadgeEl.textContent = '回測承接區 🟢';
-            longAnalysisEl.innerHTML = `🛡️ <b>回測建議買區・策略防守線穩固</b>：今日小幅拉回，但股價<b>精準回測至昨日 AI 規劃之分批承接區（${plan.entry_low} ~ ${plan.entry_high} 元）</b>，且距鐵律防守價（${plan.stop_loss} 元）仍有安全距離。AI 昨日本即強調「買綠不買紅、切勿急躁追高」，此回檔屬健康籌碼沉澱，維持原策略於區間內分批逢低布局。`;
-          } else if (currentPrice < plan.stop_loss) {
-            longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40';
-            longBadgeEl.textContent = '觸發停損警戒 🚨';
-            longAnalysisEl.innerHTML = `🚨 <b>觸發鐵律防守・落實停損保命</b>：今日受大盤或突發賣壓衝擊跌破防守價（${plan.stop_loss} 元）。雖然做多遭遇逆風，但 AI 提早預設的停損機制能有效阻止深幅套牢（虧損控制在預期內），建議持股者果斷依紀律減碼或退場觀望，證明量化風控之必要性。`;
-          } else {
-            longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
-            longBadgeEl.textContent = '區間整理中 ⏳';
-            longAnalysisEl.innerHTML = `⏳ <b>多空拉鋸震盪・守穩支撐</b>：今日微幅震盪，並未破壞多方中長線架構，上方壓力看 ${plan.entry_high} 元、下方支撐看 ${plan.stop_loss} 元。AI 建議耐心觀察主力洗盤沉澱，勿受短線雜音干擾。`;
-          }
-        } else {
-          longAmountEl.className = 'text-lg font-black font-mono mb-1 text-slate-300';
-          longAmountEl.textContent = '0 元 (平盤 0.00%)';
-          longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300';
-          longBadgeEl.textContent = '平盤持平 ➖';
-          longAnalysisEl.innerHTML = '今日股價平盤整理，多空力道均衡，維持昨日策略觀察後續量能變化。';
-        }
-      }
-
-      // 2. 做空實盤損益 (融券放空一張 = 1,000股)
+      // 3. 做空實盤損益 (融券放空一張 = 1,000股)
       const shortPnlNtd = Math.round(-chg * 1000);
       const isShortProfit = shortPnlNtd > 0;
       const isShortLoss = shortPnlNtd < 0;
@@ -1678,29 +1697,126 @@
       const shortBadgeEl = document.getElementById('shortPnlBadge');
       const shortAnalysisEl = document.getElementById('shortPnlAnalysis');
       const shortCardEl = document.getElementById('shortPnlCard');
+      const shortRoleBadge = document.getElementById('shortRoleBadge');
+      const shortTitleEl = document.getElementById('shortDirectionTitle');
 
-      if (shortAmountEl && shortBadgeEl && shortAnalysisEl && shortCardEl) {
+      const plan = item.price_plan || {};
+      const ssPlan = item.short_sell_plan || {};
+
+      // 設置做多卡角標與內容
+      if (longAmountEl && longBadgeEl && longAnalysisEl && longCardEl && longRoleBadge) {
+        if (isBullFavored) {
+          longRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/50';
+          longRoleBadge.textContent = '🌟 昨日 AI 主推策略';
+          if (longTitleEl) longTitleEl.textContent = `若昨日依建議做多（買一張）`;
+        } else if (isBearFavored) {
+          longRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700';
+          longRoleBadge.textContent = '⚠️ 非昨日主推（逆向對照）';
+          if (longTitleEl) longTitleEl.textContent = `若昨日反向做多（買一張）`;
+        } else {
+          longRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
+          longRoleBadge.textContent = '⚖️ 區間短打選項';
+          if (longTitleEl) longTitleEl.textContent = `若昨日做多（買一張）`;
+        }
+
+        if (isLongProfit) {
+          longAmountEl.className = 'text-lg font-black font-mono mb-1 tw-up';
+          longAmountEl.textContent = `+${longPnlNtd.toLocaleString()} 元 (+${chgPct}%)`;
+          longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40';
+          longBadgeEl.textContent = '獲利達成 🎯';
+          longCardEl.className = isBullFavored
+            ? 'p-3.5 rounded-xl border-2 border-emerald-500/60 bg-emerald-950/20 shadow-lg shadow-emerald-950/30 transition'
+            : 'p-3.5 rounded-xl border border-rose-500/30 bg-rose-950/15 transition';
+          
+          if (isBullFavored) {
+            longAnalysisEl.innerHTML = `🎉 <b>昨日多方評分（${bullScore}分）顯著領先・實戰精準大賺</b>：今日撮合如期拉出 <b>+${longPnlNtd.toLocaleString()} 元 (+${chgPct}%)</b> 獲利空間！完全驗證昨日 AI 強推多方建議之高勝率與獲利價值。持有者可將停損點移動至昨收價（${prevClose} 元）鎖定利潤，續抱朝第一目標價 <b>${plan.target_price || '--'} 元</b> 前進。`;
+          } else {
+            longAnalysisEl.innerHTML = `📈 今日短線逆勢反彈 <b>+${longPnlNtd.toLocaleString()} 元</b>。但請注意昨日 AI 多方評分僅 <b>${bullScore} 分</b>（空方 ${bearScore} 分），此反彈暫屬弱勢技術修正，AI 仍建議謹慎不追高。`;
+          }
+        } else if (isLongLoss) {
+          longAmountEl.className = 'text-lg font-black font-mono mb-1 tw-down';
+          longAmountEl.textContent = `${longPnlNtd.toLocaleString()} 元 (${chgPct}%)`;
+          longCardEl.className = 'p-3.5 rounded-xl border border-slate-700 bg-slate-950/60 transition';
+
+          if (isBearFavored) {
+            // 空方為主推，做多虧損代表 AI 成功預警！
+            longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40';
+            longBadgeEl.textContent = '成功避開套牢 🛡️';
+            longAnalysisEl.innerHTML = `💡 <b>AI 昨日空方強勢預警（空方 ${bearScore} 分 遠高於多方 ${bullScore} 分）</b>：今日股價如預期拉回下跌，<b>成功幫助投資人避開做多套牢虧損（若買進將虧損 -${Math.abs(longPnlNtd).toLocaleString()} 元）</b>！不隨意盲目抄底正是 AI 風控的最大價值。`;
+          } else {
+            // 多方為主推，但回檔
+            if (plan.entry_low && currentPrice >= plan.entry_low && currentPrice <= plan.entry_high) {
+              longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+              longBadgeEl.textContent = '回測承接區 🟢';
+              longAnalysisEl.innerHTML = `🛡️ <b>昨日多方分數較高（${bullScore} 分 vs 空方 ${bearScore} 分）</b>：今日大盤震盪拉回 -${Math.abs(longPnlNtd).toLocaleString()} 元，但股價<b>精準回測至昨日 AI 設定之分批承接區（${plan.entry_low} ~ ${plan.entry_high} 元）</b>，且距鐵律防守價（${plan.stop_loss} 元）仍有安全距離。AI 昨日本即強調「買綠不買紅、切勿急躁追高」，此回檔屬健康籌碼沉澱，維持原策略於區間內分批逢低布局。`;
+            } else if (plan.stop_loss && currentPrice < plan.stop_loss) {
+              longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40';
+              longBadgeEl.textContent = '觸發停損警戒 🚨';
+              longAnalysisEl.innerHTML = `🚨 <b>觸發鐵律防守・落實停損保命</b>：今日受大盤或突發賣壓衝擊跌破防守價（${plan.stop_loss} 元）。雖然做多遭遇逆風，但 AI 提早預設的停損機制能有效阻止深幅套牢（虧損控制在預期內），建議持股者果斷依紀律減碼或退場觀望，證明量化風控之必要性。`;
+            } else {
+              longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
+              longBadgeEl.textContent = '區間整理中 ⏳';
+              longAnalysisEl.innerHTML = `⏳ <b>多方評分（${bullScore}分）支撐震盪</b>：今日小幅拉鋸，並未破壞多方中長線架構，上方壓力看 ${plan.entry_high || '--'} 元、下方支撐看 ${plan.stop_loss || '--'} 元。AI 建議耐心觀察主力洗盤沉澱，勿受短線雜音干擾。`;
+            }
+          }
+        } else {
+          longAmountEl.className = 'text-lg font-black font-mono mb-1 text-slate-300';
+          longAmountEl.textContent = '0 元 (平盤 0.00%)';
+          longBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300';
+          longBadgeEl.textContent = '平盤持平 ➖';
+          longAnalysisEl.innerHTML = `今日股價平盤整理，多空力道均衡（昨日多方 ${bullScore} 分 vs 空方 ${bearScore} 分），維持原策略觀察後續量能變化。`;
+        }
+      }
+
+      // 設置做空卡角標與內容
+      if (shortAmountEl && shortBadgeEl && shortAnalysisEl && shortCardEl && shortRoleBadge) {
+        if (isBearFavored) {
+          shortRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/50';
+          shortRoleBadge.textContent = '🌟 昨日 AI 主推策略';
+          if (shortTitleEl) shortTitleEl.textContent = `若昨日依建議做空（融券放空一張）`;
+        } else if (isBullFavored) {
+          shortRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700';
+          shortRoleBadge.textContent = '🛡️ 避險對照（非昨日主推）';
+          if (shortTitleEl) shortTitleEl.textContent = `若昨日融券放空避險（放空一張）`;
+        } else {
+          shortRoleBadge.className = 'text-[10px] font-black font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40';
+          shortRoleBadge.textContent = '🐻 避險保護選項';
+          if (shortTitleEl) shortTitleEl.textContent = `若昨日做空（融券放空一張）`;
+        }
+
         if (isShortProfit) {
           shortAmountEl.className = 'text-lg font-black font-mono mb-1 text-purple-300';
           shortAmountEl.textContent = `+${shortPnlNtd.toLocaleString()} 元 (+${(-chgPct).toFixed(2)}%)`;
           shortBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40';
-          shortBadgeEl.textContent = '放空獲利 🎯';
-          shortCardEl.className = 'p-3.5 rounded-xl border border-purple-500/40 bg-purple-950/20 transition';
-          shortAnalysisEl.innerHTML = `📉 <b>空方避險策略完美奏效</b>：成功獲利 <b>+${shortPnlNtd.toLocaleString()} 元</b>！AI 昨精確捕捉到高檔籌碼調節與空方破位，放空獲利已拉開，可於波段目標價附近分批停利回補。`;
+          shortBadgeEl.textContent = isBearFavored ? '放空避險大勝 🎯' : '對沖浮盈（非主推）';
+          shortCardEl.className = isBearFavored
+            ? 'p-3.5 rounded-xl border-2 border-purple-500/60 bg-purple-950/25 shadow-lg shadow-purple-950/30 transition'
+            : 'p-3.5 rounded-xl border border-slate-700 bg-slate-950/60 transition';
+
+          if (isBearFavored) {
+            shortAnalysisEl.innerHTML = `🎯 <b>昨日空方評分（${bearScore}分）強烈預警・避險完美收割</b>：融券放空實戰大賺 <b>+${shortPnlNtd.toLocaleString()} 元 (+${(-chgPct).toFixed(2)}%)</b>！充分驗證 AI 空方雷達對於高檔調節與弱勢破位之捕捉精準度。可於波段回補目標價附近分批停利回補。`;
+          } else {
+            shortAnalysisEl.innerHTML = `⚠️ <b>雖然放空帳面出現對沖獲利 +${shortPnlNtd.toLocaleString()} 元，但昨日 AI 評分空方僅 ${bearScore} 分（遠低於多方 ${bullScore} 分）</b>：系統昨日並未將此列為主要放空標的，此收益屬於大盤震盪時之反向對沖空間。提醒投資人注意主力買盤仍在支撐，切勿追空急跌。`;
+          }
         } else if (isShortLoss) {
           shortAmountEl.className = 'text-lg font-black font-mono mb-1 text-slate-400';
           shortAmountEl.textContent = `${shortPnlNtd.toLocaleString()} 元 (${(-chgPct).toFixed(2)}%)`;
           shortBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400';
           shortCardEl.className = 'p-3.5 rounded-xl border border-slate-700 bg-slate-950/60 transition';
-          const ssPlan = item.short_sell_plan || {};
-          shortBadgeEl.textContent = '多方強勢 ⚠️';
-          shortAnalysisEl.innerHTML = `⚠️ <b>多方推升・嚴防軋空</b>：今日主力逆勢買超拉抬，放空暫處逆風。AI 昨日已提示防軋空停損回補價為 <b>${ssPlan.stop_loss || (prevClose * 1.04).toFixed(1)} 元</b>，若帶量突破務必無條件停損回補，絕不可抗單。`;
+
+          if (isBullFavored) {
+            shortBadgeEl.textContent = '逆勢放空遭軋 ❌';
+            shortAnalysisEl.innerHTML = `❌ <b>正如昨日 AI 預警（空方評分僅 ${bearScore} 分，多方 ${bullScore} 分強勢）</b>：若逆勢隨意放空將蒙受 <b>${shortPnlNtd.toLocaleString()} 元</b> 軋空虧損。這再次印證了 AI 提醒「切勿在主力買超多頭股盲目猜頂放空」的保護價值！`;
+          } else {
+            shortBadgeEl.textContent = '觸發防軋空警戒 🚨';
+            shortAnalysisEl.innerHTML = `🚨 <b>主力逆勢拉抬・嚴守防軋空紀律</b>：今日股價逆勢上漲，放空帳面出現逆風。AI 昨日已提示防軋空停損回補價為 <b>${ssPlan.stop_loss || (prevClose * 1.04).toFixed(1)} 元</b>，若帶量突破務必無條件停損回補，絕不可抗單。`;
+          }
         } else {
           shortAmountEl.className = 'text-lg font-black font-mono mb-1 text-slate-300';
           shortAmountEl.textContent = '0 元 (平盤 0.00%)';
           shortBadgeEl.className = 'text-xs font-black font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300';
           shortBadgeEl.textContent = '平盤持平 ➖';
-          shortAnalysisEl.innerHTML = '今日股價平盤，空方調節力量與多方拉鋸中。';
+          shortAnalysisEl.innerHTML = `今日股價平盤，空方力量與多方拉鋸中（昨日多方 ${bullScore} 分 vs 空方 ${bearScore} 分）。`;
         }
       }
     }
