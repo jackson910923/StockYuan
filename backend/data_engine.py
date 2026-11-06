@@ -7,7 +7,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -1207,7 +1207,7 @@ class TaiwanStockDataEngine:
 
         return {
             "as_of_date": latest_date,
-            "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "generated_at": datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M:%S"),
             "market_summary": {
                 "total_analyzed": len(all_t0),
                 "up_count": up_count,

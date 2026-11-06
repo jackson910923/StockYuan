@@ -510,6 +510,77 @@
     let ma20Series = null;
     let priceLines = [];
 
+    // ⚡ 盤中即時報價引擎（鉅亨網 quote API 原生支援 CORS，161 檔約 0.5 秒）
+    let LIVE_QUOTES = {};
+    let LIVE_QUOTE_TIME = '';
+    const tpeParts = ms => { const s = new Date(ms + 8 * 3600000).toISOString(); return { date: s.slice(0, 10), time: s.slice(11, 19) }; };
+    function isTwMarketOpen() {
+      const d = new Date(Date.now() + 8 * 3600000);
+      const day = d.getUTCDay(), hm = d.getUTCHours() * 60 + d.getUTCMinutes();
+      return day >= 1 && day <= 5 && hm >= 535 && hm <= 815; // 08:55 ~ 13:35
+    }
+    function applyLiveQuote(code) {
+      const q = LIVE_QUOTES[code];
+      const item = REPORT_DATA && REPORT_DATA.all_debates && REPORT_DATA.all_debates[code];
+      if (!q || !item) return;
+      item.close = q.price;
+      item.change = q.change;
+      item.change_pct = q.pct;
+      const kl = (REPORT_DATA.klines = REPORT_DATA.klines || {})[code];
+      if (kl && kl.length) {
+        const last = kl[kl.length - 1];
+        const bar = { time: q.date, open: q.open, high: q.high, low: q.low, close: q.price, volume: q.volume };
+        if (last.time === q.date) Object.assign(last, bar);
+        else if (last.time < q.date) kl.push(bar);
+      }
+    }
+    async function refreshLiveQuotes() {
+      if (!REPORT_DATA || !REPORT_DATA.all_debates) return;
+      const codes = Object.keys(REPORT_DATA.all_debates);
+      if (SELECTED_CODE && !codes.includes(SELECTED_CODE)) codes.push(SELECTED_CODE);
+      const badge = document.getElementById('liveStatusBadge');
+      if (badge) badge.textContent = '⏳ 更新報價中...';
+      const chunks = [];
+      for (let i = 0; i < codes.length; i += 50) chunks.push(codes.slice(i, i + 50));
+      let latestTs = 0;
+      await Promise.all(chunks.map(async chunk => {
+        try {
+          const url = 'https://ws.api.cnyes.com/ws/api/v1/quote/quotes/' + chunk.map(c => `TWS:${c}:STOCK`).join(',');
+          const resp = await fetch(url, { cache: 'no-store' });
+          if (!resp.ok) return;
+          const data = await resp.json();
+          (data.data || []).forEach(x => {
+            const code = String(x['0'] || '').split(':')[1];
+            const price = Number(x['6']);
+            if (!code || !(price > 0)) return;
+            const ts = Number(x['200007'] || 0) * 1000;
+            latestTs = Math.max(latestTs, ts);
+            LIVE_QUOTES[code] = {
+              price,
+              change: Number(x['11'] || 0),
+              pct: Number(x['56'] || 0),
+              open: Number(x['19'] || price),
+              high: Number(x['12'] || price),
+              low: Number(x['13'] || price),
+              volume: Number(x['800001'] || 0),
+              date: tpeParts(ts || Date.now()).date,
+            };
+          });
+        } catch (e) {}
+      }));
+      if (!latestTs) {
+        if (badge) badge.textContent = '⚠️ 即時報價暫時無法連線';
+        return;
+      }
+      Object.keys(LIVE_QUOTES).forEach(applyLiveQuote);
+      const lt = tpeParts(latestTs);
+      LIVE_QUOTE_TIME = `${lt.date.slice(5)} ${lt.time}`;
+      if (badge) badge.textContent = isTwMarketOpen() ? `⚡ 盤中即時 ${lt.time}` : `🔒 收盤價 ${lt.date.slice(5)}`;
+      renderHeaderAndSummary();
+      renderTop3PodiumMatrix();
+      renderStockList(false); // 內部會重繪右側個股診斷
+    }
+
     function getLocalWatchlist() {
       try {
         const saved = localStorage.getItem('alphatw_watchlist');
@@ -531,6 +602,8 @@
         renderTop3PodiumMatrix();
         renderSectorHeatmap();
         switchTab('top');
+        if (isTwMarketOpen()) toggleAutoPolling();
+        else refreshLiveQuotes();
       } catch (err) {
         console.error('Failed to load report:', err);
       }
@@ -738,7 +811,7 @@
 
     function renderHeaderAndSummary() {
       if (!REPORT_DATA) return;
-      document.getElementById('asOfDate').textContent = `${REPORT_DATA.as_of_date}（更新於 ${REPORT_DATA.generated_at}）`;
+      document.getElementById('asOfDate').textContent = `AI 策略 ${REPORT_DATA.as_of_date} 盤後（產生於 ${REPORT_DATA.generated_at}）` + (LIVE_QUOTE_TIME ? `｜⚡ 報價 ${LIVE_QUOTE_TIME}` : '');
       const ms = REPORT_DATA.market_summary || {};
       document.getElementById('marketRegime').textContent = ms.regime || '震盪選股盤';
       document.getElementById('marketBreadthText').innerHTML =
@@ -1691,6 +1764,7 @@
         }
       }
 
+      applyLiveQuote(code);
       if (statusBadge) {
         statusBadge.textContent = `⚡ 已載入 ${code} ${metaName} 完整 K 線`;
       }
@@ -1704,10 +1778,7 @@
     }
 
     function refreshCurrentStockLive() {
-      if (SELECTED_CODE) {
-        KLINE_FETCH_LOCK.delete(SELECTED_CODE);
-        fetchLiveStockInBrowser(SELECTED_CODE, false);
-      }
+      refreshLiveQuotes();
     }
 
     function toggleAutoPolling() {
