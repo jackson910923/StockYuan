@@ -79,6 +79,46 @@ def generate_daily_intelligence_bundle(
         if code not in debates_map:
             debates_map[code] = committee.run_committee_debate(st, candles=None, fetch_live_news=False)
 
+    # 🔗 自動串接昨日 AI 評分與策略紀錄 (提供次日實盤複盤驗證真偽)
+    prev_report_file = root_dir / "data" / "latest_report.json"
+    prev_debates: Dict[str, Any] = {}
+    prev_as_of_date = None
+    if prev_report_file.exists():
+        try:
+            prev_json = json.loads(prev_report_file.read_text(encoding="utf-8"))
+            prev_debates = prev_json.get("all_debates", {})
+            prev_as_of_date = prev_json.get("as_of_date")
+        except Exception:
+            pass
+
+    for c_code, d_item in debates_map.items():
+        if c_code in prev_debates:
+            prev_item = prev_debates[c_code]
+            pp = prev_item.get("price_plan") or {}
+            sp = prev_item.get("short_sell_plan") or {}
+            d_item["yesterday_eval"] = {
+                "has_data": True,
+                "as_of_date": prev_as_of_date or "昨日",
+                "total_score": prev_item.get("total_score"),
+                "short_sell_score": prev_item.get("short_sell_score"),
+                "close": prev_item.get("close"),
+                "entry_low": pp.get("entry_low"),
+                "entry_high": pp.get("entry_high"),
+                "stop_loss": pp.get("stop_loss"),
+                "target_price": pp.get("target_price"),
+                "short_entry_low": sp.get("entry_low"),
+                "short_entry_high": sp.get("entry_high"),
+                "short_target": sp.get("target_price"),
+                "short_stop_loss": sp.get("stop_loss"),
+            }
+        else:
+            d_item["yesterday_eval"] = {
+                "has_data": False,
+                "as_of_date": prev_as_of_date or "昨日",
+                "note": "今日新納入追蹤",
+                "prev_close": d_item.get("prev_close"),
+            }
+
     def _map_debates(key: str) -> List[Dict[str, Any]]:
         return [debates_map[item["code"]] for item in snapshot.get(key, []) if item["code"] in debates_map]
 

@@ -657,6 +657,21 @@
         "ma_mid": 2232.5,
         "ma_gap_pct": -4.37,
         "pe_ratio": 24.75
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.4,
+        "short_sell_score": 96.0,
+        "close": 2240.0,
+        "entry_low": 2235.0,
+        "entry_high": 2240.0,
+        "stop_loss": 2138.75,
+        "target_price": 2397.5,
+        "short_entry_low": 2235.52,
+        "short_entry_high": 2280.32,
+        "short_target": 2082.5,
+        "short_stop_loss": 2341.25
       }
     },
     {
@@ -870,6 +885,21 @@
         "ma_mid": 236.25,
         "ma_gap_pct": -4.97,
         "pe_ratio": 14.8
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.4,
+        "short_sell_score": 96.0,
+        "close": 235.0,
+        "entry_low": 234.0,
+        "entry_high": 235.0,
+        "stop_loss": 219.47,
+        "target_price": 259.15,
+        "short_entry_low": 234.53,
+        "short_entry_high": 241.37,
+        "short_target": 210.85,
+        "short_stop_loss": 250.53
       }
     },
     {
@@ -1083,6 +1113,21 @@
         "ma_mid": 3560.0,
         "ma_gap_pct": -4.78,
         "pe_ratio": 55.99
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 52.1,
+        "short_sell_score": 96.0,
+        "close": 3460.0,
+        "entry_low": 3450.0,
+        "entry_high": 3460.0,
+        "stop_loss": 2944.75,
+        "target_price": 4261.5,
+        "short_entry_low": 3453.08,
+        "short_entry_high": 3634.75,
+        "short_target": 2658.5,
+        "short_stop_loss": 3975.25
       }
     },
     {
@@ -1295,6 +1340,21 @@
         "ma_mid": 1690.0,
         "ma_gap_pct": -7.99,
         "pe_ratio": 4.99
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 57.9,
+        "short_sell_score": 51.0,
+        "close": 1650.0,
+        "entry_low": 1640.0,
+        "entry_high": 1650.0,
+        "stop_loss": 1485.75,
+        "target_price": 1905.5,
+        "short_entry_low": 1646.7,
+        "short_entry_high": 1743.67,
+        "short_target": 1394.5,
+        "short_stop_loss": 1814.25
       }
     },
     {
@@ -1507,6 +1567,21 @@
         "ma_mid": 1700.0,
         "ma_gap_pct": -6.76,
         "pe_ratio": 19.32
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 47.1,
+        "short_sell_score": 66.0,
+        "close": 1660.0,
+        "entry_low": 1640.0,
+        "entry_high": 1660.0,
+        "stop_loss": 1441.75,
+        "target_price": 1999.5,
+        "short_entry_low": 1656.68,
+        "short_entry_high": 1747.02,
+        "short_target": 1320.5,
+        "short_stop_loss": 1878.25
       }
     },
     {
@@ -1719,6 +1794,21 @@
         "ma_mid": 63.08,
         "ma_gap_pct": -8.36,
         "pe_ratio": 34.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 36.8,
+        "short_sell_score": 90.0,
+        "close": 60.1,
+        "entry_low": 60.1,
+        "entry_high": 60.1,
+        "stop_loss": 49.62,
+        "target_price": 76.41,
+        "short_entry_low": 59.98,
+        "short_entry_high": 65.16,
+        "short_target": 43.79,
+        "short_stop_loss": 70.58
       }
     },
     {
@@ -1932,6 +2022,21 @@
         "ma_mid": 260.0,
         "ma_gap_pct": -5.19,
         "pe_ratio": 9.77
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 65.1,
+        "short_sell_score": 91.0,
+        "close": 259.0,
+        "entry_low": 257.0,
+        "entry_high": 259.0,
+        "stop_loss": 243.47,
+        "target_price": 283.15,
+        "short_entry_low": 258.48,
+        "short_entry_high": 265.82,
+        "short_target": 234.85,
+        "short_stop_loss": 274.52
       }
     },
     {
@@ -2145,6 +2250,21 @@
         "ma_mid": 44.04,
         "ma_gap_pct": -0.99,
         "pe_ratio": 9.18
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 91.9,
+        "short_sell_score": 10.0,
+        "close": 45.1,
+        "entry_low": 44.65,
+        "entry_high": 45.33,
+        "stop_loss": 42.76,
+        "target_price": 48.74,
+        "short_entry_low": 45.01,
+        "short_entry_high": 45.91,
+        "short_target": 41.46,
+        "short_stop_loss": 47.45
       }
     },
     {
@@ -2356,6 +2476,21 @@
         "ma_mid": 73.92,
         "ma_gap_pct": -0.71,
         "pe_ratio": 17.56
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.8,
+        "short_sell_score": 10.0,
+        "close": 74.9,
+        "entry_low": 73.73,
+        "entry_high": 75.27,
+        "stop_loss": 70.81,
+        "target_price": 81.27,
+        "short_entry_low": 74.75,
+        "short_entry_high": 76.25,
+        "short_target": 68.53,
+        "short_stop_loss": 79.0
       }
     },
     {
@@ -2569,6 +2704,21 @@
         "ma_mid": 161.38,
         "ma_gap_pct": 1.32,
         "pe_ratio": 32.12
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.0,
+        "short_sell_score": 10.0,
+        "close": 161.5,
+        "entry_low": 160.5,
+        "entry_high": 162.31,
+        "stop_loss": 154.53,
+        "target_price": 172.35,
+        "short_entry_low": 161.18,
+        "short_entry_high": 164.41,
+        "short_target": 150.65,
+        "short_stop_loss": 169.0
       }
     },
     {
@@ -2782,6 +2932,21 @@
         "ma_mid": 54.62,
         "ma_gap_pct": -0.78,
         "pe_ratio": 9.41
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 80.7,
+        "short_sell_score": 22.0,
+        "close": 55.4,
+        "entry_low": 54.7,
+        "entry_high": 55.68,
+        "stop_loss": 51.76,
+        "target_price": 61.07,
+        "short_entry_low": 55.29,
+        "short_entry_high": 56.4,
+        "short_target": 49.73,
+        "short_stop_loss": 59.04
       }
     },
     {
@@ -2994,6 +3159,21 @@
         "ma_mid": 31.11,
         "ma_gap_pct": -6.79,
         "pe_ratio": 31.87
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 39.0,
+        "short_sell_score": 84.0,
+        "close": 30.3,
+        "entry_low": 30.3,
+        "entry_high": 30.3,
+        "stop_loss": 25.66,
+        "target_price": 37.51,
+        "short_entry_low": 30.24,
+        "short_entry_high": 31.98,
+        "short_target": 23.09,
+        "short_stop_loss": 34.94
       }
     },
     {
@@ -3206,6 +3386,21 @@
         "ma_mid": 20.41,
         "ma_gap_pct": 0.43,
         "pe_ratio": 7.14
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.4,
+        "short_sell_score": 22.0,
+        "close": 21.05,
+        "entry_low": 20.6,
+        "entry_high": 21.05,
+        "stop_loss": 20.08,
+        "target_price": 22.56,
+        "short_entry_low": 21.01,
+        "short_entry_high": 21.43,
+        "short_target": 19.54,
+        "short_stop_loss": 22.02
       }
     },
     {
@@ -3418,6 +3613,21 @@
         "ma_mid": 378.5,
         "ma_gap_pct": -9.25,
         "pe_ratio": 6.77
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 29.2,
+        "short_sell_score": 96.0,
+        "close": 360.0,
+        "entry_low": 360.0,
+        "entry_high": 360.0,
+        "stop_loss": 302.4,
+        "target_price": 449.6,
+        "short_entry_low": 359.28,
+        "short_entry_high": 392.12,
+        "short_target": 270.4,
+        "short_stop_loss": 417.6
       }
     },
     {
@@ -3631,6 +3841,21 @@
         "ma_mid": 328.0,
         "ma_gap_pct": 5.64,
         "pe_ratio": 14.16
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 88.4,
+        "short_sell_score": 10.0,
+        "close": 339.5,
+        "entry_low": 320.22,
+        "entry_high": 332.23,
+        "stop_loss": 312.25,
+        "target_price": 376.95,
+        "short_entry_low": 338.82,
+        "short_entry_high": 345.61,
+        "short_target": 302.05,
+        "short_stop_loss": 363.57
       }
     }
   ],
@@ -3846,6 +4071,21 @@
         "ma_mid": 161.38,
         "ma_gap_pct": 1.32,
         "pe_ratio": 32.12
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.0,
+        "short_sell_score": 10.0,
+        "close": 161.5,
+        "entry_low": 160.5,
+        "entry_high": 162.31,
+        "stop_loss": 154.53,
+        "target_price": 172.35,
+        "short_entry_low": 161.18,
+        "short_entry_high": 164.41,
+        "short_target": 150.65,
+        "short_stop_loss": 169.0
       }
     },
     {
@@ -4060,6 +4300,21 @@
         "ma_mid": 1232.5,
         "ma_gap_pct": 3.04,
         "pe_ratio": 62.19
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 56.1,
+        "short_sell_score": 53.0,
+        "close": 1185.0,
+        "entry_low": 1185.0,
+        "entry_high": 1185.0,
+        "stop_loss": 1077.0,
+        "target_price": 1353.0,
+        "short_entry_low": 1182.63,
+        "short_entry_high": 1226.1,
+        "short_target": 1017.0,
+        "short_stop_loss": 1293.0
       }
     },
     {
@@ -4273,6 +4528,21 @@
         "ma_mid": 73.3,
         "ma_gap_pct": 0.95,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 86.0,
+        "short_sell_score": 22.0,
+        "close": 73.7,
+        "entry_low": 73.4,
+        "entry_high": 74.07,
+        "stop_loss": 70.96,
+        "target_price": 77.97,
+        "short_entry_low": 73.55,
+        "short_entry_high": 75.03,
+        "short_target": 69.43,
+        "short_stop_loss": 76.44
       }
     },
     {
@@ -4486,6 +4756,21 @@
         "ma_mid": 328.0,
         "ma_gap_pct": 5.64,
         "pe_ratio": 14.16
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 88.4,
+        "short_sell_score": 10.0,
+        "close": 339.5,
+        "entry_low": 320.22,
+        "entry_high": 332.23,
+        "stop_loss": 312.25,
+        "target_price": 376.95,
+        "short_entry_low": 338.82,
+        "short_entry_high": 345.61,
+        "short_target": 302.05,
+        "short_stop_loss": 363.57
       }
     },
     {
@@ -4699,6 +4984,12 @@
         "ma_mid": 143.75,
         "ma_gap_pct": 2.26,
         "pe_ratio": 14.13
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 143.0
       }
     },
     {
@@ -4912,6 +5203,12 @@
         "ma_mid": 216.88,
         "ma_gap_pct": 0.52,
         "pe_ratio": 15.73
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 215.0
       }
     },
     {
@@ -5119,6 +5416,12 @@
         "ma_mid": 103.5,
         "ma_gap_pct": 0.48,
         "pe_ratio": 13.11
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 103.0
       }
     },
     {
@@ -5332,6 +5635,21 @@
         "ma_mid": 69.2,
         "ma_gap_pct": 0.58,
         "pe_ratio": 14.15
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 82.9,
+        "short_sell_score": 22.0,
+        "close": 69.2,
+        "entry_low": 68.2,
+        "entry_high": 69.55,
+        "stop_loss": 65.38,
+        "target_price": 75.15,
+        "short_entry_low": 69.06,
+        "short_entry_high": 70.45,
+        "short_target": 63.25,
+        "short_stop_loss": 73.02
       }
     }
   ],
@@ -5541,6 +5859,12 @@
         "ma_mid": 103.5,
         "ma_gap_pct": 0.48,
         "pe_ratio": 13.11
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 103.0
       }
     },
     {
@@ -5754,6 +6078,21 @@
         "ma_mid": 381.75,
         "ma_gap_pct": 4.65,
         "pe_ratio": 32.93
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 70.9,
+        "short_sell_score": 10.0,
+        "close": 389.0,
+        "entry_low": 377.5,
+        "entry_high": 386.31,
+        "stop_loss": 357.95,
+        "target_price": 437.3,
+        "short_entry_low": 388.22,
+        "short_entry_high": 396.0,
+        "short_target": 340.7,
+        "short_stop_loss": 420.05
       }
     },
     {
@@ -5967,6 +6306,21 @@
         "ma_mid": 328.0,
         "ma_gap_pct": 5.64,
         "pe_ratio": 14.16
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 88.4,
+        "short_sell_score": 10.0,
+        "close": 339.5,
+        "entry_low": 320.22,
+        "entry_high": 332.23,
+        "stop_loss": 312.25,
+        "target_price": 376.95,
+        "short_entry_low": 338.82,
+        "short_entry_high": 345.61,
+        "short_target": 302.05,
+        "short_stop_loss": 363.57
       }
     },
     {
@@ -6181,6 +6535,21 @@
         "ma_mid": 1232.5,
         "ma_gap_pct": 3.04,
         "pe_ratio": 62.19
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 56.1,
+        "short_sell_score": 53.0,
+        "close": 1185.0,
+        "entry_low": 1185.0,
+        "entry_high": 1185.0,
+        "stop_loss": 1077.0,
+        "target_price": 1353.0,
+        "short_entry_low": 1182.63,
+        "short_entry_high": 1226.1,
+        "short_target": 1017.0,
+        "short_stop_loss": 1293.0
       }
     },
     {
@@ -6394,6 +6763,21 @@
         "ma_mid": 161.38,
         "ma_gap_pct": 1.32,
         "pe_ratio": 32.12
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.0,
+        "short_sell_score": 10.0,
+        "close": 161.5,
+        "entry_low": 160.5,
+        "entry_high": 162.31,
+        "stop_loss": 154.53,
+        "target_price": 172.35,
+        "short_entry_low": 161.18,
+        "short_entry_high": 164.41,
+        "short_target": 150.65,
+        "short_stop_loss": 169.0
       }
     },
     {
@@ -6607,6 +6991,21 @@
         "ma_mid": 14.75,
         "ma_gap_pct": 10.85,
         "pe_ratio": 13.86
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 74.4,
+        "short_sell_score": 10.0,
+        "close": 14.9,
+        "entry_low": 14.45,
+        "entry_high": 14.54,
+        "stop_loss": 13.41,
+        "target_price": 17.21,
+        "short_entry_low": 14.87,
+        "short_entry_high": 15.17,
+        "short_target": 12.59,
+        "short_stop_loss": 16.39
       }
     },
     {
@@ -6771,6 +7170,12 @@
         "ma_mid": 165.0,
         "ma_gap_pct": 1.21,
         "pe_ratio": 3.1
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 159.5
       }
     },
     {
@@ -6936,6 +7341,21 @@
         "ma_mid": 16.45,
         "ma_gap_pct": 8.21,
         "pe_ratio": 32.96
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 75.1,
+        "short_sell_score": 22.0,
+        "close": 16.4,
+        "entry_low": 16.2,
+        "entry_high": 16.48,
+        "stop_loss": 14.96,
+        "target_price": 18.64,
+        "short_entry_low": 16.37,
+        "short_entry_high": 16.7,
+        "short_target": 14.16,
+        "short_stop_loss": 17.84
       }
     },
     {
@@ -7148,6 +7568,21 @@
         "ma_mid": 263.5,
         "ma_gap_pct": 4.17,
         "pe_ratio": 14.64
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 71.6,
+        "short_sell_score": 40.0,
+        "close": 265.5,
+        "entry_low": 258.53,
+        "entry_high": 266.83,
+        "stop_loss": 243.68,
+        "target_price": 299.45,
+        "short_entry_low": 264.97,
+        "short_entry_high": 270.28,
+        "short_target": 231.55,
+        "short_stop_loss": 287.32
       }
     },
     {
@@ -7361,6 +7796,12 @@
         "ma_mid": 17.98,
         "ma_gap_pct": 4.03,
         "pe_ratio": 8.86
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 17.0
       }
     },
     {
@@ -7574,6 +8015,21 @@
         "ma_mid": 38.5,
         "ma_gap_pct": 4.68,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 71.6,
+        "short_sell_score": 40.0,
+        "close": 38.95,
+        "entry_low": 37.86,
+        "entry_high": 39.14,
+        "stop_loss": 36.57,
+        "target_price": 42.66,
+        "short_entry_low": 38.87,
+        "short_entry_high": 39.65,
+        "short_target": 35.24,
+        "short_stop_loss": 41.34
       }
     },
     {
@@ -7786,6 +8242,12 @@
         "ma_mid": 19.82,
         "ma_gap_pct": 1.64,
         "pe_ratio": 1007.5
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 19.45
       }
     }
   ],
@@ -8001,6 +8463,21 @@
         "ma_mid": 161.38,
         "ma_gap_pct": 1.32,
         "pe_ratio": 32.12
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.0,
+        "short_sell_score": 10.0,
+        "close": 161.5,
+        "entry_low": 160.5,
+        "entry_high": 162.31,
+        "stop_loss": 154.53,
+        "target_price": 172.35,
+        "short_entry_low": 161.18,
+        "short_entry_high": 164.41,
+        "short_target": 150.65,
+        "short_stop_loss": 169.0
       }
     },
     {
@@ -8215,6 +8692,21 @@
         "ma_mid": 1232.5,
         "ma_gap_pct": 3.04,
         "pe_ratio": 62.19
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 56.1,
+        "short_sell_score": 53.0,
+        "close": 1185.0,
+        "entry_low": 1185.0,
+        "entry_high": 1185.0,
+        "stop_loss": 1077.0,
+        "target_price": 1353.0,
+        "short_entry_low": 1182.63,
+        "short_entry_high": 1226.1,
+        "short_target": 1017.0,
+        "short_stop_loss": 1293.0
       }
     },
     {
@@ -8428,6 +8920,21 @@
         "ma_mid": 73.3,
         "ma_gap_pct": 0.95,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 86.0,
+        "short_sell_score": 22.0,
+        "close": 73.7,
+        "entry_low": 73.4,
+        "entry_high": 74.07,
+        "stop_loss": 70.96,
+        "target_price": 77.97,
+        "short_entry_low": 73.55,
+        "short_entry_high": 75.03,
+        "short_target": 69.43,
+        "short_stop_loss": 76.44
       }
     },
     {
@@ -8641,6 +9148,21 @@
         "ma_mid": 69.2,
         "ma_gap_pct": 0.58,
         "pe_ratio": 14.15
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 82.9,
+        "short_sell_score": 22.0,
+        "close": 69.2,
+        "entry_low": 68.2,
+        "entry_high": 69.55,
+        "stop_loss": 65.38,
+        "target_price": 75.15,
+        "short_entry_low": 69.06,
+        "short_entry_high": 70.45,
+        "short_target": 63.25,
+        "short_stop_loss": 73.02
       }
     },
     {
@@ -8848,6 +9370,12 @@
         "ma_mid": 103.5,
         "ma_gap_pct": 0.48,
         "pe_ratio": 13.11
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 103.0
       }
     },
     {
@@ -9061,6 +9589,12 @@
         "ma_mid": 143.75,
         "ma_gap_pct": 2.26,
         "pe_ratio": 14.13
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 143.0
       }
     },
     {
@@ -9274,6 +9808,12 @@
         "ma_mid": 216.88,
         "ma_gap_pct": 0.52,
         "pe_ratio": 15.73
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 215.0
       }
     },
     {
@@ -9487,6 +10027,21 @@
         "ma_mid": 328.0,
         "ma_gap_pct": 5.64,
         "pe_ratio": 14.16
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 88.4,
+        "short_sell_score": 10.0,
+        "close": 339.5,
+        "entry_low": 320.22,
+        "entry_high": 332.23,
+        "stop_loss": 312.25,
+        "target_price": 376.95,
+        "short_entry_low": 338.82,
+        "short_entry_high": 345.61,
+        "short_target": 302.05,
+        "short_stop_loss": 363.57
       }
     },
     {
@@ -9700,6 +10255,21 @@
         "ma_mid": 381.75,
         "ma_gap_pct": 4.65,
         "pe_ratio": 32.93
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 70.9,
+        "short_sell_score": 10.0,
+        "close": 389.0,
+        "entry_low": 377.5,
+        "entry_high": 386.31,
+        "stop_loss": 357.95,
+        "target_price": 437.3,
+        "short_entry_low": 388.22,
+        "short_entry_high": 396.0,
+        "short_target": 340.7,
+        "short_stop_loss": 420.05
       }
     },
     {
@@ -9864,6 +10434,21 @@
         "ma_mid": 62.27,
         "ma_gap_pct": 1.81,
         "pe_ratio": 18.38
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 80.7,
+        "short_sell_score": 22.0,
+        "close": 62.8,
+        "entry_low": 61.9,
+        "entry_high": 63.11,
+        "stop_loss": 59.33,
+        "target_price": 68.19,
+        "short_entry_low": 62.67,
+        "short_entry_high": 63.93,
+        "short_target": 57.41,
+        "short_stop_loss": 66.27
       }
     },
     {
@@ -10077,6 +10662,21 @@
         "ma_mid": 88.25,
         "ma_gap_pct": 1.64,
         "pe_ratio": 57.87
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 80.7,
+        "short_sell_score": 22.0,
+        "close": 89.3,
+        "entry_low": 87.7,
+        "entry_high": 89.75,
+        "stop_loss": 83.41,
+        "target_price": 98.47,
+        "short_entry_low": 89.12,
+        "short_entry_high": 90.91,
+        "short_target": 80.13,
+        "short_stop_loss": 95.19
       }
     },
     {
@@ -10241,6 +10841,12 @@
         "ma_mid": 27.43,
         "ma_gap_pct": 1.55,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 26.9
       }
     }
   ],
@@ -10456,6 +11062,21 @@
         "ma_mid": 161.38,
         "ma_gap_pct": 1.32,
         "pe_ratio": 32.12
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.0,
+        "short_sell_score": 10.0,
+        "close": 161.5,
+        "entry_low": 160.5,
+        "entry_high": 162.31,
+        "stop_loss": 154.53,
+        "target_price": 172.35,
+        "short_entry_low": 161.18,
+        "short_entry_high": 164.41,
+        "short_target": 150.65,
+        "short_stop_loss": 169.0
       }
     },
     {
@@ -10667,6 +11288,21 @@
         "ma_mid": 133.38,
         "ma_gap_pct": -0.28,
         "pe_ratio": 25.14
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 69.6,
+        "short_sell_score": 25.0,
+        "close": 132.5,
+        "entry_low": 132.0,
+        "entry_high": 132.5,
+        "stop_loss": 126.42,
+        "target_price": 141.95,
+        "short_entry_low": 132.24,
+        "short_entry_high": 134.88,
+        "short_target": 123.05,
+        "short_stop_loss": 138.57
       }
     },
     {
@@ -10879,6 +11515,21 @@
         "ma_mid": 53.55,
         "ma_gap_pct": -0.09,
         "pe_ratio": 20.82
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 85.0,
+        "short_sell_score": 10.0,
+        "close": 54.0,
+        "entry_low": 53.4,
+        "entry_high": 54.27,
+        "stop_loss": 50.4,
+        "target_price": 59.6,
+        "short_entry_low": 53.89,
+        "short_entry_high": 54.97,
+        "short_target": 48.4,
+        "short_stop_loss": 57.6
       }
     },
     {
@@ -11090,6 +11741,21 @@
         "ma_mid": 73.92,
         "ma_gap_pct": -0.71,
         "pe_ratio": 17.56
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.8,
+        "short_sell_score": 10.0,
+        "close": 74.9,
+        "entry_low": 73.73,
+        "entry_high": 75.27,
+        "stop_loss": 70.81,
+        "target_price": 81.27,
+        "short_entry_low": 74.75,
+        "short_entry_high": 76.25,
+        "short_target": 68.53,
+        "short_stop_loss": 79.0
       }
     },
     {
@@ -11301,6 +11967,21 @@
         "ma_mid": 112.75,
         "ma_gap_pct": -0.67,
         "pe_ratio": 27.25
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 69.6,
+        "short_sell_score": 33.0,
+        "close": 112.5,
+        "entry_low": 112.0,
+        "entry_high": 112.5,
+        "stop_loss": 106.65,
+        "target_price": 121.6,
+        "short_entry_low": 112.28,
+        "short_entry_high": 114.53,
+        "short_target": 103.4,
+        "short_stop_loss": 118.75
       }
     },
     {
@@ -11514,6 +12195,21 @@
         "ma_mid": 73.3,
         "ma_gap_pct": 0.95,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 86.0,
+        "short_sell_score": 22.0,
+        "close": 73.7,
+        "entry_low": 73.4,
+        "entry_high": 74.07,
+        "stop_loss": 70.96,
+        "target_price": 77.97,
+        "short_entry_low": 73.55,
+        "short_entry_high": 75.03,
+        "short_target": 69.43,
+        "short_stop_loss": 76.44
       }
     },
     {
@@ -11677,6 +12373,21 @@
         "ma_mid": 311.83,
         "ma_gap_pct": -3.96,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.8,
+        "short_sell_score": 83.0,
+        "close": 299.5,
+        "entry_low": 296.0,
+        "entry_high": 299.5,
+        "stop_loss": 265.3,
+        "target_price": 352.7,
+        "short_entry_low": 298.9,
+        "short_entry_high": 313.39,
+        "short_target": 246.3,
+        "short_stop_loss": 333.7
       }
     },
     {
@@ -11840,6 +12551,21 @@
         "ma_mid": 27.23,
         "ma_gap_pct": -1.74,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 65.1,
+        "short_sell_score": 85.0,
+        "close": 27.2,
+        "entry_low": 27.1,
+        "entry_high": 27.2,
+        "stop_loss": 25.38,
+        "target_price": 30.03,
+        "short_entry_low": 27.15,
+        "short_entry_high": 27.69,
+        "short_target": 24.37,
+        "short_stop_loss": 29.02
       }
     },
     {
@@ -12053,6 +12779,21 @@
         "ma_mid": 44.62,
         "ma_gap_pct": 0.75,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 56.2,
+        "short_sell_score": 60.0,
+        "close": 44.3,
+        "entry_low": 44.3,
+        "entry_high": 44.3,
+        "stop_loss": 40.43,
+        "target_price": 50.32,
+        "short_entry_low": 44.21,
+        "short_entry_high": 45.1,
+        "short_target": 38.28,
+        "short_stop_loss": 48.17
       }
     },
     {
@@ -12217,6 +12958,12 @@
         "ma_mid": 55.63,
         "ma_gap_pct": 3.0,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 52.1
       }
     },
     {
@@ -12380,6 +13127,12 @@
         "ma_mid": 143.5,
         "ma_gap_pct": -0.7,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 141.0
       }
     },
     {
@@ -12544,6 +13297,12 @@
         "ma_mid": 125.5,
         "ma_gap_pct": 0.8,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 124.5
       }
     }
   ],
@@ -12760,6 +13519,21 @@
         "ma_mid": 1232.5,
         "ma_gap_pct": 3.04,
         "pe_ratio": 62.19
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 56.1,
+        "short_sell_score": 53.0,
+        "close": 1185.0,
+        "entry_low": 1185.0,
+        "entry_high": 1185.0,
+        "stop_loss": 1077.0,
+        "target_price": 1353.0,
+        "short_entry_low": 1182.63,
+        "short_entry_high": 1226.1,
+        "short_target": 1017.0,
+        "short_stop_loss": 1293.0
       }
     },
     {
@@ -12973,6 +13747,21 @@
         "ma_mid": 328.0,
         "ma_gap_pct": 5.64,
         "pe_ratio": 14.16
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 88.4,
+        "short_sell_score": 10.0,
+        "close": 339.5,
+        "entry_low": 320.22,
+        "entry_high": 332.23,
+        "stop_loss": 312.25,
+        "target_price": 376.95,
+        "short_entry_low": 338.82,
+        "short_entry_high": 345.61,
+        "short_target": 302.05,
+        "short_stop_loss": 363.57
       }
     },
     {
@@ -13186,6 +13975,12 @@
         "ma_mid": 216.88,
         "ma_gap_pct": 0.52,
         "pe_ratio": 15.73
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 215.0
       }
     },
     {
@@ -13399,6 +14194,21 @@
         "ma_mid": 381.75,
         "ma_gap_pct": 4.65,
         "pe_ratio": 32.93
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 70.9,
+        "short_sell_score": 10.0,
+        "close": 389.0,
+        "entry_low": 377.5,
+        "entry_high": 386.31,
+        "stop_loss": 357.95,
+        "target_price": 437.3,
+        "short_entry_low": 388.22,
+        "short_entry_high": 396.0,
+        "short_target": 340.7,
+        "short_stop_loss": 420.05
       }
     },
     {
@@ -13611,6 +14421,21 @@
         "ma_mid": 263.5,
         "ma_gap_pct": 4.17,
         "pe_ratio": 14.64
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 71.6,
+        "short_sell_score": 40.0,
+        "close": 265.5,
+        "entry_low": 258.53,
+        "entry_high": 266.83,
+        "stop_loss": 243.68,
+        "target_price": 299.45,
+        "short_entry_low": 264.97,
+        "short_entry_high": 270.28,
+        "short_target": 231.55,
+        "short_stop_loss": 287.32
       }
     },
     {
@@ -13824,6 +14649,12 @@
         "ma_mid": 317.25,
         "ma_gap_pct": -5.75,
         "pe_ratio": 190.45
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 297.5
       }
     },
     {
@@ -13988,6 +14819,12 @@
         "ma_mid": 235.75,
         "ma_gap_pct": 0.11,
         "pe_ratio": 20.19
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 234.0
       }
     },
     {
@@ -14200,6 +15037,21 @@
         "ma_mid": 4740.0,
         "ma_gap_pct": -5.49,
         "pe_ratio": 25.82
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.1,
+        "short_sell_score": 73.0,
+        "close": 4525.0,
+        "entry_low": 4520.0,
+        "entry_high": 4525.0,
+        "stop_loss": 3836.5,
+        "target_price": 5596.0,
+        "short_entry_low": 4515.95,
+        "short_entry_high": 4850.8,
+        "short_target": 3454.0,
+        "short_stop_loss": 5213.5
       }
     },
     {
@@ -14363,6 +15215,21 @@
         "ma_mid": 311.83,
         "ma_gap_pct": -3.96,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.8,
+        "short_sell_score": 83.0,
+        "close": 299.5,
+        "entry_low": 296.0,
+        "entry_high": 299.5,
+        "stop_loss": 265.3,
+        "target_price": 352.7,
+        "short_entry_low": 298.9,
+        "short_entry_high": 313.39,
+        "short_target": 246.3,
+        "short_stop_loss": 333.7
       }
     },
     {
@@ -14526,6 +15393,12 @@
         "ma_mid": 407.12,
         "ma_gap_pct": -0.28,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 402.5
       }
     },
     {
@@ -14689,6 +15562,12 @@
         "ma_mid": 204.75,
         "ma_gap_pct": -0.37,
         "pe_ratio": 12.28
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 204.0
       }
     },
     {
@@ -14852,6 +15731,21 @@
         "ma_mid": 301.12,
         "ma_gap_pct": -3.53,
         "pe_ratio": 12.66
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.4,
+        "short_sell_score": 62.0,
+        "close": 300.0,
+        "entry_low": 298.0,
+        "entry_high": 300.0,
+        "stop_loss": 281.1,
+        "target_price": 329.4,
+        "short_entry_low": 299.4,
+        "short_entry_high": 306.19,
+        "short_target": 270.6,
+        "short_stop_loss": 318.9
       }
     }
   ],
@@ -15067,6 +15961,21 @@
         "ma_mid": 161.38,
         "ma_gap_pct": 1.32,
         "pe_ratio": 32.12
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.0,
+        "short_sell_score": 10.0,
+        "close": 161.5,
+        "entry_low": 160.5,
+        "entry_high": 162.31,
+        "stop_loss": 154.53,
+        "target_price": 172.35,
+        "short_entry_low": 161.18,
+        "short_entry_high": 164.41,
+        "short_target": 150.65,
+        "short_stop_loss": 169.0
       }
     },
     {
@@ -15280,6 +16189,21 @@
         "ma_mid": 73.3,
         "ma_gap_pct": 0.95,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 86.0,
+        "short_sell_score": 22.0,
+        "close": 73.7,
+        "entry_low": 73.4,
+        "entry_high": 74.07,
+        "stop_loss": 70.96,
+        "target_price": 77.97,
+        "short_entry_low": 73.55,
+        "short_entry_high": 75.03,
+        "short_target": 69.43,
+        "short_stop_loss": 76.44
       }
     },
     {
@@ -15493,6 +16417,12 @@
         "ma_mid": 143.75,
         "ma_gap_pct": 2.26,
         "pe_ratio": 14.13
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 143.0
       }
     },
     {
@@ -15700,6 +16630,12 @@
         "ma_mid": 103.5,
         "ma_gap_pct": 0.48,
         "pe_ratio": 13.11
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 103.0
       }
     },
     {
@@ -15913,6 +16849,21 @@
         "ma_mid": 69.2,
         "ma_gap_pct": 0.58,
         "pe_ratio": 14.15
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 82.9,
+        "short_sell_score": 22.0,
+        "close": 69.2,
+        "entry_low": 68.2,
+        "entry_high": 69.55,
+        "stop_loss": 65.38,
+        "target_price": 75.15,
+        "short_entry_low": 69.06,
+        "short_entry_high": 70.45,
+        "short_target": 63.25,
+        "short_stop_loss": 73.02
       }
     },
     {
@@ -16126,6 +17077,21 @@
         "ma_mid": 88.25,
         "ma_gap_pct": 1.64,
         "pe_ratio": 57.87
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 80.7,
+        "short_sell_score": 22.0,
+        "close": 89.3,
+        "entry_low": 87.7,
+        "entry_high": 89.75,
+        "stop_loss": 83.41,
+        "target_price": 98.47,
+        "short_entry_low": 89.12,
+        "short_entry_high": 90.91,
+        "short_target": 80.13,
+        "short_stop_loss": 95.19
       }
     },
     {
@@ -16290,6 +17256,21 @@
         "ma_mid": 62.27,
         "ma_gap_pct": 1.81,
         "pe_ratio": 18.38
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 80.7,
+        "short_sell_score": 22.0,
+        "close": 62.8,
+        "entry_low": 61.9,
+        "entry_high": 63.11,
+        "stop_loss": 59.33,
+        "target_price": 68.19,
+        "short_entry_low": 62.67,
+        "short_entry_high": 63.93,
+        "short_target": 57.41,
+        "short_stop_loss": 66.27
       }
     },
     {
@@ -16454,6 +17435,12 @@
         "ma_mid": 55.63,
         "ma_gap_pct": 3.0,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 52.1
       }
     },
     {
@@ -16617,6 +17604,12 @@
         "ma_mid": 143.5,
         "ma_gap_pct": -0.7,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 141.0
       }
     },
     {
@@ -16828,6 +17821,21 @@
         "ma_mid": 133.38,
         "ma_gap_pct": -0.28,
         "pe_ratio": 25.14
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 69.6,
+        "short_sell_score": 25.0,
+        "close": 132.5,
+        "entry_low": 132.0,
+        "entry_high": 132.5,
+        "stop_loss": 126.42,
+        "target_price": 141.95,
+        "short_entry_low": 132.24,
+        "short_entry_high": 134.88,
+        "short_target": 123.05,
+        "short_stop_loss": 138.57
       }
     },
     {
@@ -16992,6 +18000,12 @@
         "ma_mid": 125.5,
         "ma_gap_pct": 0.8,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 124.5
       }
     },
     {
@@ -17156,6 +18170,12 @@
         "ma_mid": 188.12,
         "ma_gap_pct": 2.06,
         "pe_ratio": 17.93
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 176.5
       }
     }
   ],
@@ -17371,6 +18391,21 @@
         "ma_mid": 44.62,
         "ma_gap_pct": 0.75,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 56.2,
+        "short_sell_score": 60.0,
+        "close": 44.3,
+        "entry_low": 44.3,
+        "entry_high": 44.3,
+        "stop_loss": 40.43,
+        "target_price": 50.32,
+        "short_entry_low": 44.21,
+        "short_entry_high": 45.1,
+        "short_target": 38.28,
+        "short_stop_loss": 48.17
       }
     },
     {
@@ -17584,6 +18619,21 @@
         "ma_mid": 38.5,
         "ma_gap_pct": 4.68,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 71.6,
+        "short_sell_score": 40.0,
+        "close": 38.95,
+        "entry_low": 37.86,
+        "entry_high": 39.14,
+        "stop_loss": 36.57,
+        "target_price": 42.66,
+        "short_entry_low": 38.87,
+        "short_entry_high": 39.65,
+        "short_target": 35.24,
+        "short_stop_loss": 41.34
       }
     },
     {
@@ -17796,6 +18846,12 @@
         "ma_mid": 19.82,
         "ma_gap_pct": 1.64,
         "pe_ratio": 1007.5
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 19.45
       }
     },
     {
@@ -18009,6 +19065,12 @@
         "ma_mid": 17.5,
         "ma_gap_pct": 4.57,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 16.65
       }
     },
     {
@@ -18222,6 +19284,12 @@
         "ma_mid": 17.98,
         "ma_gap_pct": 4.03,
         "pe_ratio": 8.86
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 17.0
       }
     },
     {
@@ -18435,6 +19503,12 @@
         "ma_mid": 26.37,
         "ma_gap_pct": 5.82,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 26.15
       }
     },
     {
@@ -18599,6 +19673,12 @@
         "ma_mid": 27.43,
         "ma_gap_pct": 1.55,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 26.9
       }
     },
     {
@@ -18763,6 +19843,12 @@
         "ma_mid": 24.13,
         "ma_gap_pct": 6.08,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 23.3
       }
     },
     {
@@ -18927,6 +20013,12 @@
         "ma_mid": 20.17,
         "ma_gap_pct": 3.39,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 19.4
       }
     },
     {
@@ -19092,6 +20184,21 @@
         "ma_mid": 16.45,
         "ma_gap_pct": 8.21,
         "pe_ratio": 32.96
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 75.1,
+        "short_sell_score": 22.0,
+        "close": 16.4,
+        "entry_low": 16.2,
+        "entry_high": 16.48,
+        "stop_loss": 14.96,
+        "target_price": 18.64,
+        "short_entry_low": 16.37,
+        "short_entry_high": 16.7,
+        "short_target": 14.16,
+        "short_stop_loss": 17.84
       }
     },
     {
@@ -19305,6 +20412,21 @@
         "ma_mid": 14.75,
         "ma_gap_pct": 10.85,
         "pe_ratio": 13.86
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 74.4,
+        "short_sell_score": 10.0,
+        "close": 14.9,
+        "entry_low": 14.45,
+        "entry_high": 14.54,
+        "stop_loss": 13.41,
+        "target_price": 17.21,
+        "short_entry_low": 14.87,
+        "short_entry_high": 15.17,
+        "short_target": 12.59,
+        "short_stop_loss": 16.39
       }
     },
     {
@@ -19469,6 +20591,12 @@
         "ma_mid": 11.06,
         "ma_gap_pct": 0.34,
         "pe_ratio": 33.64
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 11.1
       }
     }
   ],
@@ -19684,6 +20812,21 @@
         "ma_mid": 420.12,
         "ma_gap_pct": -10.98,
         "pe_ratio": 25.19
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 29.2,
+        "short_sell_score": 96.0,
+        "close": 404.5,
+        "entry_low": 404.5,
+        "entry_high": 404.5,
+        "stop_loss": 339.02,
+        "target_price": 506.35,
+        "short_entry_low": 403.69,
+        "short_entry_high": 437.68,
+        "short_target": 302.65,
+        "short_stop_loss": 469.98
       }
     },
     {
@@ -19897,6 +21040,12 @@
         "ma_mid": 173.25,
         "ma_gap_pct": -8.23,
         "pe_ratio": 26.32
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 165.5
       }
     },
     {
@@ -20109,6 +21258,21 @@
         "ma_mid": 1037.0,
         "ma_gap_pct": -12.63,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.1,
+        "short_sell_score": 83.0,
+        "close": 1005.0,
+        "entry_low": 1005.0,
+        "entry_high": 1005.0,
+        "stop_loss": 843.0,
+        "target_price": 1257.0,
+        "short_entry_low": 1002.99,
+        "short_entry_high": 1075.35,
+        "short_target": 753.0,
+        "short_stop_loss": 1167.0
       }
     },
     {
@@ -20322,6 +21486,21 @@
         "ma_mid": 56.23,
         "ma_gap_pct": -5.47,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 38.5,
+        "short_sell_score": 96.0,
+        "close": 55.9,
+        "entry_low": 55.8,
+        "entry_high": 55.9,
+        "stop_loss": 52.73,
+        "target_price": 60.83,
+        "short_entry_low": 55.79,
+        "short_entry_high": 57.54,
+        "short_target": 50.97,
+        "short_stop_loss": 59.07
       }
     },
     {
@@ -20535,6 +21714,21 @@
         "ma_mid": 33.38,
         "ma_gap_pct": -5.77,
         "pe_ratio": 6.47
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 36.8,
+        "short_sell_score": 96.0,
+        "close": 32.6,
+        "entry_low": 32.4,
+        "entry_high": 32.6,
+        "stop_loss": 27.49,
+        "target_price": 40.55,
+        "short_entry_low": 32.53,
+        "short_entry_high": 34.19,
+        "short_target": 24.65,
+        "short_stop_loss": 37.71
       }
     },
     {
@@ -20748,6 +21942,21 @@
         "ma_mid": 33.12,
         "ma_gap_pct": -3.43,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 38.5,
+        "short_sell_score": 96.0,
+        "close": 33.03,
+        "entry_low": 33.0,
+        "entry_high": 33.03,
+        "stop_loss": 31.49,
+        "target_price": 35.43,
+        "short_entry_low": 32.96,
+        "short_entry_high": 33.67,
+        "short_target": 30.63,
+        "short_stop_loss": 34.57
       }
     },
     {
@@ -20912,6 +22121,21 @@
         "ma_mid": 31.08,
         "ma_gap_pct": -3.02,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 38.5,
+        "short_sell_score": 92.0,
+        "close": 31.19,
+        "entry_low": 31.18,
+        "entry_high": 31.19,
+        "stop_loss": 29.9,
+        "target_price": 33.2,
+        "short_entry_low": 31.13,
+        "short_entry_high": 31.75,
+        "short_target": 29.18,
+        "short_stop_loss": 32.48
       }
     },
     {
@@ -21076,6 +22300,21 @@
         "ma_mid": 19.0,
         "ma_gap_pct": -2.37,
         "pe_ratio": 463.75
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 65.1,
+        "short_sell_score": 84.0,
+        "close": 18.95,
+        "entry_low": 18.95,
+        "entry_high": 18.95,
+        "stop_loss": 18.13,
+        "target_price": 20.23,
+        "short_entry_low": 18.91,
+        "short_entry_high": 19.29,
+        "short_target": 17.67,
+        "short_stop_loss": 20.0
       }
     },
     {
@@ -21240,6 +22479,21 @@
         "ma_mid": 25.54,
         "ma_gap_pct": -4.94,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 32.2,
+        "short_sell_score": 96.0,
+        "close": 25.14,
+        "entry_low": 25.14,
+        "entry_high": 25.14,
+        "stop_loss": 23.38,
+        "target_price": 27.87,
+        "short_entry_low": 25.09,
+        "short_entry_high": 26.09,
+        "short_target": 22.41,
+        "short_stop_loss": 26.9
       }
     },
     {
@@ -21405,6 +22659,21 @@
         "ma_mid": 170.25,
         "ma_gap_pct": -6.02,
         "pe_ratio": 12.71
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 52.1,
+        "short_sell_score": 96.0,
+        "close": 168.5,
+        "entry_low": 168.0,
+        "entry_high": 168.5,
+        "stop_loss": 155.68,
+        "target_price": 188.45,
+        "short_entry_low": 168.16,
+        "short_entry_high": 174.53,
+        "short_target": 148.55,
+        "short_stop_loss": 181.32
       }
     },
     {
@@ -21617,6 +22886,21 @@
         "ma_mid": 1168.75,
         "ma_gap_pct": -9.73,
         "pe_ratio": 31.68
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.5,
+        "short_sell_score": 96.0,
+        "close": 1130.0,
+        "entry_low": 1120.0,
+        "entry_high": 1130.0,
+        "stop_loss": 943.25,
+        "target_price": 1420.5,
+        "short_entry_low": 1127.74,
+        "short_entry_high": 1212.7,
+        "short_target": 839.5,
+        "short_stop_loss": 1316.75
       }
     },
     {
@@ -21830,6 +23114,21 @@
         "ma_mid": 829.25,
         "ma_gap_pct": -12.33,
         "pe_ratio": 37.63
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.1,
+        "short_sell_score": 96.0,
+        "close": 800.0,
+        "entry_low": 800.0,
+        "entry_high": 800.0,
+        "stop_loss": 650.15,
+        "target_price": 1033.1,
+        "short_entry_low": 798.4,
+        "short_entry_high": 867.65,
+        "short_target": 566.9,
+        "short_stop_loss": 949.85
       }
     }
   ],
@@ -22045,6 +23344,21 @@
         "ma_mid": 161.38,
         "ma_gap_pct": 1.32,
         "pe_ratio": 32.12
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.0,
+        "short_sell_score": 10.0,
+        "close": 161.5,
+        "entry_low": 160.5,
+        "entry_high": 162.31,
+        "stop_loss": 154.53,
+        "target_price": 172.35,
+        "short_entry_low": 161.18,
+        "short_entry_high": 164.41,
+        "short_target": 150.65,
+        "short_stop_loss": 169.0
       }
     },
     {
@@ -22259,6 +23573,21 @@
         "ma_mid": 1232.5,
         "ma_gap_pct": 3.04,
         "pe_ratio": 62.19
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 56.1,
+        "short_sell_score": 53.0,
+        "close": 1185.0,
+        "entry_low": 1185.0,
+        "entry_high": 1185.0,
+        "stop_loss": 1077.0,
+        "target_price": 1353.0,
+        "short_entry_low": 1182.63,
+        "short_entry_high": 1226.1,
+        "short_target": 1017.0,
+        "short_stop_loss": 1293.0
       }
     },
     {
@@ -22471,6 +23800,21 @@
         "ma_mid": 4740.0,
         "ma_gap_pct": -5.49,
         "pe_ratio": 25.82
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.1,
+        "short_sell_score": 73.0,
+        "close": 4525.0,
+        "entry_low": 4520.0,
+        "entry_high": 4525.0,
+        "stop_loss": 3836.5,
+        "target_price": 5596.0,
+        "short_entry_low": 4515.95,
+        "short_entry_high": 4850.8,
+        "short_target": 3454.0,
+        "short_stop_loss": 5213.5
       }
     },
     {
@@ -22683,6 +24027,12 @@
         "ma_mid": 225.88,
         "ma_gap_pct": -9.91,
         "pe_ratio": 17.36
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 220.0
       }
     },
     {
@@ -22895,6 +24245,21 @@
         "ma_mid": 21.01,
         "ma_gap_pct": 0.89,
         "pe_ratio": 9.81
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 82.5,
+        "short_sell_score": 10.0,
+        "close": 21.65,
+        "entry_low": 21.3,
+        "entry_high": 21.61,
+        "stop_loss": 20.57,
+        "target_price": 23.33,
+        "short_entry_low": 21.61,
+        "short_entry_high": 22.04,
+        "short_target": 19.97,
+        "short_stop_loss": 22.73
       }
     },
     {
@@ -23107,6 +24472,12 @@
         "ma_mid": 3923.33,
         "ma_gap_pct": -12.19,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 3725.0
       }
     },
     {
@@ -23270,6 +24641,21 @@
         "ma_mid": 39.04,
         "ma_gap_pct": -7.65,
         "pe_ratio": 46.22
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.5,
+        "short_sell_score": 96.0,
+        "close": 38.0,
+        "entry_low": 37.85,
+        "entry_high": 38.0,
+        "stop_loss": 32.2,
+        "target_price": 47.03,
+        "short_entry_low": 37.92,
+        "short_entry_high": 40.23,
+        "short_target": 28.97,
+        "short_stop_loss": 43.8
       }
     },
     {
@@ -23433,6 +24819,12 @@
         "ma_mid": 163.17,
         "ma_gap_pct": -12.97,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 157.5
       }
     },
     {
@@ -23646,6 +25038,21 @@
         "ma_mid": 44.04,
         "ma_gap_pct": -0.99,
         "pe_ratio": 9.18
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 91.9,
+        "short_sell_score": 10.0,
+        "close": 45.1,
+        "entry_low": 44.65,
+        "entry_high": 45.33,
+        "stop_loss": 42.76,
+        "target_price": 48.74,
+        "short_entry_low": 45.01,
+        "short_entry_high": 45.91,
+        "short_target": 41.46,
+        "short_stop_loss": 47.45
       }
     },
     {
@@ -23809,6 +25216,21 @@
         "ma_mid": 42.06,
         "ma_gap_pct": -2.64,
         "pe_ratio": 19.14
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 65.1,
+        "short_sell_score": 27.0,
+        "close": 42.25,
+        "entry_low": 42.0,
+        "entry_high": 42.25,
+        "stop_loss": 39.73,
+        "target_price": 46.17,
+        "short_entry_low": 42.17,
+        "short_entry_high": 43.01,
+        "short_target": 38.33,
+        "short_stop_loss": 44.77
       }
     }
   ],
@@ -24024,6 +25446,21 @@
         "ma_mid": 2232.5,
         "ma_gap_pct": -4.37,
         "pe_ratio": 24.75
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.4,
+        "short_sell_score": 96.0,
+        "close": 2240.0,
+        "entry_low": 2235.0,
+        "entry_high": 2240.0,
+        "stop_loss": 2138.75,
+        "target_price": 2397.5,
+        "short_entry_low": 2235.52,
+        "short_entry_high": 2280.32,
+        "short_target": 2082.5,
+        "short_stop_loss": 2341.25
       }
     },
     {
@@ -24237,6 +25674,21 @@
         "ma_mid": 97.53,
         "ma_gap_pct": -5.15,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.4,
+        "short_sell_score": 96.0,
+        "close": 97.15,
+        "entry_low": 96.9,
+        "entry_high": 97.15,
+        "stop_loss": 92.11,
+        "target_price": 104.99,
+        "short_entry_low": 96.96,
+        "short_entry_high": 99.7,
+        "short_target": 89.31,
+        "short_stop_loss": 102.19
       }
     },
     {
@@ -24450,6 +25902,21 @@
         "ma_mid": 3560.0,
         "ma_gap_pct": -4.78,
         "pe_ratio": 55.99
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 52.1,
+        "short_sell_score": 96.0,
+        "close": 3460.0,
+        "entry_low": 3450.0,
+        "entry_high": 3460.0,
+        "stop_loss": 2944.75,
+        "target_price": 4261.5,
+        "short_entry_low": 3453.08,
+        "short_entry_high": 3634.75,
+        "short_target": 2658.5,
+        "short_stop_loss": 3975.25
       }
     },
     {
@@ -24662,6 +26129,21 @@
         "ma_mid": 1168.75,
         "ma_gap_pct": -9.73,
         "pe_ratio": 31.68
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.5,
+        "short_sell_score": 96.0,
+        "close": 1130.0,
+        "entry_low": 1120.0,
+        "entry_high": 1130.0,
+        "stop_loss": 943.25,
+        "target_price": 1420.5,
+        "short_entry_low": 1127.74,
+        "short_entry_high": 1212.7,
+        "short_target": 839.5,
+        "short_stop_loss": 1316.75
       }
     },
     {
@@ -24875,6 +26357,21 @@
         "ma_mid": 829.25,
         "ma_gap_pct": -12.33,
         "pe_ratio": 37.63
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.1,
+        "short_sell_score": 96.0,
+        "close": 800.0,
+        "entry_low": 800.0,
+        "entry_high": 800.0,
+        "stop_loss": 650.15,
+        "target_price": 1033.1,
+        "short_entry_low": 798.4,
+        "short_entry_high": 867.65,
+        "short_target": 566.9,
+        "short_stop_loss": 949.85
       }
     },
     {
@@ -25088,6 +26585,21 @@
         "ma_mid": 259.0,
         "ma_gap_pct": -7.53,
         "pe_ratio": 38.63
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.1,
+        "short_sell_score": 96.0,
+        "close": 249.0,
+        "entry_low": 249.0,
+        "entry_high": 249.0,
+        "stop_loss": 208.5,
+        "target_price": 312.0,
+        "short_entry_low": 248.5,
+        "short_entry_high": 266.83,
+        "short_target": 186.0,
+        "short_stop_loss": 289.5
       }
     },
     {
@@ -25252,6 +26764,21 @@
         "ma_mid": 6630.0,
         "ma_gap_pct": -6.41,
         "pe_ratio": 125.35
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 52.1,
+        "short_sell_score": 90.0,
+        "close": 6405.0,
+        "entry_low": 6405.0,
+        "entry_high": 6405.0,
+        "stop_loss": 5352.0,
+        "target_price": 8043.0,
+        "short_entry_low": 6392.19,
+        "short_entry_high": 6805.52,
+        "short_target": 4767.0,
+        "short_stop_loss": 7458.0
       }
     },
     {
@@ -25417,6 +26944,21 @@
         "ma_mid": 4217.5,
         "ma_gap_pct": -9.43,
         "pe_ratio": 40.92
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 33.8,
+        "short_sell_score": 96.0,
+        "close": 4100.0,
+        "entry_low": 4100.0,
+        "entry_high": 4100.0,
+        "stop_loss": 3481.25,
+        "target_price": 5062.5,
+        "short_entry_low": 4091.8,
+        "short_entry_high": 4371.75,
+        "short_target": 3137.5,
+        "short_stop_loss": 4718.75
       }
     },
     {
@@ -25582,6 +27124,21 @@
         "ma_mid": 585.5,
         "ma_gap_pct": -9.99,
         "pe_ratio": 38.13
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.1,
+        "short_sell_score": 96.0,
+        "close": 572.0,
+        "entry_low": 568.0,
+        "entry_high": 572.0,
+        "stop_loss": 495.05,
+        "target_price": 691.7,
+        "short_entry_low": 570.86,
+        "short_entry_high": 608.02,
+        "short_target": 452.3,
+        "short_stop_loss": 648.95
       }
     },
     {
@@ -25794,6 +27351,21 @@
         "ma_mid": 378.5,
         "ma_gap_pct": -9.25,
         "pe_ratio": 6.77
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 29.2,
+        "short_sell_score": 96.0,
+        "close": 360.0,
+        "entry_low": 360.0,
+        "entry_high": 360.0,
+        "stop_loss": 302.4,
+        "target_price": 449.6,
+        "short_entry_low": 359.28,
+        "short_entry_high": 392.12,
+        "short_target": 270.4,
+        "short_stop_loss": 417.6
       }
     }
   ],
@@ -26009,6 +27581,21 @@
         "ma_mid": 420.12,
         "ma_gap_pct": -10.98,
         "pe_ratio": 25.19
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 29.2,
+        "short_sell_score": 96.0,
+        "close": 404.5,
+        "entry_low": 404.5,
+        "entry_high": 404.5,
+        "stop_loss": 339.02,
+        "target_price": 506.35,
+        "short_entry_low": 403.69,
+        "short_entry_high": 437.68,
+        "short_target": 302.65,
+        "short_stop_loss": 469.98
       }
     },
     {
@@ -26222,6 +27809,12 @@
         "ma_mid": 173.25,
         "ma_gap_pct": -8.23,
         "pe_ratio": 26.32
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 165.5
       }
     },
     {
@@ -26434,6 +28027,21 @@
         "ma_mid": 1037.0,
         "ma_gap_pct": -12.63,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.1,
+        "short_sell_score": 83.0,
+        "close": 1005.0,
+        "entry_low": 1005.0,
+        "entry_high": 1005.0,
+        "stop_loss": 843.0,
+        "target_price": 1257.0,
+        "short_entry_low": 1002.99,
+        "short_entry_high": 1075.35,
+        "short_target": 753.0,
+        "short_stop_loss": 1167.0
       }
     },
     {
@@ -26647,6 +28255,21 @@
         "ma_mid": 56.23,
         "ma_gap_pct": -5.47,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 38.5,
+        "short_sell_score": 96.0,
+        "close": 55.9,
+        "entry_low": 55.8,
+        "entry_high": 55.9,
+        "stop_loss": 52.73,
+        "target_price": 60.83,
+        "short_entry_low": 55.79,
+        "short_entry_high": 57.54,
+        "short_target": 50.97,
+        "short_stop_loss": 59.07
       }
     },
     {
@@ -26860,6 +28483,21 @@
         "ma_mid": 33.38,
         "ma_gap_pct": -5.77,
         "pe_ratio": 6.47
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 36.8,
+        "short_sell_score": 96.0,
+        "close": 32.6,
+        "entry_low": 32.4,
+        "entry_high": 32.6,
+        "stop_loss": 27.49,
+        "target_price": 40.55,
+        "short_entry_low": 32.53,
+        "short_entry_high": 34.19,
+        "short_target": 24.65,
+        "short_stop_loss": 37.71
       }
     },
     {
@@ -27073,6 +28711,21 @@
         "ma_mid": 33.12,
         "ma_gap_pct": -3.43,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 38.5,
+        "short_sell_score": 96.0,
+        "close": 33.03,
+        "entry_low": 33.0,
+        "entry_high": 33.03,
+        "stop_loss": 31.49,
+        "target_price": 35.43,
+        "short_entry_low": 32.96,
+        "short_entry_high": 33.67,
+        "short_target": 30.63,
+        "short_stop_loss": 34.57
       }
     },
     {
@@ -27237,6 +28890,21 @@
         "ma_mid": 31.08,
         "ma_gap_pct": -3.02,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 38.5,
+        "short_sell_score": 92.0,
+        "close": 31.19,
+        "entry_low": 31.18,
+        "entry_high": 31.19,
+        "stop_loss": 29.9,
+        "target_price": 33.2,
+        "short_entry_low": 31.13,
+        "short_entry_high": 31.75,
+        "short_target": 29.18,
+        "short_stop_loss": 32.48
       }
     },
     {
@@ -27401,6 +29069,21 @@
         "ma_mid": 19.0,
         "ma_gap_pct": -2.37,
         "pe_ratio": 463.75
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 65.1,
+        "short_sell_score": 84.0,
+        "close": 18.95,
+        "entry_low": 18.95,
+        "entry_high": 18.95,
+        "stop_loss": 18.13,
+        "target_price": 20.23,
+        "short_entry_low": 18.91,
+        "short_entry_high": 19.29,
+        "short_target": 17.67,
+        "short_stop_loss": 20.0
       }
     }
   ],
@@ -27615,6 +29298,21 @@
         "ma_mid": 378.5,
         "ma_gap_pct": -9.25,
         "pe_ratio": 6.77
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 29.2,
+        "short_sell_score": 96.0,
+        "close": 360.0,
+        "entry_low": 360.0,
+        "entry_high": 360.0,
+        "stop_loss": 302.4,
+        "target_price": 449.6,
+        "short_entry_low": 359.28,
+        "short_entry_high": 392.12,
+        "short_target": 270.4,
+        "short_stop_loss": 417.6
       }
     },
     "2891": {
@@ -27826,6 +29524,21 @@
         "ma_mid": 73.92,
         "ma_gap_pct": -0.71,
         "pe_ratio": 17.56
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.8,
+        "short_sell_score": 10.0,
+        "close": 74.9,
+        "entry_low": 73.73,
+        "entry_high": 75.27,
+        "stop_loss": 70.81,
+        "target_price": 81.27,
+        "short_entry_low": 74.75,
+        "short_entry_high": 76.25,
+        "short_target": 68.53,
+        "short_stop_loss": 79.0
       }
     },
     "2317": {
@@ -28039,6 +29752,21 @@
         "ma_mid": 236.25,
         "ma_gap_pct": -4.97,
         "pe_ratio": 14.8
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.4,
+        "short_sell_score": 96.0,
+        "close": 235.0,
+        "entry_low": 234.0,
+        "entry_high": 235.0,
+        "stop_loss": 219.47,
+        "target_price": 259.15,
+        "short_entry_low": 234.53,
+        "short_entry_high": 241.37,
+        "short_target": 210.85,
+        "short_stop_loss": 250.53
       }
     },
     "2412": {
@@ -28252,6 +29980,21 @@
         "ma_mid": 161.38,
         "ma_gap_pct": 1.32,
         "pe_ratio": 32.12
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.0,
+        "short_sell_score": 10.0,
+        "close": 161.5,
+        "entry_low": 160.5,
+        "entry_high": 162.31,
+        "stop_loss": 154.53,
+        "target_price": 172.35,
+        "short_entry_low": 161.18,
+        "short_entry_high": 164.41,
+        "short_target": 150.65,
+        "short_stop_loss": 169.0
       }
     },
     "2330": {
@@ -28465,6 +30208,21 @@
         "ma_mid": 2232.5,
         "ma_gap_pct": -4.37,
         "pe_ratio": 24.75
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.4,
+        "short_sell_score": 96.0,
+        "close": 2240.0,
+        "entry_low": 2235.0,
+        "entry_high": 2240.0,
+        "stop_loss": 2138.75,
+        "target_price": 2397.5,
+        "short_entry_low": 2235.52,
+        "short_entry_high": 2280.32,
+        "short_target": 2082.5,
+        "short_stop_loss": 2341.25
       }
     },
     "6446": {
@@ -28679,6 +30437,21 @@
         "ma_mid": 1232.5,
         "ma_gap_pct": 3.04,
         "pe_ratio": 62.19
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 56.1,
+        "short_sell_score": 53.0,
+        "close": 1185.0,
+        "entry_low": 1185.0,
+        "entry_high": 1185.0,
+        "stop_loss": 1077.0,
+        "target_price": 1353.0,
+        "short_entry_low": 1182.63,
+        "short_entry_high": 1226.1,
+        "short_target": 1017.0,
+        "short_stop_loss": 1293.0
       }
     },
     "3031": {
@@ -28891,6 +30664,21 @@
         "ma_mid": 31.11,
         "ma_gap_pct": -6.79,
         "pe_ratio": 31.87
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 39.0,
+        "short_sell_score": 84.0,
+        "close": 30.3,
+        "entry_low": 30.3,
+        "entry_high": 30.3,
+        "stop_loss": 25.66,
+        "target_price": 37.51,
+        "short_entry_low": 30.24,
+        "short_entry_high": 31.98,
+        "short_target": 23.09,
+        "short_stop_loss": 34.94
       }
     },
     "2454": {
@@ -29104,6 +30892,21 @@
         "ma_mid": 3560.0,
         "ma_gap_pct": -4.78,
         "pe_ratio": 55.99
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 52.1,
+        "short_sell_score": 96.0,
+        "close": 3460.0,
+        "entry_low": 3450.0,
+        "entry_high": 3460.0,
+        "stop_loss": 2944.75,
+        "target_price": 4261.5,
+        "short_entry_low": 3453.08,
+        "short_entry_high": 3634.75,
+        "short_target": 2658.5,
+        "short_stop_loss": 3975.25
       }
     },
     "6757": {
@@ -29317,6 +31120,21 @@
         "ma_mid": 54.62,
         "ma_gap_pct": -0.78,
         "pe_ratio": 9.41
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 80.7,
+        "short_sell_score": 22.0,
+        "close": 55.4,
+        "entry_low": 54.7,
+        "entry_high": 55.68,
+        "stop_loss": 51.76,
+        "target_price": 61.07,
+        "short_entry_low": 55.29,
+        "short_entry_high": 56.4,
+        "short_target": 49.73,
+        "short_stop_loss": 59.04
       }
     },
     "2603": {
@@ -29530,6 +31348,21 @@
         "ma_mid": 260.0,
         "ma_gap_pct": -5.19,
         "pe_ratio": 9.77
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 65.1,
+        "short_sell_score": 91.0,
+        "close": 259.0,
+        "entry_low": 257.0,
+        "entry_high": 259.0,
+        "stop_loss": 243.47,
+        "target_price": 283.15,
+        "short_entry_low": 258.48,
+        "short_entry_high": 265.82,
+        "short_target": 234.85,
+        "short_stop_loss": 274.52
       }
     },
     "2618": {
@@ -29743,6 +31576,21 @@
         "ma_mid": 44.04,
         "ma_gap_pct": -0.99,
         "pe_ratio": 9.18
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 91.9,
+        "short_sell_score": 10.0,
+        "close": 45.1,
+        "entry_low": 44.65,
+        "entry_high": 45.33,
+        "stop_loss": 42.76,
+        "target_price": 48.74,
+        "short_entry_low": 45.01,
+        "short_entry_high": 45.91,
+        "short_target": 41.46,
+        "short_stop_loss": 47.45
       }
     },
     "1476": {
@@ -29956,6 +31804,21 @@
         "ma_mid": 328.0,
         "ma_gap_pct": 5.64,
         "pe_ratio": 14.16
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 88.4,
+        "short_sell_score": 10.0,
+        "close": 339.5,
+        "entry_low": 320.22,
+        "entry_high": 332.23,
+        "stop_loss": 312.25,
+        "target_price": 376.95,
+        "short_entry_low": 338.82,
+        "short_entry_high": 345.61,
+        "short_target": 302.05,
+        "short_stop_loss": 363.57
       }
     },
     "6669": {
@@ -30168,6 +32031,21 @@
         "ma_mid": 1690.0,
         "ma_gap_pct": -7.99,
         "pe_ratio": 4.99
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 57.9,
+        "short_sell_score": 51.0,
+        "close": 1650.0,
+        "entry_low": 1640.0,
+        "entry_high": 1650.0,
+        "stop_loss": 1485.75,
+        "target_price": 1905.5,
+        "short_entry_low": 1646.7,
+        "short_entry_high": 1743.67,
+        "short_target": 1394.5,
+        "short_stop_loss": 1814.25
       }
     },
     "1802": {
@@ -30380,6 +32258,21 @@
         "ma_mid": 63.08,
         "ma_gap_pct": -8.36,
         "pe_ratio": 34.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 36.8,
+        "short_sell_score": 90.0,
+        "close": 60.1,
+        "entry_low": 60.1,
+        "entry_high": 60.1,
+        "stop_loss": 49.62,
+        "target_price": 76.41,
+        "short_entry_low": 59.98,
+        "short_entry_high": 65.16,
+        "short_target": 43.79,
+        "short_stop_loss": 70.58
       }
     },
     "2501": {
@@ -30592,6 +32485,21 @@
         "ma_mid": 20.41,
         "ma_gap_pct": 0.43,
         "pe_ratio": 7.14
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 87.4,
+        "short_sell_score": 22.0,
+        "close": 21.05,
+        "entry_low": 20.6,
+        "entry_high": 21.05,
+        "stop_loss": 20.08,
+        "target_price": 22.56,
+        "short_entry_low": 21.01,
+        "short_entry_high": 21.43,
+        "short_target": 19.54,
+        "short_stop_loss": 22.02
       }
     },
     "3533": {
@@ -30804,6 +32712,21 @@
         "ma_mid": 1700.0,
         "ma_gap_pct": -6.76,
         "pe_ratio": 19.32
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 47.1,
+        "short_sell_score": 66.0,
+        "close": 1660.0,
+        "entry_low": 1640.0,
+        "entry_high": 1660.0,
+        "stop_loss": 1441.75,
+        "target_price": 1999.5,
+        "short_entry_low": 1656.68,
+        "short_entry_high": 1747.02,
+        "short_target": 1320.5,
+        "short_stop_loss": 1878.25
       }
     },
     "9910": {
@@ -31017,6 +32940,21 @@
         "ma_mid": 69.2,
         "ma_gap_pct": 0.58,
         "pe_ratio": 14.15
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 82.9,
+        "short_sell_score": 22.0,
+        "close": 69.2,
+        "entry_low": 68.2,
+        "entry_high": 69.55,
+        "stop_loss": 65.38,
+        "target_price": 75.15,
+        "short_entry_low": 69.06,
+        "short_entry_high": 70.45,
+        "short_target": 63.25,
+        "short_stop_loss": 73.02
       }
     },
     "3045": {
@@ -31228,6 +33166,21 @@
         "ma_mid": 133.38,
         "ma_gap_pct": -0.28,
         "pe_ratio": 25.14
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 69.6,
+        "short_sell_score": 25.0,
+        "close": 132.5,
+        "entry_low": 132.0,
+        "entry_high": 132.5,
+        "stop_loss": 126.42,
+        "target_price": 141.95,
+        "short_entry_low": 132.24,
+        "short_entry_high": 134.88,
+        "short_target": 123.05,
+        "short_stop_loss": 138.57
       }
     },
     "6472": {
@@ -31441,6 +33394,21 @@
         "ma_mid": 381.75,
         "ma_gap_pct": 4.65,
         "pe_ratio": 32.93
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 70.9,
+        "short_sell_score": 10.0,
+        "close": 389.0,
+        "entry_low": 377.5,
+        "entry_high": 386.31,
+        "stop_loss": 357.95,
+        "target_price": 437.3,
+        "short_entry_low": 388.22,
+        "short_entry_high": 396.0,
+        "short_target": 340.7,
+        "short_stop_loss": 420.05
       }
     },
     "1416": {
@@ -31654,6 +33622,21 @@
         "ma_mid": 14.75,
         "ma_gap_pct": 10.85,
         "pe_ratio": 13.86
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 74.4,
+        "short_sell_score": 10.0,
+        "close": 14.9,
+        "entry_low": 14.45,
+        "entry_high": 14.54,
+        "stop_loss": 13.41,
+        "target_price": 17.21,
+        "short_entry_low": 14.87,
+        "short_entry_high": 15.17,
+        "short_target": 12.59,
+        "short_stop_loss": 16.39
       }
     },
     "2886": {
@@ -31866,6 +33849,21 @@
         "ma_mid": 53.55,
         "ma_gap_pct": -0.09,
         "pe_ratio": 20.82
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 85.0,
+        "short_sell_score": 10.0,
+        "close": 54.0,
+        "entry_low": 53.4,
+        "entry_high": 54.27,
+        "stop_loss": 50.4,
+        "target_price": 59.6,
+        "short_entry_low": 53.89,
+        "short_entry_high": 54.97,
+        "short_target": 48.4,
+        "short_stop_loss": 57.6
       }
     },
     "6890": {
@@ -32079,6 +34077,12 @@
         "ma_mid": 143.75,
         "ma_gap_pct": 2.26,
         "pe_ratio": 14.13
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 143.0
       }
     },
     "2247": {
@@ -32292,6 +34296,12 @@
         "ma_mid": 216.88,
         "ma_gap_pct": 0.52,
         "pe_ratio": 15.73
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 215.0
       }
     },
     "1215": {
@@ -32499,6 +34509,12 @@
         "ma_mid": 103.5,
         "ma_gap_pct": 0.48,
         "pe_ratio": 13.11
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 103.0
       }
     },
     "5904": {
@@ -32712,6 +34728,21 @@
         "ma_mid": 73.3,
         "ma_gap_pct": 0.95,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 86.0,
+        "short_sell_score": 22.0,
+        "close": 73.7,
+        "entry_low": 73.4,
+        "entry_high": 74.07,
+        "stop_loss": 70.96,
+        "target_price": 77.97,
+        "short_entry_low": 73.55,
+        "short_entry_high": 75.03,
+        "short_target": 69.43,
+        "short_stop_loss": 76.44
       }
     },
     "6782": {
@@ -32924,6 +34955,21 @@
         "ma_mid": 263.5,
         "ma_gap_pct": 4.17,
         "pe_ratio": 14.64
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 71.6,
+        "short_sell_score": 40.0,
+        "close": 265.5,
+        "entry_low": 258.53,
+        "entry_high": 266.83,
+        "stop_loss": 243.68,
+        "target_price": 299.45,
+        "short_entry_low": 264.97,
+        "short_entry_high": 270.28,
+        "short_target": 231.55,
+        "short_stop_loss": 287.32
       }
     },
     "4904": {
@@ -33135,6 +35181,21 @@
         "ma_mid": 112.75,
         "ma_gap_pct": -0.67,
         "pe_ratio": 27.25
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 69.6,
+        "short_sell_score": 33.0,
+        "close": 112.5,
+        "entry_low": 112.0,
+        "entry_high": 112.5,
+        "stop_loss": 106.65,
+        "target_price": 121.6,
+        "short_entry_low": 112.28,
+        "short_entry_high": 114.53,
+        "short_target": 103.4,
+        "short_stop_loss": 118.75
       }
     },
     "2466": {
@@ -33348,6 +35409,12 @@
         "ma_mid": 317.25,
         "ma_gap_pct": -5.75,
         "pe_ratio": 190.45
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 297.5
       }
     },
     "4743": {
@@ -33561,6 +35628,21 @@
         "ma_mid": 44.62,
         "ma_gap_pct": 0.75,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 56.2,
+        "short_sell_score": 60.0,
+        "close": 44.3,
+        "entry_low": 44.3,
+        "entry_high": 44.3,
+        "stop_loss": 40.43,
+        "target_price": 50.32,
+        "short_entry_low": 44.21,
+        "short_entry_high": 45.1,
+        "short_target": 38.28,
+        "short_stop_loss": 48.17
       }
     },
     "6180": {
@@ -33774,6 +35856,21 @@
         "ma_mid": 38.5,
         "ma_gap_pct": 4.68,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 71.6,
+        "short_sell_score": 40.0,
+        "close": 38.95,
+        "entry_low": 37.86,
+        "entry_high": 39.14,
+        "stop_loss": 36.57,
+        "target_price": 42.66,
+        "short_entry_low": 38.87,
+        "short_entry_high": 39.65,
+        "short_target": 35.24,
+        "short_stop_loss": 41.34
       }
     },
     "1789": {
@@ -33986,6 +36083,12 @@
         "ma_mid": 19.82,
         "ma_gap_pct": 1.64,
         "pe_ratio": 1007.5
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 19.45
       }
     },
     "9921": {
@@ -34199,6 +36302,21 @@
         "ma_mid": 88.25,
         "ma_gap_pct": 1.64,
         "pe_ratio": 57.87
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 80.7,
+        "short_sell_score": 22.0,
+        "close": 89.3,
+        "entry_low": 87.7,
+        "entry_high": 89.75,
+        "stop_loss": 83.41,
+        "target_price": 98.47,
+        "short_entry_low": 89.12,
+        "short_entry_high": 90.91,
+        "short_target": 80.13,
+        "short_stop_loss": 95.19
       }
     },
     "2313": {
@@ -34412,6 +36530,12 @@
         "ma_mid": 173.25,
         "ma_gap_pct": -8.23,
         "pe_ratio": 26.32
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 165.5
       }
     },
     "0052": {
@@ -34625,6 +36749,21 @@
         "ma_mid": 56.23,
         "ma_gap_pct": -5.47,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 38.5,
+        "short_sell_score": 96.0,
+        "close": 55.9,
+        "entry_low": 55.8,
+        "entry_high": 55.9,
+        "stop_loss": 52.73,
+        "target_price": 60.83,
+        "short_entry_low": 55.79,
+        "short_entry_high": 57.54,
+        "short_target": 50.97,
+        "short_stop_loss": 59.07
       }
     },
     "2327": {
@@ -34838,6 +36977,21 @@
         "ma_mid": 420.12,
         "ma_gap_pct": -10.98,
         "pe_ratio": 25.19
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 29.2,
+        "short_sell_score": 96.0,
+        "close": 404.5,
+        "entry_low": 404.5,
+        "entry_high": 404.5,
+        "stop_loss": 339.02,
+        "target_price": 506.35,
+        "short_entry_low": 403.69,
+        "short_entry_high": 437.68,
+        "short_target": 302.65,
+        "short_stop_loss": 469.98
       }
     },
     "6152": {
@@ -35051,6 +37205,12 @@
         "ma_mid": 17.98,
         "ma_gap_pct": 4.03,
         "pe_ratio": 8.86
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 17.0
       }
     },
     "5202": {
@@ -35264,6 +37424,12 @@
         "ma_mid": 17.5,
         "ma_gap_pct": 4.57,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 16.65
       }
     },
     "00878": {
@@ -35477,6 +37643,21 @@
         "ma_mid": 33.12,
         "ma_gap_pct": -3.43,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 38.5,
+        "short_sell_score": 96.0,
+        "close": 33.03,
+        "entry_low": 33.0,
+        "entry_high": 33.03,
+        "stop_loss": 31.49,
+        "target_price": 35.43,
+        "short_entry_low": 32.96,
+        "short_entry_high": 33.67,
+        "short_target": 30.63,
+        "short_stop_loss": 34.57
       }
     },
     "2610": {
@@ -35689,6 +37870,21 @@
         "ma_mid": 21.01,
         "ma_gap_pct": 0.89,
         "pe_ratio": 9.81
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 82.5,
+        "short_sell_score": 10.0,
+        "close": 21.65,
+        "entry_low": 21.3,
+        "entry_high": 21.61,
+        "stop_loss": 20.57,
+        "target_price": 23.33,
+        "short_entry_low": 21.61,
+        "short_entry_high": 22.04,
+        "short_target": 19.97,
+        "short_stop_loss": 22.73
       }
     },
     "6223": {
@@ -35901,6 +38097,12 @@
         "ma_mid": 3923.33,
         "ma_gap_pct": -12.19,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 3725.0
       }
     },
     "3685": {
@@ -36114,6 +38316,12 @@
         "ma_mid": 26.37,
         "ma_gap_pct": 5.82,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 26.15
       }
     },
     "3008": {
@@ -36326,6 +38534,21 @@
         "ma_mid": 4740.0,
         "ma_gap_pct": -5.49,
         "pe_ratio": 25.82
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.1,
+        "short_sell_score": 73.0,
+        "close": 4525.0,
+        "entry_low": 4520.0,
+        "entry_high": 4525.0,
+        "stop_loss": 3836.5,
+        "target_price": 5596.0,
+        "short_entry_low": 4515.95,
+        "short_entry_high": 4850.8,
+        "short_target": 3454.0,
+        "short_stop_loss": 5213.5
       }
     },
     "6239": {
@@ -36538,6 +38761,12 @@
         "ma_mid": 225.88,
         "ma_gap_pct": -9.91,
         "pe_ratio": 17.36
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 220.0
       }
     },
     "0050": {
@@ -36751,6 +38980,21 @@
         "ma_mid": 97.53,
         "ma_gap_pct": -5.15,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.4,
+        "short_sell_score": 96.0,
+        "close": 97.15,
+        "entry_low": 96.9,
+        "entry_high": 97.15,
+        "stop_loss": 92.11,
+        "target_price": 104.99,
+        "short_entry_low": 96.96,
+        "short_entry_high": 99.7,
+        "short_target": 89.31,
+        "short_stop_loss": 102.19
       }
     },
     "2308": {
@@ -36963,6 +39207,21 @@
         "ma_mid": 1168.75,
         "ma_gap_pct": -9.73,
         "pe_ratio": 31.68
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.5,
+        "short_sell_score": 96.0,
+        "close": 1130.0,
+        "entry_low": 1120.0,
+        "entry_high": 1130.0,
+        "stop_loss": 943.25,
+        "target_price": 1420.5,
+        "short_entry_low": 1127.74,
+        "short_entry_high": 1212.7,
+        "short_target": 839.5,
+        "short_stop_loss": 1316.75
       }
     },
     "3037": {
@@ -37176,6 +39435,21 @@
         "ma_mid": 829.25,
         "ma_gap_pct": -12.33,
         "pe_ratio": 37.63
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.1,
+        "short_sell_score": 96.0,
+        "close": 800.0,
+        "entry_low": 800.0,
+        "entry_high": 800.0,
+        "stop_loss": 650.15,
+        "target_price": 1033.1,
+        "short_entry_low": 798.4,
+        "short_entry_high": 867.65,
+        "short_target": 566.9,
+        "short_stop_loss": 949.85
       }
     },
     "1303": {
@@ -37389,6 +39663,21 @@
         "ma_mid": 259.0,
         "ma_gap_pct": -7.53,
         "pe_ratio": 38.63
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.1,
+        "short_sell_score": 96.0,
+        "close": 249.0,
+        "entry_low": 249.0,
+        "entry_high": 249.0,
+        "stop_loss": 208.5,
+        "target_price": 312.0,
+        "short_entry_low": 248.5,
+        "short_entry_high": 266.83,
+        "short_target": 186.0,
+        "short_stop_loss": 289.5
       }
     },
     "1605": {
@@ -37602,6 +39891,21 @@
         "ma_mid": 33.38,
         "ma_gap_pct": -5.77,
         "pe_ratio": 6.47
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 36.8,
+        "short_sell_score": 96.0,
+        "close": 32.6,
+        "entry_low": 32.4,
+        "entry_high": 32.6,
+        "stop_loss": 27.49,
+        "target_price": 40.55,
+        "short_entry_low": 32.53,
+        "short_entry_high": 34.19,
+        "short_target": 24.65,
+        "short_stop_loss": 37.71
       }
     },
     "6274": {
@@ -37814,6 +40118,21 @@
         "ma_mid": 1037.0,
         "ma_gap_pct": -12.63,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.1,
+        "short_sell_score": 83.0,
+        "close": 1005.0,
+        "entry_low": 1005.0,
+        "entry_high": 1005.0,
+        "stop_loss": 843.0,
+        "target_price": 1257.0,
+        "short_entry_low": 1002.99,
+        "short_entry_high": 1075.35,
+        "short_target": 753.0,
+        "short_stop_loss": 1167.0
       }
     },
     "0056": {
@@ -37978,6 +40297,21 @@
         "ma_mid": 52.02,
         "ma_gap_pct": -4.05,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.4,
+        "short_sell_score": 96.0,
+        "close": 51.55,
+        "entry_low": 51.4,
+        "entry_high": 51.55,
+        "stop_loss": 48.53,
+        "target_price": 56.24,
+        "short_entry_low": 51.45,
+        "short_entry_high": 52.98,
+        "short_target": 46.86,
+        "short_stop_loss": 54.57
       }
     },
     "00919": {
@@ -38142,6 +40476,21 @@
         "ma_mid": 31.08,
         "ma_gap_pct": -3.02,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 38.5,
+        "short_sell_score": 92.0,
+        "close": 31.19,
+        "entry_low": 31.18,
+        "entry_high": 31.19,
+        "stop_loss": 29.9,
+        "target_price": 33.2,
+        "short_entry_low": 31.13,
+        "short_entry_high": 31.75,
+        "short_target": 29.18,
+        "short_stop_loss": 32.48
       }
     },
     "00929": {
@@ -38306,6 +40655,21 @@
         "ma_mid": 25.54,
         "ma_gap_pct": -4.94,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 32.2,
+        "short_sell_score": 96.0,
+        "close": 25.14,
+        "entry_low": 25.14,
+        "entry_high": 25.14,
+        "stop_loss": 23.38,
+        "target_price": 27.87,
+        "short_entry_low": 25.09,
+        "short_entry_high": 26.09,
+        "short_target": 22.41,
+        "short_stop_loss": 26.9
       }
     },
     "2382": {
@@ -38469,6 +40833,21 @@
         "ma_mid": 301.12,
         "ma_gap_pct": -3.53,
         "pe_ratio": 12.66
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.4,
+        "short_sell_score": 62.0,
+        "close": 300.0,
+        "entry_low": 298.0,
+        "entry_high": 300.0,
+        "stop_loss": 281.1,
+        "target_price": 329.4,
+        "short_entry_low": 299.4,
+        "short_entry_high": 306.19,
+        "short_target": 270.6,
+        "short_stop_loss": 318.9
       }
     },
     "3231": {
@@ -38634,6 +41013,21 @@
         "ma_mid": 170.25,
         "ma_gap_pct": -6.02,
         "pe_ratio": 12.71
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 52.1,
+        "short_sell_score": 96.0,
+        "close": 168.5,
+        "entry_low": 168.0,
+        "entry_high": 168.5,
+        "stop_loss": 155.68,
+        "target_price": 188.45,
+        "short_entry_low": 168.16,
+        "short_entry_high": 174.53,
+        "short_target": 148.55,
+        "short_stop_loss": 181.32
       }
     },
     "2356": {
@@ -38797,6 +41191,21 @@
         "ma_mid": 55.3,
         "ma_gap_pct": -4.88,
         "pe_ratio": 16.97
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 65.1,
+        "short_sell_score": 73.0,
+        "close": 55.0,
+        "entry_low": 54.9,
+        "entry_high": 55.0,
+        "stop_loss": 50.46,
+        "target_price": 62.07,
+        "short_entry_low": 54.89,
+        "short_entry_high": 56.48,
+        "short_target": 47.93,
+        "short_stop_loss": 59.54
       }
     },
     "2376": {
@@ -38960,6 +41369,21 @@
         "ma_mid": 315.62,
         "ma_gap_pct": -5.58,
         "pe_ratio": 11.15
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 61.5,
+        "short_sell_score": 48.0,
+        "close": 313.0,
+        "entry_low": 313.0,
+        "entry_high": 313.0,
+        "stop_loss": 290.95,
+        "target_price": 347.3,
+        "short_entry_low": 312.37,
+        "short_entry_high": 323.11,
+        "short_target": 278.7,
+        "short_stop_loss": 335.05
       }
     },
     "3017": {
@@ -39123,6 +41547,21 @@
         "ma_mid": 2657.5,
         "ma_gap_pct": -13.08,
         "pe_ratio": 30.79
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.5,
+        "short_sell_score": 66.0,
+        "close": 2565.0,
+        "entry_low": 2545.0,
+        "entry_high": 2565.0,
+        "stop_loss": 2189.25,
+        "target_price": 3149.5,
+        "short_entry_low": 2559.87,
+        "short_entry_high": 2787.2,
+        "short_target": 1980.5,
+        "short_stop_loss": 2940.75
       }
     },
     "3324": {
@@ -39286,6 +41725,21 @@
         "ma_mid": 1225.0,
         "ma_gap_pct": -13.88,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 29.2,
+        "short_sell_score": 96.0,
+        "close": 1170.0,
+        "entry_low": 1170.0,
+        "entry_high": 1170.0,
+        "stop_loss": 940.5,
+        "target_price": 1527.0,
+        "short_entry_low": 1167.66,
+        "short_entry_high": 1269.65,
+        "short_target": 813.0,
+        "short_stop_loss": 1399.5
       }
     },
     "2303": {
@@ -39450,6 +41904,21 @@
         "ma_mid": 99.72,
         "ma_gap_pct": -7.75,
         "pe_ratio": 13.59
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 47.5,
+        "short_sell_score": 96.0,
+        "close": 98.4,
+        "entry_low": 97.9,
+        "entry_high": 98.4,
+        "stop_loss": 87.11,
+        "target_price": 115.97,
+        "short_entry_low": 98.2,
+        "short_entry_high": 102.81,
+        "short_target": 80.83,
+        "short_stop_loss": 109.7
       }
     },
     "3711": {
@@ -39615,6 +42084,21 @@
         "ma_mid": 585.5,
         "ma_gap_pct": -9.99,
         "pe_ratio": 38.13
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.1,
+        "short_sell_score": 96.0,
+        "close": 572.0,
+        "entry_low": 568.0,
+        "entry_high": 572.0,
+        "stop_loss": 495.05,
+        "target_price": 691.7,
+        "short_entry_low": 570.86,
+        "short_entry_high": 608.02,
+        "short_target": 452.3,
+        "short_stop_loss": 648.95
       }
     },
     "2449": {
@@ -39779,6 +42263,21 @@
         "ma_mid": 234.12,
         "ma_gap_pct": -12.01,
         "pe_ratio": 27.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.1,
+        "short_sell_score": 96.0,
+        "close": 228.5,
+        "entry_low": 225.07,
+        "entry_high": 228.5,
+        "stop_loss": 198.12,
+        "target_price": 275.75,
+        "short_entry_low": 228.04,
+        "short_entry_high": 244.72,
+        "short_target": 181.25,
+        "short_stop_loss": 258.88
       }
     },
     "3661": {
@@ -39943,6 +42442,21 @@
         "ma_mid": 3027.5,
         "ma_gap_pct": -6.52,
         "pe_ratio": 41.51
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 32.2,
+        "short_sell_score": 96.0,
+        "close": 2960.0,
+        "entry_low": 2915.6,
+        "entry_high": 2960.0,
+        "stop_loss": 2559.5,
+        "target_price": 3583.0,
+        "short_entry_low": 2954.08,
+        "short_entry_high": 3108.8,
+        "short_target": 2337.0,
+        "short_stop_loss": 3360.5
       }
     },
     "3443": {
@@ -40107,6 +42621,21 @@
         "ma_mid": 6630.0,
         "ma_gap_pct": -6.41,
         "pe_ratio": 125.35
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 52.1,
+        "short_sell_score": 90.0,
+        "close": 6405.0,
+        "entry_low": 6405.0,
+        "entry_high": 6405.0,
+        "stop_loss": 5352.0,
+        "target_price": 8043.0,
+        "short_entry_low": 6392.19,
+        "short_entry_high": 6805.52,
+        "short_target": 4767.0,
+        "short_stop_loss": 7458.0
       }
     },
     "5274": {
@@ -40270,6 +42799,21 @@
         "ma_mid": 13380.0,
         "ma_gap_pct": -14.99,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 55.8,
+        "short_sell_score": 51.0,
+        "close": 12635.0,
+        "entry_low": 12635.0,
+        "entry_high": 12635.0,
+        "stop_loss": 10479.5,
+        "target_price": 15988.0,
+        "short_entry_low": 12609.73,
+        "short_entry_high": 13869.0,
+        "short_target": 9282.0,
+        "short_stop_loss": 14790.5
       }
     },
     "8299": {
@@ -40433,6 +42977,21 @@
         "ma_mid": 1633.33,
         "ma_gap_pct": -8.16,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 29.2,
+        "short_sell_score": 96.0,
+        "close": 1560.0,
+        "entry_low": 1550.0,
+        "entry_high": 1560.0,
+        "stop_loss": 1326.0,
+        "target_price": 1924.0,
+        "short_entry_low": 1556.88,
+        "short_entry_high": 1661.6,
+        "short_target": 1196.0,
+        "short_stop_loss": 1794.0
       }
     },
     "3260": {
@@ -40596,6 +43155,21 @@
         "ma_mid": 311.83,
         "ma_gap_pct": -3.96,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.8,
+        "short_sell_score": 83.0,
+        "close": 299.5,
+        "entry_low": 296.0,
+        "entry_high": 299.5,
+        "stop_loss": 265.3,
+        "target_price": 352.7,
+        "short_entry_low": 298.9,
+        "short_entry_high": 313.39,
+        "short_target": 246.3,
+        "short_stop_loss": 333.7
       }
     },
     "2344": {
@@ -40759,6 +43333,21 @@
         "ma_mid": 133.88,
         "ma_gap_pct": -9.99,
         "pe_ratio": 7.76
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 29.2,
+        "short_sell_score": 96.0,
+        "close": 127.5,
+        "entry_low": 127.5,
+        "entry_high": 127.5,
+        "stop_loss": 107.92,
+        "target_price": 157.95,
+        "short_entry_low": 127.25,
+        "short_entry_high": 139.03,
+        "short_target": 97.05,
+        "short_stop_loss": 147.07
       }
     },
     "2383": {
@@ -40924,6 +43513,21 @@
         "ma_mid": 4217.5,
         "ma_gap_pct": -9.43,
         "pe_ratio": 40.92
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 33.8,
+        "short_sell_score": 96.0,
+        "close": 4100.0,
+        "entry_low": 4100.0,
+        "entry_high": 4100.0,
+        "stop_loss": 3481.25,
+        "target_price": 5062.5,
+        "short_entry_low": 4091.8,
+        "short_entry_high": 4371.75,
+        "short_target": 3137.5,
+        "short_stop_loss": 4718.75
       }
     },
     "3189": {
@@ -41087,6 +43691,21 @@
         "ma_mid": 763.0,
         "ma_gap_pct": -12.06,
         "pe_ratio": 72.31
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 29.2,
+        "short_sell_score": 96.0,
+        "close": 740.0,
+        "entry_low": 740.0,
+        "entry_high": 740.0,
+        "stop_loss": 623.0,
+        "target_price": 922.0,
+        "short_entry_low": 738.52,
+        "short_entry_high": 797.63,
+        "short_target": 558.0,
+        "short_stop_loss": 857.0
       }
     },
     "8046": {
@@ -41250,6 +43869,21 @@
         "ma_mid": 999.25,
         "ma_gap_pct": -12.43,
         "pe_ratio": 70.06
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 33.8,
+        "short_sell_score": 96.0,
+        "close": 972.0,
+        "entry_low": 972.0,
+        "entry_high": 972.0,
+        "stop_loss": 802.8,
+        "target_price": 1235.2,
+        "short_entry_low": 970.06,
+        "short_entry_high": 1045.87,
+        "short_target": 708.8,
+        "short_stop_loss": 1141.2
       }
     },
     "2609": {
@@ -41413,6 +44047,21 @@
         "ma_mid": 60.37,
         "ma_gap_pct": -5.42,
         "pe_ratio": 12.86
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 39.0,
+        "short_sell_score": 84.0,
+        "close": 60.0,
+        "entry_low": 59.6,
+        "entry_high": 60.0,
+        "stop_loss": 55.14,
+        "target_price": 67.56,
+        "short_entry_low": 59.88,
+        "short_entry_high": 61.77,
+        "short_target": 52.44,
+        "short_stop_loss": 64.86
       }
     },
     "2615": {
@@ -41576,6 +44225,21 @@
         "ma_mid": 112.88,
         "ma_gap_pct": -4.76,
         "pe_ratio": 7.38
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.8,
+        "short_sell_score": 69.0,
+        "close": 113.0,
+        "entry_low": 112.0,
+        "entry_high": 113.0,
+        "stop_loss": 103.33,
+        "target_price": 128.05,
+        "short_entry_low": 112.77,
+        "short_entry_high": 115.24,
+        "short_target": 97.95,
+        "short_stop_loss": 122.67
       }
     },
     "1519": {
@@ -41739,6 +44403,21 @@
         "ma_mid": 492.38,
         "ma_gap_pct": -8.2,
         "pe_ratio": 29.58
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 60.6,
+        "short_sell_score": 66.0,
+        "close": 493.5,
+        "entry_low": 493.0,
+        "entry_high": 493.5,
+        "stop_loss": 435.45,
+        "target_price": 583.8,
+        "short_entry_low": 492.51,
+        "short_entry_high": 508.36,
+        "short_target": 403.2,
+        "short_stop_loss": 551.55
       }
     },
     "1513": {
@@ -41903,6 +44582,21 @@
         "ma_mid": 144.12,
         "ma_gap_pct": -3.9,
         "pe_ratio": 15.58
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 45.3,
+        "short_sell_score": 91.0,
+        "close": 143.5,
+        "entry_low": 143.0,
+        "entry_high": 143.5,
+        "stop_loss": 132.47,
+        "target_price": 160.65,
+        "short_entry_low": 143.21,
+        "short_entry_high": 146.73,
+        "short_target": 126.35,
+        "short_stop_loss": 154.53
       }
     },
     "1503": {
@@ -42066,6 +44760,21 @@
         "ma_mid": 169.5,
         "ma_gap_pct": -6.19,
         "pe_ratio": 21.9
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 53.4,
+        "short_sell_score": 83.0,
+        "close": 168.5,
+        "entry_low": 168.0,
+        "entry_high": 168.5,
+        "stop_loss": 153.88,
+        "target_price": 191.25,
+        "short_entry_low": 168.16,
+        "short_entry_high": 173.86,
+        "short_target": 145.75,
+        "short_stop_loss": 183.12
       }
     },
     "1504": {
@@ -42229,6 +44938,21 @@
         "ma_mid": 63.58,
         "ma_gap_pct": -6.1,
         "pe_ratio": 21.63
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 63.3,
+        "short_sell_score": 73.0,
+        "close": 63.4,
+        "entry_low": 63.2,
+        "entry_high": 63.4,
+        "stop_loss": 57.73,
+        "target_price": 72.22,
+        "short_entry_low": 63.27,
+        "short_entry_high": 65.19,
+        "short_target": 54.58,
+        "short_stop_loss": 69.07
       }
     },
     "2002": {
@@ -42393,6 +45117,21 @@
         "ma_mid": 19.0,
         "ma_gap_pct": -2.37,
         "pe_ratio": 463.75
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 65.1,
+        "short_sell_score": 84.0,
+        "close": 18.95,
+        "entry_low": 18.95,
+        "entry_high": 18.95,
+        "stop_loss": 18.13,
+        "target_price": 20.23,
+        "short_entry_low": 18.91,
+        "short_entry_high": 19.29,
+        "short_target": 17.67,
+        "short_stop_loss": 20.0
       }
     },
     "1101": {
@@ -42556,6 +45295,21 @@
         "ma_mid": 27.23,
         "ma_gap_pct": -1.74,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 65.1,
+        "short_sell_score": 85.0,
+        "close": 27.2,
+        "entry_low": 27.1,
+        "entry_high": 27.2,
+        "stop_loss": 25.38,
+        "target_price": 30.03,
+        "short_entry_low": 27.15,
+        "short_entry_high": 27.69,
+        "short_target": 24.37,
+        "short_stop_loss": 29.02
       }
     },
     "1216": {
@@ -42718,6 +45472,21 @@
         "ma_mid": 79.92,
         "ma_gap_pct": -3.91,
         "pe_ratio": 18.2
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 82.8,
+        "short_sell_score": 10.0,
+        "close": 80.9,
+        "entry_low": 80.5,
+        "entry_high": 81.3,
+        "stop_loss": 76.98,
+        "target_price": 86.99,
+        "short_entry_low": 80.74,
+        "short_entry_high": 82.36,
+        "short_target": 74.81,
+        "short_stop_loss": 84.82
       }
     },
     "2881": {
@@ -42881,6 +45650,21 @@
         "ma_mid": 153.0,
         "ma_gap_pct": -3.27,
         "pe_ratio": 13.83
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 74.5,
+        "short_sell_score": 19.0,
+        "close": 155.5,
+        "entry_low": 154.0,
+        "entry_high": 155.5,
+        "stop_loss": 146.05,
+        "target_price": 170.2,
+        "short_entry_low": 155.19,
+        "short_entry_high": 158.3,
+        "short_target": 140.8,
+        "short_stop_loss": 164.95
       }
     },
     "2882": {
@@ -43045,6 +45829,21 @@
         "ma_mid": 110.5,
         "ma_gap_pct": -4.07,
         "pe_ratio": 12.5
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 74.5,
+        "short_sell_score": 19.0,
+        "close": 112.0,
+        "entry_low": 111.0,
+        "entry_high": 112.0,
+        "stop_loss": 105.03,
+        "target_price": 122.85,
+        "short_entry_low": 111.78,
+        "short_entry_high": 114.02,
+        "short_target": 101.15,
+        "short_stop_loss": 118.97
       }
     },
     "2892": {
@@ -43208,6 +46007,21 @@
         "ma_mid": 42.06,
         "ma_gap_pct": -2.64,
         "pe_ratio": 19.14
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 65.1,
+        "short_sell_score": 27.0,
+        "close": 42.25,
+        "entry_low": 42.0,
+        "entry_high": 42.25,
+        "stop_loss": 39.73,
+        "target_price": 46.17,
+        "short_entry_low": 42.17,
+        "short_entry_high": 43.01,
+        "short_target": 38.33,
+        "short_stop_loss": 44.77
       }
     },
     "5880": {
@@ -43371,6 +46185,21 @@
         "ma_mid": 28.34,
         "ma_gap_pct": -1.54,
         "pe_ratio": 18.24
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 72.3,
+        "short_sell_score": 19.0,
+        "close": 28.5,
+        "entry_low": 28.35,
+        "entry_high": 28.5,
+        "stop_loss": 27.22,
+        "target_price": 30.49,
+        "short_entry_low": 28.44,
+        "short_entry_high": 29.01,
+        "short_target": 26.51,
+        "short_stop_loss": 29.78
       }
     },
     "7750": {
@@ -43534,6 +46363,21 @@
         "ma_mid": 1520.0,
         "ma_gap_pct": -4.61,
         "pe_ratio": 24.92
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 50.4,
+        "short_sell_score": 67.0,
+        "close": 1485.0,
+        "entry_low": 1462.72,
+        "entry_high": 1485.0,
+        "stop_loss": 1273.5,
+        "target_price": 1814.0,
+        "short_entry_low": 1482.03,
+        "short_entry_high": 1551.05,
+        "short_target": 1156.0,
+        "short_stop_loss": 1696.5
       }
     },
     "2059": {
@@ -43697,6 +46541,21 @@
         "ma_mid": 8350.0,
         "ma_gap_pct": -9.4,
         "pe_ratio": 41.71
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 63.0,
+        "short_sell_score": 51.0,
+        "close": 7995.0,
+        "entry_low": 7875.07,
+        "entry_high": 7995.0,
+        "stop_loss": 6728.25,
+        "target_price": 9965.5,
+        "short_entry_low": 7979.01,
+        "short_entry_high": 8654.72,
+        "short_target": 6024.5,
+        "short_stop_loss": 9261.75
       }
     },
     "3481": {
@@ -43860,6 +46719,21 @@
         "ma_mid": 39.04,
         "ma_gap_pct": -7.65,
         "pe_ratio": 46.22
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.5,
+        "short_sell_score": 96.0,
+        "close": 38.0,
+        "entry_low": 37.85,
+        "entry_high": 38.0,
+        "stop_loss": 32.2,
+        "target_price": 47.03,
+        "short_entry_low": 37.92,
+        "short_entry_high": 40.23,
+        "short_target": 28.97,
+        "short_stop_loss": 43.8
       }
     },
     "2409": {
@@ -44023,6 +46897,21 @@
         "ma_mid": 27.93,
         "ma_gap_pct": -4.92,
         "pe_ratio": 110.62
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 52.1,
+        "short_sell_score": 96.0,
+        "close": 27.25,
+        "entry_low": 27.1,
+        "entry_high": 27.25,
+        "stop_loss": 23.63,
+        "target_price": 32.88,
+        "short_entry_low": 27.2,
+        "short_entry_high": 28.53,
+        "short_target": 21.62,
+        "short_stop_loss": 30.87
       }
     },
     "1815": {
@@ -44186,6 +47075,21 @@
         "ma_mid": 127.83,
         "ma_gap_pct": -8.08,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 29.2,
+        "short_sell_score": 96.0,
+        "close": 121.5,
+        "entry_low": 121.5,
+        "entry_high": 121.5,
+        "stop_loss": 97.42,
+        "target_price": 158.95,
+        "short_entry_low": 121.26,
+        "short_entry_high": 129.81,
+        "short_target": 84.05,
+        "short_stop_loss": 145.57
       }
     },
     "4958": {
@@ -44350,6 +47254,21 @@
         "ma_mid": 410.75,
         "ma_gap_pct": -9.19,
         "pe_ratio": 44.14
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.1,
+        "short_sell_score": 96.0,
+        "close": 394.0,
+        "entry_low": 391.5,
+        "entry_high": 394.0,
+        "stop_loss": 321.55,
+        "target_price": 506.7,
+        "short_entry_low": 393.21,
+        "short_entry_high": 425.45,
+        "short_target": 281.3,
+        "short_stop_loss": 466.45
       }
     },
     "2368": {
@@ -44513,6 +47432,21 @@
         "ma_mid": 903.75,
         "ma_gap_pct": -10.04,
         "pe_ratio": 29.18
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 51.8,
+        "short_sell_score": 80.0,
+        "close": 868.0,
+        "entry_low": 868.0,
+        "entry_high": 868.0,
+        "stop_loss": 698.8,
+        "target_price": 1131.2,
+        "short_entry_low": 866.26,
+        "short_entry_high": 938.67,
+        "short_target": 604.8,
+        "short_stop_loss": 1037.2
       }
     },
     "3653": {
@@ -44676,6 +47610,21 @@
         "ma_mid": 5878.75,
         "ma_gap_pct": -11.12,
         "pe_ratio": 117.92
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 52.1,
+        "short_sell_score": 96.0,
+        "close": 5805.0,
+        "entry_low": 5805.0,
+        "entry_high": 5805.0,
+        "stop_loss": 4907.25,
+        "target_price": 7201.5,
+        "short_entry_low": 5793.39,
+        "short_entry_high": 6127.15,
+        "short_target": 4408.5,
+        "short_stop_loss": 6702.75
       }
     },
     "6770": {
@@ -44839,6 +47788,21 @@
         "ma_mid": 56.83,
         "ma_gap_pct": -6.91,
         "pe_ratio": 17.63
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.1,
+        "short_sell_score": 96.0,
+        "close": 54.8,
+        "entry_low": 54.7,
+        "entry_high": 54.8,
+        "stop_loss": 47.33,
+        "target_price": 66.42,
+        "short_entry_low": 54.69,
+        "short_entry_high": 58.42,
+        "short_target": 43.18,
+        "short_stop_loss": 62.27
       }
     },
     "2345": {
@@ -45002,6 +47966,21 @@
         "ma_mid": 1408.75,
         "ma_gap_pct": -9.14,
         "pe_ratio": 20.11
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 44.1,
+        "short_sell_score": 92.0,
+        "close": 1380.0,
+        "entry_low": 1370.0,
+        "entry_high": 1380.0,
+        "stop_loss": 1179.75,
+        "target_price": 1691.5,
+        "short_entry_low": 1377.24,
+        "short_entry_high": 1458.92,
+        "short_target": 1068.5,
+        "short_stop_loss": 1580.25
       }
     },
     "6488": {
@@ -45165,6 +48144,21 @@
         "ma_mid": 605.33,
         "ma_gap_pct": -15.42,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 43.7,
+        "short_sell_score": 96.0,
+        "close": 564.0,
+        "entry_low": 558.0,
+        "entry_high": 564.0,
+        "stop_loss": 461.85,
+        "target_price": 722.9,
+        "short_entry_low": 562.87,
+        "short_entry_high": 625.78,
+        "short_target": 405.1,
+        "short_stop_loss": 666.85
       }
     },
     "3081": {
@@ -45328,6 +48322,21 @@
         "ma_mid": 2008.33,
         "ma_gap_pct": -12.86,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 50.4,
+        "short_sell_score": 51.0,
+        "close": 1890.0,
+        "entry_low": 1890.0,
+        "entry_high": 1890.0,
+        "stop_loss": 1570.5,
+        "target_price": 2387.0,
+        "short_entry_low": 1886.22,
+        "short_entry_high": 2065.27,
+        "short_target": 1393.0,
+        "short_stop_loss": 2209.5
       }
     },
     "3665": {
@@ -45491,6 +48500,21 @@
         "ma_mid": 1485.0,
         "ma_gap_pct": -10.77,
         "pe_ratio": 24.33
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 52.1,
+        "short_sell_score": 80.0,
+        "close": 1470.0,
+        "entry_low": 1447.95,
+        "entry_high": 1470.0,
+        "stop_loss": 1242.75,
+        "target_price": 1823.5,
+        "short_entry_low": 1467.06,
+        "short_entry_high": 1546.02,
+        "short_target": 1116.5,
+        "short_stop_loss": 1697.25
       }
     },
     "7769": {
@@ -45653,6 +48677,21 @@
         "ma_mid": 4122.5,
         "ma_gap_pct": -10.86,
         "pe_ratio": 32.21
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 58.5,
+        "short_sell_score": 51.0,
+        "close": 3980.0,
+        "entry_low": 3935.0,
+        "entry_high": 3980.0,
+        "stop_loss": 3361.25,
+        "target_price": 4942.5,
+        "short_entry_low": 3972.04,
+        "short_entry_high": 4293.02,
+        "short_target": 3017.5,
+        "short_stop_loss": 4598.75
       }
     },
     "3105": {
@@ -45816,6 +48855,21 @@
         "ma_mid": 479.0,
         "ma_gap_pct": -15.24,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 49.1,
+        "short_sell_score": 96.0,
+        "close": 451.0,
+        "entry_low": 451.0,
+        "entry_high": 451.0,
+        "stop_loss": 377.2,
+        "target_price": 565.8,
+        "short_entry_low": 450.1,
+        "short_entry_high": 496.47,
+        "short_target": 336.2,
+        "short_stop_loss": 525.26
       }
     },
     "3406": {
@@ -45980,6 +49034,21 @@
         "ma_mid": 886.5,
         "ma_gap_pct": -6.94,
         "pe_ratio": 22.32
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 63.0,
+        "short_sell_score": 33.0,
+        "close": 846.0,
+        "entry_low": 846.0,
+        "entry_high": 846.0,
+        "stop_loss": 684.9,
+        "target_price": 1096.6,
+        "short_entry_low": 844.31,
+        "short_entry_high": 911.53,
+        "short_target": 595.4,
+        "short_stop_loss": 1007.1
       }
     },
     "2887": {
@@ -46143,6 +49212,12 @@
         "ma_mid": 40.01,
         "ma_gap_pct": -3.91,
         "pe_ratio": 14.24
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 40.1
       }
     },
     "8358": {
@@ -46306,6 +49381,21 @@
         "ma_mid": 348.5,
         "ma_gap_pct": -13.06,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 54.9,
+        "short_sell_score": 33.0,
+        "close": 334.0,
+        "entry_low": 330.5,
+        "entry_high": 334.0,
+        "stop_loss": 263.8,
+        "target_price": 443.2,
+        "short_entry_low": 333.33,
+        "short_entry_high": 360.63,
+        "short_target": 224.8,
+        "short_stop_loss": 404.2
       }
     },
     "2492": {
@@ -46469,6 +49559,21 @@
         "ma_mid": 293.12,
         "ma_gap_pct": -11.81,
         "pe_ratio": 29.04
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 54.0,
+        "short_sell_score": 48.0,
+        "close": 281.5,
+        "entry_low": 281.0,
+        "entry_high": 281.5,
+        "stop_loss": 225.03,
+        "target_price": 369.35,
+        "short_entry_low": 280.94,
+        "short_entry_high": 306.19,
+        "short_target": 193.65,
+        "short_stop_loss": 337.98
       }
     },
     "7799": {
@@ -46632,6 +49737,12 @@
         "ma_mid": 407.12,
         "ma_gap_pct": -0.28,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 402.5
       }
     },
     "7765": {
@@ -46796,6 +49907,12 @@
         "ma_mid": 235.75,
         "ma_gap_pct": 0.11,
         "pe_ratio": 20.19
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 234.0
       }
     },
     "3130": {
@@ -46959,6 +50076,12 @@
         "ma_mid": 204.75,
         "ma_gap_pct": -0.37,
         "pe_ratio": 12.28
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 204.0
       }
     },
     "6213": {
@@ -47122,6 +50245,21 @@
         "ma_mid": 564.75,
         "ma_gap_pct": -12.17,
         "pe_ratio": 35.5
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 51.8,
+        "short_sell_score": 62.0,
+        "close": 551.0,
+        "entry_low": 551.0,
+        "entry_high": 551.0,
+        "stop_loss": 453.35,
+        "target_price": 702.9,
+        "short_entry_low": 549.9,
+        "short_entry_high": 590.6,
+        "short_target": 399.1,
+        "short_stop_loss": 648.65
       }
     },
     "3167": {
@@ -47285,6 +50423,12 @@
         "ma_mid": 790.25,
         "ma_gap_pct": -11.42,
         "pe_ratio": 49.09
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 777.0
       }
     },
     "6672": {
@@ -47448,6 +50592,21 @@
         "ma_mid": 492.62,
         "ma_gap_pct": -6.01,
         "pe_ratio": 69.94
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 36.8,
+        "short_sell_score": 96.0,
+        "close": 476.5,
+        "entry_low": 476.5,
+        "entry_high": 476.5,
+        "stop_loss": 397.07,
+        "target_price": 600.05,
+        "short_entry_low": 475.55,
+        "short_entry_high": 505.01,
+        "short_target": 352.95,
+        "short_stop_loss": 555.92
       }
     },
     "7856": {
@@ -47611,6 +50770,12 @@
         "ma_mid": 2668.33,
         "ma_gap_pct": -14.18,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 2520.0
       }
     },
     "3450": {
@@ -47774,6 +50939,12 @@
         "ma_mid": 351.38,
         "ma_gap_pct": -12.06,
         "pe_ratio": 62.68
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 342.0
       }
     },
     "6139": {
@@ -47937,6 +51108,12 @@
         "ma_mid": 579.75,
         "ma_gap_pct": -7.72,
         "pe_ratio": 10.78
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 567.0
       }
     },
     "3026": {
@@ -48100,6 +51277,21 @@
         "ma_mid": 540.88,
         "ma_gap_pct": -12.09,
         "pe_ratio": 36.8
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 40.5,
+        "short_sell_score": 69.0,
+        "close": 528.0,
+        "entry_low": 528.0,
+        "entry_high": 528.0,
+        "stop_loss": 430.35,
+        "target_price": 679.9,
+        "short_entry_low": 526.94,
+        "short_entry_high": 565.48,
+        "short_target": 376.1,
+        "short_stop_loss": 625.65
       }
     },
     "6269": {
@@ -48263,6 +51455,12 @@
         "ma_mid": 67.95,
         "ma_gap_pct": -4.34,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 64.9
       }
     },
     "8069": {
@@ -48426,6 +51624,12 @@
         "ma_mid": 143.5,
         "ma_gap_pct": -0.7,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 141.0
       }
     },
     "6214": {
@@ -48590,6 +51794,12 @@
         "ma_mid": 188.12,
         "ma_gap_pct": 2.06,
         "pe_ratio": 17.93
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 176.5
       }
     },
     "6112": {
@@ -48754,6 +51964,12 @@
         "ma_mid": 48.77,
         "ma_gap_pct": 5.38,
         "pe_ratio": 21.42
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 47.7
       }
     },
     "8271": {
@@ -48918,6 +52134,12 @@
         "ma_mid": 165.0,
         "ma_gap_pct": 1.21,
         "pe_ratio": 3.1
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 159.5
       }
     },
     "6620": {
@@ -49081,6 +52303,12 @@
         "ma_mid": 113.17,
         "ma_gap_pct": -7.66,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 100.5
       }
     },
     "5340": {
@@ -49244,6 +52472,12 @@
         "ma_mid": 88.3,
         "ma_gap_pct": -4.3,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 83.1
       }
     },
     "2254": {
@@ -49408,6 +52642,21 @@
         "ma_mid": 108.25,
         "ma_gap_pct": 1.62,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 73.0,
+        "short_sell_score": 40.0,
+        "close": 109.0,
+        "entry_low": 107.13,
+        "entry_high": 109.54,
+        "stop_loss": 101.17,
+        "target_price": 121.18,
+        "short_entry_low": 108.78,
+        "short_entry_high": 110.96,
+        "short_target": 96.82,
+        "short_stop_loss": 116.83
       }
     },
     "6191": {
@@ -49571,6 +52820,12 @@
         "ma_mid": 74.9,
         "ma_gap_pct": -3.6,
         "pe_ratio": 12.58
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 71.7
       }
     },
     "5013": {
@@ -49734,6 +52989,12 @@
         "ma_mid": 63.83,
         "ma_gap_pct": -2.87,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 59.3
       }
     },
     "3287": {
@@ -49898,6 +53159,12 @@
         "ma_mid": 69.93,
         "ma_gap_pct": 4.81,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 66.7
       }
     },
     "6689": {
@@ -50061,6 +53328,12 @@
         "ma_mid": 72.75,
         "ma_gap_pct": -1.72,
         "pe_ratio": 32.65
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 71.0
       }
     },
     "9914": {
@@ -50225,6 +53498,21 @@
         "ma_mid": 62.27,
         "ma_gap_pct": 1.81,
         "pe_ratio": 18.38
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 80.7,
+        "short_sell_score": 22.0,
+        "close": 62.8,
+        "entry_low": 61.9,
+        "entry_high": 63.11,
+        "stop_loss": 59.33,
+        "target_price": 68.19,
+        "short_entry_low": 62.67,
+        "short_entry_high": 63.93,
+        "short_target": 57.41,
+        "short_stop_loss": 66.27
       }
     },
     "2480": {
@@ -50388,6 +53676,12 @@
         "ma_mid": 169.12,
         "ma_gap_pct": -1.85,
         "pe_ratio": 17.93
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 166.0
       }
     },
     "1558": {
@@ -50552,6 +53846,12 @@
         "ma_mid": 106.5,
         "ma_gap_pct": 6.1,
         "pe_ratio": 14.07
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 103.5
       }
     },
     "4741": {
@@ -50716,6 +54016,12 @@
         "ma_mid": 55.63,
         "ma_gap_pct": 3.0,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 52.1
       }
     },
     "6690": {
@@ -50879,6 +54185,12 @@
         "ma_mid": 187.5,
         "ma_gap_pct": -2.4,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 182.0
       }
     },
     "6751": {
@@ -51042,6 +54354,12 @@
         "ma_mid": 73.57,
         "ma_gap_pct": -1.59,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 65.9
       }
     },
     "3218": {
@@ -51206,6 +54524,12 @@
         "ma_mid": 125.5,
         "ma_gap_pct": 0.8,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 124.5
       }
     },
     "4736": {
@@ -51368,6 +54692,12 @@
         "ma_mid": 127.0,
         "ma_gap_pct": -0.79,
         "pe_ratio": 4.62
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 125.5
       }
     },
     "7786": {
@@ -51531,6 +54861,12 @@
         "ma_mid": 111.38,
         "ma_gap_pct": -1.68,
         "pe_ratio": 10.27
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 109.5
       }
     },
     "6499": {
@@ -51694,6 +55030,12 @@
         "ma_mid": 71.23,
         "ma_gap_pct": -0.47,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 70.8
       }
     },
     "6947": {
@@ -51858,6 +55200,12 @@
         "ma_mid": 59.5,
         "ma_gap_pct": 4.37,
         "pe_ratio": 31.21
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 56.6
       }
     },
     "6443": {
@@ -52023,6 +55371,21 @@
         "ma_mid": 23.85,
         "ma_gap_pct": 8.81,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 75.1,
+        "short_sell_score": 22.0,
+        "close": 23.6,
+        "entry_low": 23.5,
+        "entry_high": 23.72,
+        "stop_loss": 20.77,
+        "target_price": 28.01,
+        "short_entry_low": 23.55,
+        "short_entry_high": 24.02,
+        "short_target": 19.19,
+        "short_stop_loss": 26.43
       }
     },
     "3576": {
@@ -52188,6 +55551,21 @@
         "ma_mid": 16.45,
         "ma_gap_pct": 8.21,
         "pe_ratio": 32.96
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 75.1,
+        "short_sell_score": 22.0,
+        "close": 16.4,
+        "entry_low": 16.2,
+        "entry_high": 16.48,
+        "stop_loss": 14.96,
+        "target_price": 18.64,
+        "short_entry_low": 16.37,
+        "short_entry_high": 16.7,
+        "short_target": 14.16,
+        "short_stop_loss": 17.84
       }
     },
     "6116": {
@@ -52351,6 +55729,12 @@
         "ma_mid": 12.43,
         "ma_gap_pct": -2.21,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 12.1
       }
     },
     "6244": {
@@ -52515,6 +55899,12 @@
         "ma_mid": 20.17,
         "ma_gap_pct": 3.39,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 19.4
       }
     },
     "3049": {
@@ -52679,6 +56069,12 @@
         "ma_mid": 11.06,
         "ma_gap_pct": 0.34,
         "pe_ratio": 33.64
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 11.1
       }
     },
     "4707": {
@@ -52842,6 +56238,12 @@
         "ma_mid": 26.38,
         "ma_gap_pct": -3.54,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 25.15
       }
     },
     "1712": {
@@ -53004,6 +56406,12 @@
         "ma_mid": 40.44,
         "ma_gap_pct": -0.09,
         "pe_ratio": 15.25
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 40.25
       }
     },
     "5490": {
@@ -53168,6 +56576,12 @@
         "ma_mid": 24.13,
         "ma_gap_pct": 6.08,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 23.3
       }
     },
     "5521": {
@@ -53330,6 +56744,12 @@
         "ma_mid": 10.99,
         "ma_gap_pct": -0.8,
         "pe_ratio": 11.47
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 10.85
       }
     },
     "6589": {
@@ -53493,6 +56913,12 @@
         "ma_mid": 47.15,
         "ma_gap_pct": -0.53,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 46.8
       }
     },
     "5230": {
@@ -53656,6 +57082,12 @@
         "ma_mid": 26.87,
         "ma_gap_pct": -5.09,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 25.45
       }
     },
     "6541": {
@@ -53820,6 +57252,12 @@
         "ma_mid": 27.43,
         "ma_gap_pct": 1.55,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 26.9
       }
     },
     "2884": {
@@ -53983,6 +57421,21 @@
         "ma_mid": 47.49,
         "ma_gap_pct": -1.03,
         "pe_ratio": 19.5
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 85.0,
+        "short_sell_score": 10.0,
+        "close": 47.95,
+        "entry_low": 47.85,
+        "entry_high": 48.19,
+        "stop_loss": 45.34,
+        "target_price": 52.01,
+        "short_entry_low": 47.85,
+        "short_entry_high": 48.81,
+        "short_target": 43.89,
+        "short_stop_loss": 50.56
       }
     },
     "2883": {
@@ -54146,6 +57599,12 @@
         "ma_mid": 34.44,
         "ma_gap_pct": -2.29,
         "pe_ratio": 11.77
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 34.35
       }
     },
     "2324": {
@@ -54310,6 +57769,12 @@
         "ma_mid": 32.69,
         "ma_gap_pct": -3.63,
         "pe_ratio": 15.83
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 32.45
       }
     },
     "6148": {
@@ -54474,6 +57939,12 @@
         "ma_mid": 42.43,
         "ma_gap_pct": 1.1,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 43.4
       }
     },
     "2890": {
@@ -54636,6 +58107,12 @@
         "ma_mid": 43.04,
         "ma_gap_pct": -3.11,
         "pe_ratio": 15.74
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 42.9
       }
     },
     "2880": {
@@ -54798,6 +58275,21 @@
         "ma_mid": 49.16,
         "ma_gap_pct": -0.43,
         "pe_ratio": 21.19
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 83.3,
+        "short_sell_score": 22.0,
+        "close": 49.6,
+        "entry_low": 48.9,
+        "entry_high": 49.85,
+        "stop_loss": 46.79,
+        "target_price": 53.98,
+        "short_entry_low": 49.5,
+        "short_entry_high": 50.49,
+        "short_target": 45.22,
+        "short_stop_loss": 52.41
       }
     },
     "2801": {
@@ -54960,6 +58452,12 @@
         "ma_mid": 28.91,
         "ma_gap_pct": -3.5,
         "pe_ratio": 16.41
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 28.7
       }
     },
     "2834": {
@@ -55123,6 +58621,12 @@
         "ma_mid": 17.55,
         "ma_gap_pct": -1.14,
         "pe_ratio": 12.76
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 17.5
       }
     },
     "6147": {
@@ -55286,6 +58790,12 @@
         "ma_mid": 163.17,
         "ma_gap_pct": -12.97,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 157.5
       }
     },
     "2337": {
@@ -55449,6 +58959,12 @@
         "ma_mid": 82.75,
         "ma_gap_pct": -8.4,
         "pe_ratio": 7.46
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 79.7
       }
     },
     "5289": {
@@ -55612,6 +59128,12 @@
         "ma_mid": 986.0,
         "ma_gap_pct": -5.88,
         "pe_ratio": 0.0
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 945.0
       }
     },
     "2301": {
@@ -55776,6 +59298,12 @@
         "ma_mid": 215.88,
         "ma_gap_pct": -8.28,
         "pe_ratio": 20.25
+      },
+      "yesterday_eval": {
+        "has_data": false,
+        "as_of_date": "2026-11-05",
+        "note": "今日新納入追蹤",
+        "prev_close": 211.5
       }
     },
     "2885": {
@@ -55940,6 +59468,21 @@
         "ma_mid": 68.55,
         "ma_gap_pct": -2.41,
         "pe_ratio": 15.67
+      },
+      "yesterday_eval": {
+        "has_data": true,
+        "as_of_date": "2026-11-05",
+        "total_score": 69.6,
+        "short_sell_score": 27.0,
+        "close": 69.1,
+        "entry_low": 68.7,
+        "entry_high": 69.1,
+        "stop_loss": 65.05,
+        "target_price": 75.4,
+        "short_entry_low": 68.96,
+        "short_entry_high": 70.34,
+        "short_target": 62.8,
+        "short_stop_loss": 73.15
       }
     }
   },
