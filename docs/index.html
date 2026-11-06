@@ -369,7 +369,6 @@
                 </div>
               </div>
             </div>
-            </div>
           </div>
 
           <!-- ⏱️ 互動式「短線 / 波段 / 長線 / 🐻做空放空」四大策略劇本切換器 -->
@@ -699,14 +698,20 @@
     function getLocalWatchlist() {
       try {
         const saved = localStorage.getItem('alphatw_watchlist');
-        if (saved) return JSON.parse(saved);
+        if (saved !== null) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) return parsed;
+        }
       } catch (e) {}
       return (REPORT_DATA && REPORT_DATA.watchlist_codes) ? REPORT_DATA.watchlist_codes : ['2330', '2317', '2454', '6669', '2618', '2891', '0050', '00878'];
     }
 
     function saveLocalWatchlist(list) {
-      localStorage.setItem('alphatw_watchlist', JSON.stringify(list));
-      document.getElementById('watchCountBadge').textContent = list.length;
+      try {
+        localStorage.setItem('alphatw_watchlist', JSON.stringify(list));
+      } catch (e) {}
+      const badge = document.getElementById('watchCountBadge');
+      if (badge) badge.textContent = list.length;
     }
 
     async function loadReportData() {
@@ -716,7 +721,13 @@
         renderHeaderAndSummary();
         renderTop3PodiumMatrix();
         renderSectorHeatmap();
-        switchTab('top');
+        // 初始化自選股數量標籤
+        const initialWl = getLocalWatchlist();
+        const watchBadge = document.getElementById('watchCountBadge');
+        if (watchBadge) watchBadge.textContent = initialWl.length;
+        // 記憶使用者的分頁（若曾切換過自選或其他分頁，重開網頁時維持該分頁）
+        const restoredTab = localStorage.getItem('alphatw_active_tab') || (initialWl.length > 0 && localStorage.getItem('alphatw_watchlist') ? 'watch' : 'top');
+        switchTab(restoredTab);
         if (isTwMarketOpen()) toggleAutoPolling();
         else refreshLiveQuotes();
       } catch (err) {
@@ -1009,6 +1020,9 @@
 
     function switchTab(tab) {
       CURRENT_TAB = tab;
+      try {
+        localStorage.setItem('alphatw_active_tab', tab);
+      } catch (e) {}
       document.querySelectorAll('.tab-btn').forEach(btn => {
         if (btn.id === 'tab_short_sell') {
           btn.className = 'tab-btn px-2.5 py-2 rounded-xl text-xs font-bold bg-purple-950/60 text-purple-300 border border-purple-500/30 hover:bg-purple-900/50 transition';
@@ -1170,13 +1184,20 @@
       if (!SELECTED_CODE) return;
       const wl = getLocalWatchlist();
       const idx = wl.indexOf(SELECTED_CODE);
+      let isAdded = false;
       if (idx >= 0) {
         wl.splice(idx, 1);
+        isAdded = false;
       } else {
         wl.unshift(SELECTED_CODE);
+        isAdded = true;
       }
       saveLocalWatchlist(wl);
       updateWatchStarBtn(SELECTED_CODE);
+      if (typeof showLiveToast === 'function') {
+        const stockName = (REPORT_DATA && REPORT_DATA.all_debates && REPORT_DATA.all_debates[SELECTED_CODE]) ? REPORT_DATA.all_debates[SELECTED_CODE].name : SELECTED_CODE;
+        showLiveToast(isAdded ? `⭐ 已將【${stockName} (${SELECTED_CODE})】加入自選股清單！` : `已將【${stockName} (${SELECTED_CODE})】從自選股移除`, false, 2000);
+      }
       if (CURRENT_TAB === 'watch') renderStockList();
     }
 
