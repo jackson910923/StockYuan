@@ -1234,6 +1234,25 @@
     const KLINE_FETCH_LOCK = new Set();
 
     // 0 延遲秒開引擎：從預載的 1,800+ 檔全市場證交所/櫃買中心字典瞬間合成完整 6-Agent 策略與初始 K 線
+    function alignToTwseTick(price, mode = 'round') {
+      if (!(price > 0)) return 0;
+      let tick = 0.01;
+      if (price < 10) tick = 0.01;
+      else if (price < 50) tick = 0.05;
+      else if (price < 100) tick = 0.10;
+      else if (price < 500) tick = 0.50;
+      else if (price < 1000) tick = 1.00;
+      else tick = 5.00;
+
+      let snapped = price;
+      if (mode === 'floor') snapped = Math.floor(price / tick + 1e-9) * tick;
+      else if (mode === 'ceil') snapped = Math.ceil(price / tick - 1e-9) * tick;
+      else snapped = Math.round(price / tick) * tick;
+
+      const decimals = tick < 0.1 ? 2 : (tick < 1.0 ? 1 : 0);
+      return Number(snapped.toFixed(decimals));
+    }
+
     function ensureInstantStockFromDirectory(rawCode) {
       const code = String(rawCode || '').trim().toUpperCase();
       if (!code || !REPORT_DATA) return null;

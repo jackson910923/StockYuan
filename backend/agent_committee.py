@@ -110,20 +110,21 @@ class MultiAgentStockCommittee:
             news_items = self.data_engine.fetch_yahoo_stock_news(code, name=name, limit=8)
 
         # === 三大週期專屬交易策略 (Short-Term / Swing / Long-Term) ===
-        st_entry_low = round(max(close_p * 0.99, ma_short * 0.995), 2)
-        st_entry_high = round(close_p * 1.005, 2)
+        align = self.data_engine.align_to_twse_tick
+        st_entry_low = align(max(close_p * 0.99, ma_short * 0.995), mode="floor")
+        st_entry_high = align(close_p * 1.005, mode="ceil")
         if st_entry_low > st_entry_high:
-            st_entry_low = round(close_p * 0.988, 2)
-        st_stop = round(max(close_p * 0.965, close_p - 1.25 * atr_val), 2)
-        st_target = round(close_p + 2.0 * atr_val, 2)
+            st_entry_low = align(close_p * 0.988, mode="floor")
+        st_stop = align(max(close_p * 0.965, close_p - 1.25 * atr_val), mode="floor")
+        st_target = align(close_p + 2.0 * atr_val, mode="ceil")
 
-        lt_entry_low = round(min(close_p * 0.95, tech["ma60"] * 0.985 if tech["ma60"] > 0 else close_p * 0.95), 2)
-        lt_entry_high = round(min(close_p * 0.995, tech["ma20"] * 1.01 if tech["ma20"] > 0 else close_p), 2)
+        lt_entry_low = align(min(close_p * 0.95, tech["ma60"] * 0.985 if tech["ma60"] > 0 else close_p * 0.95), mode="floor")
+        lt_entry_high = align(min(close_p * 0.995, tech["ma20"] * 1.01 if tech["ma20"] > 0 else close_p), mode="ceil")
         if lt_entry_low > lt_entry_high:
-            lt_entry_low = round(close_p * 0.95, 2)
-            lt_entry_high = round(close_p, 2)
-        lt_stop = round(min(close_p * 0.88, tech["ma60"] * 0.94 if tech["ma60"] > 0 else close_p * 0.88), 2)
-        lt_target = round(close_p * 1.22, 2)
+            lt_entry_low = align(close_p * 0.95, mode="floor")
+            lt_entry_high = align(close_p, mode="round")
+        lt_stop = align(min(close_p * 0.88, tech["ma60"] * 0.94 if tech["ma60"] > 0 else close_p * 0.88), mode="floor")
+        lt_target = align(close_p * 1.22, mode="ceil")
 
         horizon_plans = {
             "short_term": {

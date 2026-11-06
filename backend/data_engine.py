@@ -150,6 +150,42 @@ class TaiwanStockDataEngine:
         return out
 
     @staticmethod
+    def align_to_twse_tick(price: float, mode: str = "round") -> float:
+        """
+        台灣證交所官方撮合升降單位 (TWSE Tick Size 規格對齊):
+        未滿 10 元: 0.01 元
+        10~50 元: 0.05 元
+        50~100 元: 0.10 元
+        100~500 元: 0.50 元
+        500~1000 元: 1.00 元
+        1000 元以上: 5.00 元
+        """
+        if price <= 0:
+            return 0.0
+        if price < 10:
+            tick = 0.01
+        elif price < 50:
+            tick = 0.05
+        elif price < 100:
+            tick = 0.10
+        elif price < 500:
+            tick = 0.50
+        elif price < 1000:
+            tick = 1.00
+        else:
+            tick = 5.00
+
+        if mode == "floor":
+            snapped = math.floor(price / tick + 1e-9) * tick
+        elif mode == "ceil":
+            snapped = math.ceil(price / tick - 1e-9) * tick
+        else:
+            snapped = round(price / tick) * tick
+
+        decimals = 2 if tick < 0.1 else (1 if tick < 1.0 else 0)
+        return round(snapped, decimals)
+
+    @staticmethod
     def compute_technical_indicators(candles: List[Dict[str, Any]], current_close: float) -> Dict[str, Any]:
         """由歷史日 K 線計算完整技術指標矩陣：MA5/10/20/60、RSI(14)、KD(9,3,3)、MACD(12,26,9)、布林通道、20日高低支撐壓力。"""
         if not candles:
@@ -1032,20 +1068,21 @@ class TaiwanStockDataEngine:
                 best_horizon = "SWING"
                 best_horizon_label = "🌊 波段法人認養 (2~8週)"
 
-            entry_low = round(max(low_p, min(close_p * 0.985, ma_short * 0.995)), 2)
-            entry_high = round(min(close_p * 1.005, ma_mid * 1.035 if close_p > ma_mid else close_p), 2)
+            align = TaiwanStockDataEngine.align_to_twse_tick
+            entry_low = align(max(low_p, min(close_p * 0.985, ma_short * 0.995)), mode="floor")
+            entry_high = align(min(close_p * 1.005, ma_mid * 1.035 if close_p > ma_mid else close_p), mode="ceil")
             if entry_low > entry_high:
-                entry_low = round(close_p * 0.98, 2)
-                entry_high = round(close_p, 2)
-            stop_loss = round(min(low_p * 0.985, close_p - 1.8 * atr_est), 2)
-            target_price = round(close_p + 2.8 * atr_est, 2)
+                entry_low = align(close_p * 0.98, mode="floor")
+                entry_high = align(close_p, mode="round")
+            stop_loss = align(min(low_p * 0.985, close_p - 1.8 * atr_est), mode="floor")
+            target_price = align(close_p + 2.8 * atr_est, mode="ceil")
             rr_ratio = round((target_price - close_p) / max(0.01, close_p - stop_loss), 2)
 
-            # 做空（放空）專屬點位計算
-            short_entry_low = round(close_p * 0.998, 2)
-            short_entry_high = round(max(close_p * 1.018, ma_short * 1.005), 2)
-            short_stop_loss = round(max(high_p * 1.015, close_p + 1.8 * atr_est, ma_mid * 1.015), 2)
-            short_target_price = round(max(1.0, close_p - 2.8 * atr_est), 2)
+            # 做空與防守價位估算 (嚴格對齊台股檔位)
+            short_entry_low = align(close_p * 0.998, mode="floor")
+            short_entry_high = align(max(close_p * 1.018, ma_short * 1.005), mode="ceil")
+            short_stop_loss = align(max(high_p * 1.015, close_p + 1.8 * atr_est, ma_mid * 1.015), mode="ceil")
+            short_target_price = align(max(1.0, close_p - 2.8 * atr_est), mode="floor")
             short_rr_ratio = round((close_p - short_target_price) / max(0.01, short_stop_loss - close_p), 2)
 
             # 凱利部位與分批建倉建議
