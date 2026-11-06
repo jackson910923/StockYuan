@@ -468,6 +468,7 @@
               <div class="flex items-center gap-2">
                 <span class="text-base">⚖️</span>
                 <span class="text-sm font-black text-white">昨日策略今日實盤複盤驗證（1張 = 1,000股 實戰損益）</span>
+                <span id="pnlTitleStanceBadge" class="text-xs font-black px-2.5 py-0.5 rounded-full border"></span>
               </div>
               <div class="text-[11px] font-mono text-slate-400">
                 基準昨收：<span id="pnlPrevClose" class="font-bold text-slate-200">--</span> 元 ➔ 現價/今收：<span id="pnlCurrentPrice" class="font-bold text-white">--</span> 元
@@ -1647,6 +1648,21 @@
       const isBullFavored = scoreDiff > 5;
       const isBearFavored = scoreDiff < -5;
       const isNeutral = !isBullFavored && !isBearFavored;
+
+      // 0. 標題後方直接標示昨日哪方分數較高
+      const titleBadgeEl = document.getElementById('pnlTitleStanceBadge');
+      if (titleBadgeEl) {
+        if (bullScore > bearScore) {
+          titleBadgeEl.className = 'text-xs font-black px-2.5 py-0.5 rounded-full border border-emerald-400/60 bg-emerald-900/50 text-emerald-200';
+          titleBadgeEl.textContent = `🟢 昨日多方分數較高（多 ${bullScore} vs 空 ${bearScore}）`;
+        } else if (bearScore > bullScore) {
+          titleBadgeEl.className = 'text-xs font-black px-2.5 py-0.5 rounded-full border border-purple-400/60 bg-purple-900/50 text-purple-200';
+          titleBadgeEl.textContent = `🟣 昨日空方分數較高（空 ${bearScore} vs 多 ${bullScore}）`;
+        } else {
+          titleBadgeEl.className = 'text-xs font-black px-2.5 py-0.5 rounded-full border border-amber-400/60 bg-amber-900/40 text-amber-200';
+          titleBadgeEl.textContent = `⚖️ 昨日多空同分（${bullScore}）`;
+        }
+      }
 
       // 1. 渲染頂部「AI 昨日核心研判立場旗幟」
       const stanceBannerEl = document.getElementById('aiYesterdayStanceBanner');
