@@ -18,9 +18,17 @@ on:
 permissions:
   contents: write
 
+# GitHub 排程常延遲數小時，避免兩次排程重疊互相覆寫
+concurrency:
+  group: stockyuan-daily-pipeline
+  cancel-in-progress: false
+
 jobs:
   run-daily-alpha-agent:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      TZ: Asia/Taipei
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -42,5 +50,5 @@ jobs:
         run: |
           git config user.name "StockYuan-AI-Agent"
           git config user.email "agent@stockyuan.local"
-          git add data/latest_report.json docs/data/latest_report.json docs/daily_briefing.md
+          git add data/latest_report.json data/strategy_history.json docs/data/latest_report.json docs/daily_briefing.md
           git diff --staged --quiet || (git commit -m "chore(auto): update StockYuan AI intelligence $(date +'%Y-%m-%d %H:%M')" && git pull --rebase origin main && git push origin HEAD:main)

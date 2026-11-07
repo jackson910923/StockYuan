@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import html as _html
 import json
 import math
+import re
 import ssl
+import time
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -10,6 +13,41 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+
+# 台灣時區（GitHub Actions 執行環境為 UTC，所有對外顯示時間一律換算為台北時間）
+TPE = timezone(timedelta(hours=8))
+
+# 頭條新聞過濾：自動產生的制式快訊不適合放在「市場焦點」區塊（個股新聞仍保留）
+_HEADLINE_NOISE_PREFIXES = ("營收速報", "鉅亨速報", "盤前個股新聞", "盤後個股新聞")
+
+
+def _tpe_str(ts: float) -> str:
+    return datetime.fromtimestamp(ts, TPE).strftime("%Y-%m-%d %H:%M")
+
+
+def _split_source_suffix(title: str) -> Tuple[str, str]:
+    """Google News 標題格式為「標題 - 媒體名」，拆成乾淨標題與來源名稱。"""
+    title = (title or "").strip()
+    if " - " in title:
+        head, tail = title.rsplit(" - ", 1)
+        if head.strip() and 0 < len(tail.strip()) <= 24:
+            return head.strip(), tail.strip()
+    return title, ""
+
+
+def _news_key(title: str) -> str:
+    # 取前 20 個字元：同一篇新聞在不同來源常多/少作者名或尾綴
+    return re.sub(r"[\W_]+", "", title or "")[:20]
+
+
+_FINANCE_SOURCE_HINTS = (
+    "鉅亨", "經濟", "工商", "財經", "財訊", "理財", "股市", "MoneyDJ", "今周刊", "商周", "中央社",
+    "數位時代", "科技新報", "TechNews", "天下", "CMoney", "非凡", "Smart", "證券", "投資",
+)
+
+
+def _is_finance_source(source: str) -> bool:
+    return any(h in (source or "") for h in _FINANCE_SOURCE_HINTS)
 
 
 # 核心台股與熱門高股息/市值型 ETF 產業字典（並支援從證交所/櫃買即時行情動態擴充全市場 1,800+ 檔標的）
@@ -523,79 +561,132 @@ class TaiwanStockDataEngine:
                             dt_shares[code] = self._parse_float(r[3], 0.0)
         return margin_diff_lots, dt_shares
 
-    def fetch_google_news_for_query(self, query: str, limit: int = 6) -> List[Dict[str, str]]:
-        """從 Google News RSS 抓取台股近期最新新聞（強制過濾舊聞並依時間由新到舊排序）。"""
+    @staticmethod
+    def _news_item(title: str, link: str, source: str, ts: float, **extra: Any) -> Dict[str, Any]:
+        """統一新聞格式：pub_date 一律為台北時間字串，另附 ts (Unix 秒) 供前端精準換算相對時間。"""
+        item: Dict[str, Any] = {
+            "title": title,
+            "source": source,
+            "link": link,
+            "pub_date": _tpe_str(ts),
+            "ts": int(ts),
+        }
+        for k, v in extra.items():
+            if v not in (None, "", [], {}):
+                item[k] = v
+        return item
+
+    def fetch_google_news_for_query(self, query: str, limit: int = 6, max_age_days: float = 7.0) -> List[Dict[str, Any]]:
+        """從 Google News RSS 抓取新聞（時間換算為台北時間、移除標題尾端媒體名、由新到舊排序）。"""
         from email.utils import parsedate_to_datetime
 
-        now_dt = datetime.now()
-        parsed_items: List[tuple[float, Dict[str, str]]] = []
+        url = f"https://news.google.com/rss/search?q={urllib.parse.quote(query)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        try:
+            with urllib.request.urlopen(req, timeout=6.0, context=self.ssl_ctx) as resp:
+                root = ET.fromstring(resp.read())
+        except Exception:
+            return []
 
-        for time_window in ("when:7d", "when:30d"):
-            encoded = urllib.parse.quote(f"{query} 台股 {time_window}")
-            url = f"https://news.google.com/rss/search?q={encoded}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
-            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        now_ts = time.time()
+        out: List[Dict[str, Any]] = []
+        for item in root.findall(".//item"):
+            raw_title = (item.findtext("title") or "").strip()
+            link = (item.findtext("link") or "").strip()
+            pub_raw = (item.findtext("pubDate") or "").strip()
+            source_el = item.find("source")
+            title, suffix_src = _split_source_suffix(raw_title)
+            source = (source_el.text.strip() if source_el is not None and source_el.text else "") or suffix_src or "財經新聞"
+            if not title or not link or not pub_raw:
+                continue
             try:
-                with urllib.request.urlopen(req, timeout=5.0, context=self.ssl_ctx) as resp:
-                    xml_bytes = resp.read()
-                root = ET.fromstring(xml_bytes)
-                for item in root.findall(".//item"):
-                    title = (item.findtext("title") or "").strip()
-                    link = (item.findtext("link") or "").strip()
-                    pub_raw = (item.findtext("pubDate") or "").strip()
-                    source_el = item.find("source")
-                    source = source_el.text.strip() if source_el is not None and source_el.text else "財經快訊"
-                    if not title:
-                        continue
-                    ts = now_dt.timestamp()
-                    pub_str = now_dt.strftime("%Y-%m-%d")
-                    if pub_raw:
-                        try:
-                            dt_obj = parsedate_to_datetime(pub_raw).replace(tzinfo=None)
-                            # 嚴格排除超過 45 天或跨年度的過時舊聞（如 2025 年舊聞）
-                            age_days = (now_dt - dt_obj).total_seconds() / 86400.0
-                            if age_days > 7.0 or dt_obj.year < 2026:
-                                continue
-                            ts = dt_obj.timestamp()
-                            pub_str = dt_obj.strftime("%Y-%m-%d %H:%M")
-                        except Exception:
-                            if "2025" in pub_raw or "2024" in pub_raw or "2023" in pub_raw:
-                                continue
-                    parsed_items.append(
-                        (
-                            ts,
-                            {
-                                "title": title,
-                                "source": source,
-                                "link": link,
-                                "pub_date": pub_str,
-                            },
-                        )
-                    )
-                if len(parsed_items) >= 3:
-                    break
+                ts = parsedate_to_datetime(pub_raw).timestamp()
             except Exception:
-                pass
+                continue
+            age = now_ts - ts
+            if age > max_age_days * 86400 or age < -3600:
+                continue
+            out.append(self._news_item(title, link, source, ts))
+        out.sort(key=lambda a: a["ts"], reverse=True)
+        return out[:limit]
 
-        # 依發布時間由最新到最舊排序並去重
-        parsed_items.sort(key=lambda x: x[0], reverse=True)
-        seen_titles = set()
-        articles: List[Dict[str, str]] = []
-        for _, art in parsed_items:
-            if art["title"] not in seen_titles:
-                seen_titles.add(art["title"])
-                articles.append(art)
-                if len(articles) >= limit:
-                    break
-        return articles
+    def fetch_cnyes_category_news(self, category: str = "tw_stock", limit: int = 30) -> List[Dict[str, Any]]:
+        """鉅亨網分類新聞（伺服器端呼叫，含相關個股代號與封面圖）。"""
+        data = self._http_get_json(
+            f"https://api.cnyes.com/media/api/v1/newslist/category/{category}?limit={limit}&page=1", timeout=8.0
+        )
+        rows = (((data or {}).get("items") or {}).get("data") or []) if isinstance(data, dict) else []
+        out: List[Dict[str, Any]] = []
+        for it in rows:
+            title = re.sub(r"<[^>]+>", "", str(it.get("title") or "")).strip()
+            nid = it.get("newsId")
+            ts = float(it.get("publishAt") or 0)
+            if not (title and nid and ts):
+                continue
+            cover = it.get("coverSrc") if isinstance(it.get("coverSrc"), dict) else {}
+            image = ((cover.get("s") or cover.get("xs") or {}) or {}).get("src")
+            summary = _html.unescape(re.sub(r"<[^>]+>", "", str(it.get("summary") or ""))).replace("\n", " ").strip()
+            stocks = [str(s).strip() for s in (it.get("stock") or []) if str(s).strip()][:4]
+            out.append(
+                self._news_item(
+                    title,
+                    f"https://news.cnyes.com/news/id/{nid}",
+                    "鉅亨網",
+                    ts,
+                    summary=summary[:140],
+                    image=image,
+                    stocks=stocks,
+                )
+            )
+        return out
 
-    def fetch_yahoo_stock_news(self, code: str, name: str = "", limit: int = 8) -> List[Dict[str, str]]:
-        """多來源聚合個股新聞（Yahoo / Google News / 鉅亨網），僅留 7 天內，依「標題相關度 > 新舊」排序。"""
+    def fetch_market_headlines(self, limit: int = 20) -> List[Dict[str, Any]]:
+        """
+        全市場焦點頭條：鉅亨台股新聞 + Google News（近 1 日）多來源聚合，
+        去重後嚴格由新到舊排序；48 小時內新聞不足 8 則時才回補 7 日內新聞。
+        """
+        jobs = [
+            lambda: self.fetch_cnyes_category_news("tw_stock", 30),
+            lambda: self.fetch_google_news_for_query("台股 when:1d", 25, 2.0),
+            lambda: self.fetch_google_news_for_query("台股 外資 when:1d", 25, 2.0),
+            lambda: self.fetch_google_news_for_query("台股 大盤 when:7d", 25, 7.0),
+        ]
+        with ThreadPoolExecutor(max_workers=len(jobs)) as ex:
+            pools = list(ex.map(lambda fn: fn(), jobs))
+
+        merged: List[Dict[str, Any]] = []
+        seen: set = set()
+        for art in sorted((a for pool in pools for a in pool), key=lambda a: a["ts"], reverse=True):
+            if art["title"].startswith(_HEADLINE_NOISE_PREFIXES) or "股市爆料同學會" in art["title"]:
+                continue
+            key = _news_key(art["title"])
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            merged.append(art)
+
+        fresh = [a for a in merged if time.time() - a["ts"] <= 48 * 3600]
+        pool = fresh if len(fresh) >= 8 else merged
+        # 財經專業媒體優先（避免藝人賠錢等八卦標題洗版），不足時才以其他來源依時間補齊
+        pro = [a for a in pool if _is_finance_source(a["source"])]
+        if len(pro) >= min(limit, 10):
+            return pro[:limit]
+        rest = [a for a in pool if a not in pro]
+        return sorted(pro + rest[: limit - len(pro)], key=lambda a: a["ts"], reverse=True)
+
+    def fetch_yahoo_stock_news(self, code: str, name: str = "", limit: int = 8) -> List[Dict[str, Any]]:
+        """
+        多來源聚合個股新聞（Yahoo 個股 RSS / Google News / 鉅亨網），僅留 7 天內。
+        排序：先取「標題提及股名或代號（或來自 Yahoo 個股專屬 RSS）」的相關新聞，一律由新到舊；
+        相關新聞不足時才以其他提及新聞補足；CMoney「股市爆料同學會」論壇貼文僅在新聞不足時墊底。
+        """
         import json as _json
         import re as _re
         from concurrent.futures import ThreadPoolExecutor as _TPE
         from email.utils import parsedate_to_datetime
 
-        now_ts = datetime.now().timestamp()
+        name = (name or "").rstrip("*").strip()
+        now_ts = time.time()
         max_age = 7 * 86400
         ua = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
 
@@ -656,28 +747,43 @@ class TaiwanStockDataEngine:
         with _TPE(max_workers=4) as ex:
             pools = list(ex.map(lambda fn: fn(), jobs))
 
+        forum_prefix = _re.compile(rf"^\s*{_re.escape(code)}\s*{_re.escape(name)}\s*-\s*") if name else None
         seen = set()
-        ranked: List[tuple] = []
+        relevant: List[Dict[str, Any]] = []
+        mentions: List[Dict[str, Any]] = []
+        forum: List[Dict[str, Any]] = []
         for arts in pools:
             for a in arts:
                 age = now_ts - a["ts"]
                 if age > max_age or age < -3600:
                     continue
-                key = _re.sub(r"\W+", "", a["title"])[:40]
+                title = a["title"]
+                is_forum = "股市爆料同學會" in title or a["source"] in ("CMoney", "股市爆料同學會")
+                if is_forum:
+                    title = _re.sub(r"\s*-?\s*股市爆料同學會\s*$", "", title)
+                    if forum_prefix:
+                        title = forum_prefix.sub("", title)
+                    title = title.strip(" -")
+                key = _news_key(title)
                 if not key or key in seen:
                     continue
                 seen.add(key)
-                t = a["title"]
-                # 相關度：標題含股名/代號為最高，僅內文提及次之
-                rel = (2 if name and name in t else 0) + (1 if code in t else 0)
-                ranked.append((-rel, -a["ts"], {
-                    "title": t,
-                    "source": a["source"],
-                    "link": a["link"],
-                    "pub_date": datetime.fromtimestamp(a["ts"]).strftime("%Y-%m-%d %H:%M"),
-                }))
-        ranked.sort(key=lambda x: (x[0], x[1]))
-        return [r[2] for r in ranked[:limit]]
+                art = self._news_item(title, a["link"], "CMoney 論壇" if is_forum else a["source"], a["ts"])
+                if is_forum:
+                    forum.append(art)
+                elif (name and name in title) or code in title:
+                    relevant.append(art)
+                else:
+                    mentions.append(art)
+
+        for bucket in (relevant, mentions, forum):
+            bucket.sort(key=lambda x: x["ts"], reverse=True)
+        result = relevant[:limit]
+        if len(result) < 6:
+            result += mentions[: 6 - len(result)]
+        if len(result) < 4:
+            result += forum[: 4 - len(result)]
+        return result[:limit]
 
     def fetch_stock_kline_history(self, code: str, market: str = "TWSE", days: int = 60) -> List[Dict[str, Any]]:
         """抓取個股近 60 日真實 OHLCV K 線（供 TradingView 圖表與 RSI/KD/MACD/布林通道計算使用）。"""
@@ -697,7 +803,7 @@ class TaiwanStockDataEngine:
             for ts, o, h, l, c, v in zip(timestamps, opens, highs, lows, closes, volumes):
                 if c is None or o is None or h is None or l is None:
                     continue
-                dt_str = datetime.fromtimestamp(ts).strftime("%Y-%m-%d")
+                dt_str = datetime.fromtimestamp(ts, TPE).strftime("%Y-%m-%d")
                 candles.append(
                     {
                         "time": dt_str,
@@ -730,7 +836,7 @@ class TaiwanStockDataEngine:
             f_t86_t0 = ex.submit(self._fetch_twse_t86_breakdown, latest_date)
             f_tp_inst = ex.submit(self._fetch_tpex_inst_breakdown)
             f_margin_dt = ex.submit(self._fetch_margin_and_daytrade, latest_date)
-            f_market_news = ex.submit(self.fetch_google_news_for_query, "台股 外資 投信 熱門股 AI", 10)
+            f_market_news = ex.submit(self.fetch_market_headlines, 20)
 
             hist_tw_futs = [ex.submit(self._fetch_twse_day_snapshot, d) for d in prev_dates]
             hist_tp_futs = [ex.submit(self._fetch_tpex_day_snapshot, d) for d in prev_dates]
@@ -1241,6 +1347,7 @@ class TaiwanStockDataEngine:
                 item.get("open", item["close"]),
                 item.get("high", item["close"]),
                 item.get("low", item["close"]),
+                int(vol_sh // 1000),  # [12] 成交量（張），供前端全市場排行
             ]
 
         return {
