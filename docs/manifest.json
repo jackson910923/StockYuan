@@ -1,25 +1,25 @@
 {
-  "name": "StockYuan",
+  "id": "./",
+  "name": "StockYuan 台股 AI 投研",
   "short_name": "StockYuan",
-  "description": "短線・波段・長線 × 高/中低/低價股 × 做空專區 全方位台股 AI 投研 APP",
-  "start_url": "./index.html?v=46",
+  "description": "台股即時報價 × 六大 Agent AI 策略（短線 / 波段 / 長線 / 做空）× 三大法人籌碼 × 即時財經新聞",
+  "lang": "zh-Hant-TW",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#070b14",
-  "theme_color": "#070b14",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#05070c",
+  "theme_color": "#05070c",
+  "categories": ["finance", "business", "news"],
   "icons": [
-    {
-      "src": "./icon-192.png?v=46",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./icon-512.png?v=46",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "我的自選", "short_name": "自選", "url": "./#/watch", "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }] },
+    { "name": "AI 選股器", "short_name": "選股", "url": "./#/screener", "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }] },
+    { "name": "財經新聞", "short_name": "新聞", "url": "./#/news", "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }] }
   ]
 }
